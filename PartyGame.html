@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <!--
 App Name: PartyGame
-Version: v3.1.6
-Update Theme: 代码结构清理 + CSS去冗余 + 主题系统模块化
+Version: v3.1.7
+Update Theme: 代码结构继续模块化 + 配置拆分 + 共享音乐逻辑整理
 Main Entry: PartyGame.html
 -->
 <html lang="zh-CN">
@@ -235,10 +235,12 @@ Main Entry: PartyGame.html
   <script src="data/triple_music/triple_music_questions_v3.js"></script>
   <script src="data/emoji_guess/emoji_guess_questions_v2.js"></script>
   <script src="js/core/config.js"></script>
+  <script src="js/data/built_in_questions.js"></script>
   <script src="js/core/state.js"></script>
   <script src="js/core/utils.js"></script>
   <script src="js/core/dom.js"></script>
   <script src="js/core/themes.js"></script>
+  <script src="js/core/diagnostics.js"></script>
   <script src="js/core/router.js"></script>
   <script src="js/core/participants.js"></script>
   <script src="js/core/scoring.js"></script>
@@ -246,6 +248,7 @@ Main Entry: PartyGame.html
   <script src="js/core/settlement.js"></script>
   <script src="js/core/media.js"></script>
   <script src="js/games/game_registry.js"></script>
+  <script src="js/games/music_common.js"></script>
   <script src="js/games/line_guess.js"></script>
   <script src="js/games/triple_music.js"></script>
   <script src="js/games/single_music.js"></script>

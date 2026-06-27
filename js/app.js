@@ -1,82 +1,138 @@
 window.PartyGame = window.PartyGame || {};
 window.PartyGame.App = window.PartyGame.App || {};
 
+function handleThemeClick(event) {
+  const themeTarget = event.target.closest("[data-ui-theme]");
+  if (!themeTarget) return false;
+  applyUITheme(themeTarget.dataset.uiTheme);
+  return true;
+}
+
+function handleSingleMusicPlaybackClick(event) {
+  const target = event.target.closest("[data-single-music-playback]");
+  if (!target || !window.PartyGame.Games.singleMusic) return false;
+  window.PartyGame.Games.singleMusic.setPlaybackMode(target.dataset.singleMusicPlayback);
+  return true;
+}
+
+function handleGameCardClick(event) {
+  const gameTarget = event.target.closest("[data-game-id]");
+  if (!gameTarget) return false;
+  const game = getGameById(gameTarget.dataset.gameId);
+  if (game && game.status !== "available") {
+    showToast("这个游戏还在准备中，敬请期待");
+    return true;
+  }
+  if (game) selectGame(game.id);
+  return true;
+}
+
+function handleNavigationClick(event) {
+  const navTarget = event.target.closest("[data-nav]");
+  if (!navTarget) return false;
+  if (navTarget.dataset.nav === "home") requestReturnHome();
+  else switchScreen(navTarget.dataset.nav);
+  return true;
+}
+
+function handleModeClick(event) {
+  const modeTarget = event.target.closest("[data-mode]");
+  if (!modeTarget) return false;
+  updateSelectedMode(modeTarget.dataset.mode);
+  return true;
+}
+
+function handleParticipantClick(event) {
+  const avatarTarget = event.target.closest("[data-avatar-id]");
+  if (avatarTarget) {
+    state.selectedAvatarId = avatarTarget.dataset.avatarId;
+    renderAvatars();
+    return true;
+  }
+
+  const removeTarget = event.target.closest("[data-remove-id]");
+  if (removeTarget) {
+    removeParticipant(removeTarget.dataset.removeId);
+    return true;
+  }
+
+  const editTarget = event.target.closest("[data-edit-id]");
+  if (editTarget) {
+    beginParticipantEdit(editTarget.dataset.editId);
+    return true;
+  }
+
+  const participationTarget = event.target.closest("[data-toggle-active-id]");
+  if (participationTarget) {
+    toggleParticipantActive(participationTarget.dataset.toggleActiveId);
+    return true;
+  }
+
+  return false;
+}
+
+function handleScoringClick(event) {
+  const scoreTarget = event.target.closest("[data-score-id]");
+  if (scoreTarget) {
+    adjustScore(scoreTarget.dataset.scoreId, Number(scoreTarget.dataset.delta));
+    return true;
+  }
+
+  const noScoreTarget = event.target.closest("#noScoreOption");
+  if (noScoreTarget) {
+    selectNoScore();
+    return true;
+  }
+
+  return false;
+}
+
+function handleMusicPreviewClick(event) {
+  const triplePreviewTarget = event.target.closest("[data-triple-preview-id]");
+  if (triplePreviewTarget && window.PartyGame.Games.tripleMusic) {
+    window.PartyGame.Games.tripleMusic.playSinglePreview(triplePreviewTarget.dataset.triplePreviewId);
+    return true;
+  }
+
+  const singleMusicReplayTarget = event.target.closest("[data-single-music-replay]");
+  if (singleMusicReplayTarget && window.PartyGame.Games.singleMusic) {
+    window.PartyGame.Games.singleMusic.playAudio();
+    return true;
+  }
+
+  return false;
+}
+
+function handleRoundOptionClick(event) {
+  const sizeTarget = event.target.closest("[data-round-size]");
+  if (sizeTarget) {
+    state.roundSize = sizeTarget.dataset.roundSize === "ALL" ? "ALL" : Number(sizeTarget.dataset.roundSize);
+    renderRoundOptions();
+    return true;
+  }
+
+  const categoryTarget = event.target.closest("[data-round-category]");
+  if (categoryTarget) {
+    state.selectedCategory = categoryTarget.dataset.roundCategory;
+    renderRoundOptions();
+    updateCategoryStatsDisplay();
+    return true;
+  }
+
+  return false;
+}
+
 function bindEvents() {
   document.addEventListener("click", (event) => {
-    const themeTarget = event.target.closest("[data-ui-theme]");
-    if (themeTarget) {
-      applyUITheme(themeTarget.dataset.uiTheme);
-      return;
-    }
-
-    const singleMusicPlaybackTarget = event.target.closest("[data-single-music-playback]");
-    if (singleMusicPlaybackTarget && window.PartyGame.Games.singleMusic) {
-      window.PartyGame.Games.singleMusic.setPlaybackMode(singleMusicPlaybackTarget.dataset.singleMusicPlayback);
-      return;
-    }
-
-    const gameTarget = event.target.closest("[data-game-id]");
-    if (gameTarget) {
-      const game = getGameById(gameTarget.dataset.gameId);
-      if (game && game.status !== "available") {
-        showToast("这个游戏还在准备中，敬请期待");
-        return;
-      }
-      if (game && !selectGame(game.id)) return;
-    }
-
-    const navTarget = event.target.closest("[data-nav]");
-    if (navTarget) {
-      if (navTarget.dataset.nav === "home") requestReturnHome();
-      else switchScreen(navTarget.dataset.nav);
-    }
-
-    const modeTarget = event.target.closest("[data-mode]");
-    if (modeTarget) updateSelectedMode(modeTarget.dataset.mode);
-
-    const avatarTarget = event.target.closest("[data-avatar-id]");
-    if (avatarTarget) {
-      state.selectedAvatarId = avatarTarget.dataset.avatarId;
-      renderAvatars();
-    }
-
-    const removeTarget = event.target.closest("[data-remove-id]");
-    if (removeTarget) removeParticipant(removeTarget.dataset.removeId);
-
-    const editTarget = event.target.closest("[data-edit-id]");
-    if (editTarget) beginParticipantEdit(editTarget.dataset.editId);
-
-    const participationTarget = event.target.closest("[data-toggle-active-id]");
-    if (participationTarget) toggleParticipantActive(participationTarget.dataset.toggleActiveId);
-
-    const scoreTarget = event.target.closest("[data-score-id]");
-    if (scoreTarget) adjustScore(scoreTarget.dataset.scoreId, Number(scoreTarget.dataset.delta));
-
-    const noScoreTarget = event.target.closest("#noScoreOption");
-    if (noScoreTarget) selectNoScore();
-
-    const triplePreviewTarget = event.target.closest("[data-triple-preview-id]");
-    if (triplePreviewTarget && window.PartyGame.Games.tripleMusic) {
-      window.PartyGame.Games.tripleMusic.playSinglePreview(triplePreviewTarget.dataset.triplePreviewId);
-    }
-
-    const singleMusicReplayTarget = event.target.closest("[data-single-music-replay]");
-    if (singleMusicReplayTarget && window.PartyGame.Games.singleMusic) {
-      window.PartyGame.Games.singleMusic.playAudio();
-    }
-
-    const sizeTarget = event.target.closest("[data-round-size]");
-    if (sizeTarget) {
-      state.roundSize = sizeTarget.dataset.roundSize === "ALL" ? "ALL" : Number(sizeTarget.dataset.roundSize);
-      renderRoundOptions();
-    }
-
-    const categoryTarget = event.target.closest("[data-round-category]");
-    if (categoryTarget) {
-      state.selectedCategory = categoryTarget.dataset.roundCategory;
-      renderRoundOptions();
-      updateCategoryStatsDisplay();
-    }
+    if (handleThemeClick(event)) return;
+    if (handleSingleMusicPlaybackClick(event)) return;
+    if (handleGameCardClick(event)) return;
+    if (handleNavigationClick(event)) return;
+    if (handleModeClick(event)) return;
+    if (handleParticipantClick(event)) return;
+    if (handleScoringClick(event)) return;
+    if (handleMusicPreviewClick(event)) return;
+    if (handleRoundOptionClick(event)) return;
   });
 
   document.addEventListener("change", (event) => {

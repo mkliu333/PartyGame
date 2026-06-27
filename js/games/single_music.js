@@ -9,6 +9,9 @@ const singleMusicRuntime = {
 };
 
 function getSingleMusicShared() {
+  // single_music currently reuses the shared music track bank and inventory logic
+  // from tripleMusic. Low-level reusable helpers live in musicCommon; full bank
+  // ownership can be migrated later.
   return window.PartyGame.Games.tripleMusic;
 }
 
@@ -23,10 +26,7 @@ function getSingleMusicAudioContext() {
 
 function stopSingleMusicAudio() {
   if (singleMusicRuntime.activeForwardAudio) {
-    try {
-      singleMusicRuntime.activeForwardAudio.pause();
-      singleMusicRuntime.activeForwardAudio.currentTime = 0;
-    } catch (error) {}
+    window.PartyGame.Games.musicCommon.safeStopAudio(singleMusicRuntime.activeForwardAudio);
     singleMusicRuntime.activeForwardAudio = null;
   }
   if (singleMusicRuntime.activeSource) {
@@ -95,7 +95,7 @@ function generateSingleMusicRoundQuestions() {
   const pool = shuffleArray(getSingleMusicShared().getAvailableTracks(state.selectedCategory));
   const tracks = pool.slice(0, requestedCount);
   state.currentRoundQuestions = tracks.map((track, index) => ({
-    id: `single_music_${Date.now()}_${index + 1}`,
+    id: window.PartyGame.Games.musicCommon.createMusicQuestionId("single_music", index + 1),
     type: "single_music",
     category: track.category,
     source: "单曲猜歌",

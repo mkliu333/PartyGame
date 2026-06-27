@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v3.1.6";
+    const APP_VERSION = "v3.1.7";
 
-    const UPDATE_THEME = "代码结构清理 + CSS去冗余 + 主题系统模块化";
+    const UPDATE_THEME = "代码结构继续模块化 + 配置拆分 + 共享音乐逻辑整理";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
@@ -43,52 +43,5 @@ window.PartyGame.Config = window.PartyGame.Config || {};
       { id: "cake", label: "蛋糕", emoji: "🎂", color: "#eadcff" }
     ];
 
-    function createBuiltInFallbackQuestions() {
-      return [
-        {
-          id: "q001",
-          type: "next_line",
-          category: "movie",
-          source: "西虹市首富",
-          answer: "不装了，我是亿万富翁，我摊牌了",
-          image: "",
-          prompt_clip: "assets/script_guess/clips/q001_xi-hong-shi-shou-fu_prompt.mp4",
-          answer_clip: "assets/script_guess/clips/q001_xi-hong-shi-shou-fu_answer.mp4"
-        },
-        {
-          id: "q006",
-          type: "next_line",
-          category: "movie",
-          source: "哪吒之魔童降世",
-          answer: "是魔是仙，我自己说了才算",
-          image: "",
-          prompt_clip: "assets/script_guess/clips/q006_ne-zha_prompt.mp4",
-          answer_clip: "assets/script_guess/clips/q006_ne-zha_answer.mp4"
-        },
-        {
-          id: "q046",
-          type: "next_line",
-          category: "tv",
-          source: "狂飙",
-          answer: "京海那么多年，我花了这么多钱，养肥了这么多人",
-          image: "",
-          prompt_clip: "assets/script_guess/clips/q046_kuang-biao_prompt.mp4",
-          answer_clip: "assets/script_guess/clips/q046_kuang-biao_answer.mp4"
-        },
-        {
-          id: "q051",
-          type: "next_line",
-          category: "variety",
-          source: "喜剧之王单口季",
-          answer: "我是灵长类",
-          image: "",
-          prompt_clip: "assets/script_guess/clips/q051_tuo-kou-xiu_prompt.mp4",
-          answer_clip: "assets/script_guess/clips/q051_tuo-kou-xiu_answer.mp4"
-        }
-      ];
-    }
-
-    const BUILT_IN_QUESTIONS = createBuiltInFallbackQuestions();
-
-Object.assign(window.PartyGame.Config, { APP_VERSION, UPDATE_THEME, CATEGORY_CONFIG, ROUND_SIZE_OPTIONS, UI_THEME_OPTIONS, AVATAR_LIBRARY, BUILT_IN_QUESTIONS });
+Object.assign(window.PartyGame.Config, { APP_VERSION, UPDATE_THEME, CATEGORY_CONFIG, ROUND_SIZE_OPTIONS, UI_THEME_OPTIONS, AVATAR_LIBRARY });
 

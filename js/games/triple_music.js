@@ -167,7 +167,7 @@ function buildTripleMusicQuestion(index, tracks) {
   const allSameCategory = tracks.every((track) => track.category === firstCategory);
   const segmentType = getTripleMusicSegmentType(tracks[0]?.id);
   return {
-    id: `triple_music_${Date.now()}_${index}`,
+    id: window.PartyGame.Games.musicCommon.createMusicQuestionId("triple_music", index),
     type: "triple_music",
     category: allSameCategory ? firstCategory : "all",
     segmentType,
@@ -244,16 +244,9 @@ function removeTripleMusicPanel() {
   if (panel) panel.remove();
 }
 
-function stopAudio(audio) {
-  if (!audio) return;
-  audio.pause();
-  try { audio.currentTime = 0; } catch (error) { console.warn("Unable to reset audio:", error); }
-}
-
 function stopAllTripleMusicAudio() {
-  tripleMusicRuntime.mixedAudios.forEach(stopAudio);
-  tripleMusicRuntime.mixedAudios = [];
-  stopAudio(tripleMusicRuntime.previewAudio);
+  tripleMusicRuntime.mixedAudios = window.PartyGame.Games.musicCommon.stopAudioList(tripleMusicRuntime.mixedAudios);
+  window.PartyGame.Games.musicCommon.safeStopAudio(tripleMusicRuntime.previewAudio);
   tripleMusicRuntime.previewAudio = null;
 }
 
@@ -400,6 +393,6 @@ window.PartyGame.Games.tripleMusic = {
   getCategories: getTripleMusicCategories,
   getAvailableTracks: getAvailableTripleMusicTracks,
   getSharedRuntime: () => tripleMusicRuntime,
-  stopAudio,
+  stopAudio: window.PartyGame.Games.musicCommon.safeStopAudio,
   handleAudioError: handleTripleMusicAudioError
 };
