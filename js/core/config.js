@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v3.1.7";
+    const APP_VERSION = "v3.1.8";
 
-    const UPDATE_THEME = "代码结构继续模块化 + 配置拆分 + 共享音乐逻辑整理";
+    const UPDATE_THEME = "单曲猜歌揭晓后正倒放对照播放优化 + 代码结构整理";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

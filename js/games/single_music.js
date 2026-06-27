@@ -44,6 +44,18 @@ function getSingleMusicPlaybackModeLabel() {
   return state.singleMusicPlaybackMode === "reverse" ? "倒放" : "正放";
 }
 
+function isSingleMusicReverseMode() {
+  return state.singleMusicPlaybackMode === "reverse";
+}
+
+function getSingleMusicPrimaryPlaybackLabel() {
+  return isSingleMusicReverseMode() ? "播放倒放音频" : "播放音频";
+}
+
+function getSingleMusicAlternatePlaybackLabel() {
+  return isSingleMusicReverseMode() ? "正放音乐" : "倒放音频";
+}
+
 function getSingleMusicRoundConfig() {
   const shared = getSingleMusicShared();
   return {
@@ -184,15 +196,23 @@ async function playSingleMusicReverse(track) {
   }
 }
 
-function playSingleMusicAudio() {
+function playSingleMusicClip({ reverse = false } = {}) {
   const question = getCurrentQuestion();
   if (!isSingleMusicActive() || !question || !["prompt", "revealed"].includes(state.phase)) return;
   const track = question.tracks[0];
-  if (state.singleMusicPlaybackMode === "reverse") {
+  if (reverse) {
     playSingleMusicReverse(track);
   } else {
     playSingleMusicForward(track);
   }
+}
+
+function playSingleMusicAudio() {
+  playSingleMusicClip({ reverse: isSingleMusicReverseMode() });
+}
+
+function playSingleMusicAlternateAudio() {
+  playSingleMusicClip({ reverse: !isSingleMusicReverseMode() });
 }
 
 function renderSingleMusicGameplay() {
@@ -204,8 +224,8 @@ function renderSingleMusicGameplay() {
   }
   const track = question.tracks[0];
   const modeLabel = getSingleMusicPlaybackModeLabel();
-  const playLabel = state.singleMusicPlaybackMode === "reverse" ? "播放倒放音频" : "播放音频";
-  const replayLabel = state.singleMusicPlaybackMode === "reverse" ? "重新倒放" : "重新播放";
+  const playLabel = getSingleMusicPrimaryPlaybackLabel();
+  const alternatePlayLabel = getSingleMusicAlternatePlaybackLabel();
   elements.mediaCard.classList.remove("empty", "image-mode", "emoji-mode");
   $(".emoji-clue-panel", elements.mediaCard)?.remove();
   elements.mediaCard.classList.add("audio-mode");
@@ -225,7 +245,7 @@ function renderSingleMusicGameplay() {
   elements.answerState.textContent = state.phase === "revealed" ? "答案已揭晓" : "答案未揭晓";
   if (state.phase === "revealed") {
     elements.answerText.classList.add("triple-music-answer-list");
-    elements.answerText.innerHTML = `<span class="answer-line">${escapeHTML(track.answer)}<button class="ghost-btn mini-audio-btn" type="button" data-single-music-replay="current">${replayLabel}</button></span>`;
+    elements.answerText.innerHTML = `<span class="answer-line">${escapeHTML(track.answer)}<button class="ghost-btn mini-audio-btn" type="button" data-single-music-alternate="current">${alternatePlayLabel}</button></span>`;
   } else {
     elements.answerText.classList.remove("triple-music-answer-list");
     elements.answerText.textContent = "点击播放音频，大家抢答后再揭晓答案。";
@@ -271,5 +291,6 @@ window.PartyGame.Games.singleMusic = {
   revealAnswer: revealSingleMusicAnswer,
   toggleAnswerText() {},
   playAudio: playSingleMusicAudio,
+  playAlternateAudio: playSingleMusicAlternateAudio,
   stopAllAudio: stopSingleMusicAudio
 };
