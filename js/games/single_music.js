@@ -215,6 +215,12 @@ function playSingleMusicAlternateAudio() {
   playSingleMusicClip({ reverse: !isSingleMusicReverseMode() });
 }
 
+function playSingleMusicForwardOnly() {
+  const question = getCurrentQuestion();
+  if (!isSingleMusicActive() || !question || !question.tracks?.length) return;
+  playSingleMusicForward(question.tracks[0]);
+}
+
 function renderSingleMusicGameplay() {
   const question = getCurrentQuestion();
   if (!question) {
@@ -225,7 +231,6 @@ function renderSingleMusicGameplay() {
   const track = question.tracks[0];
   const modeLabel = getSingleMusicPlaybackModeLabel();
   const playLabel = getSingleMusicPrimaryPlaybackLabel();
-  const alternatePlayLabel = getSingleMusicAlternatePlaybackLabel();
   elements.mediaCard.classList.remove("empty", "image-mode", "emoji-mode");
   $(".emoji-clue-panel", elements.mediaCard)?.remove();
   elements.mediaCard.classList.add("audio-mode");
@@ -245,7 +250,11 @@ function renderSingleMusicGameplay() {
   elements.answerState.textContent = state.phase === "revealed" ? "答案已揭晓" : "答案未揭晓";
   if (state.phase === "revealed") {
     elements.answerText.classList.add("triple-music-answer-list");
-    elements.answerText.innerHTML = `<span class="answer-line">${escapeHTML(track.answer)}<button class="ghost-btn mini-audio-btn" type="button" data-single-music-alternate="current">${alternatePlayLabel}</button></span>`;
+    if (isSingleMusicReverseMode()) {
+      elements.answerText.innerHTML = `<span class="answer-line">${escapeHTML(track.answer)}<button class="ghost-btn mini-audio-btn" type="button" data-single-music-forward-after-reveal="current">正放音乐</button></span>`;
+    } else {
+      elements.answerText.innerHTML = `<span class="answer-line">${escapeHTML(track.answer)}</span>`;
+    }
   } else {
     elements.answerText.classList.remove("triple-music-answer-list");
     elements.answerText.textContent = "点击播放音频，大家抢答后再揭晓答案。";
@@ -291,6 +300,7 @@ window.PartyGame.Games.singleMusic = {
   revealAnswer: revealSingleMusicAnswer,
   toggleAnswerText() {},
   playAudio: playSingleMusicAudio,
+  playForwardAudio: playSingleMusicForwardOnly,
   playAlternateAudio: playSingleMusicAlternateAudio,
   stopAllAudio: stopSingleMusicAudio
 };

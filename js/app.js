@@ -100,6 +100,12 @@ function handleMusicPreviewClick(event) {
     return true;
   }
 
+  const singleMusicForwardAfterRevealTarget = event.target.closest("[data-single-music-forward-after-reveal]");
+  if (singleMusicForwardAfterRevealTarget && window.PartyGame.Games.singleMusic) {
+    window.PartyGame.Games.singleMusic.playForwardAudio();
+    return true;
+  }
+
   const singleMusicAlternateTarget = event.target.closest("[data-single-music-alternate]");
   if (singleMusicAlternateTarget && window.PartyGame.Games.singleMusic) {
     window.PartyGame.Games.singleMusic.playAlternateAudio();

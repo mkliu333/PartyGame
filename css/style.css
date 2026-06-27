@@ -654,6 +654,13 @@
       font-family: var(--font-display);
     }
 
+    body[data-theme="retro_arcade"] .hero-card h1 {
+      max-width: 980px;
+      font-size: clamp(40px, 6.2vw, 72px);
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
     .hero-card p {
       position: relative;
       z-index: 1;
@@ -2012,6 +2019,10 @@
       .setup-grid,
       .round-layout {
         grid-template-columns: 1fr;
+      }
+
+      body[data-theme="retro_arcade"] .hero-card h1 {
+        white-space: normal;
       }
 
       .round-options.compact {
