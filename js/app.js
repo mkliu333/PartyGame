@@ -23,7 +23,13 @@ function handleGameCardClick(event) {
     showToast("这个游戏还在准备中，敬请期待");
     return true;
   }
-  if (game) selectGame(game.id);
+  if (game && !selectGame(game.id)) return true;
+
+  if (gameTarget.dataset.nav) {
+    if (gameTarget.dataset.nav === "home") requestReturnHome();
+    else switchScreen(gameTarget.dataset.nav);
+  }
+
   return true;
 }
 
