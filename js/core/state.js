@@ -1,0 +1,47 @@
+window.PartyGame = window.PartyGame || {};
+window.PartyGame.State = window.PartyGame.State || {};
+
+    const state = {
+      mode: "single",
+      screen: "home",
+      activeGameId: "line_guess",
+      uiTheme: "classic_cream",
+      singleMusicPlaybackMode: "forward",
+      selectedAvatarId: AVATAR_LIBRARY[0].id,
+      editingParticipantId: null,
+      roundSize: 20,
+      selectedCategory: "all",
+      currentQuestionIndex: 0,
+      phase: "prompt",
+      questionScoreChanged: false,
+      noScoreSelected: false,
+      textAnswerVisible: false,
+      questionPositiveAwardedIds: new Set(),
+      questionDeltaById: new Map(),
+      hasStartedAnyRound: false,
+      completedRoundCount: 0,
+      activeRoundScoreSnapshot: null,
+      activeRoundInventorySnapshot: null,
+      questionBank: [...BUILT_IN_QUESTIONS],
+      tripleMusicTracks: [],
+      emojiGuessQuestions: [],
+      emojiHintVisible: false,
+      skippedQuestionIds: new Set(),
+      skippedMusicTrackIds: new Set(),
+      questionBankSource: "内置备用",
+      tripleMusicSource: "triple_music/triple_music_questions_v3.js",
+      tripleMusicPreflight: { loaded: 0, skipped: 0, issues: [] },
+      emojiGuessPreflight: { loaded: 0, skipped: 0, warnings: [], issues: [] },
+      preflight: { loaded: BUILT_IN_QUESTIONS.length, skipped: 0, warnings: [], issues: [] },
+      preflightSummary: { missingAnswer: 0, missingAnswerClip: 0, invalidCount: 0 },
+      currentRoundResult: null,
+      players: [],
+      teams: [],
+      consumedQuestionIds: new Set(),
+      consumedMusicTrackIds: new Set(),
+      consumedEmojiGuessQuestionIds: new Set(),
+      skippedEmojiGuessQuestionIds: new Set(),
+      currentRoundQuestions: []
+    };
+
+window.PartyGame.State.current = state;

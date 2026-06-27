@@ -1,0 +1,23 @@
+﻿# Large local media assets - keep local only
+assets/script_guess/
+assets/triple_music/
+
+# Temporary downloaded/imported Noto source repos
+tools/_tmp_noto_emoji/
+vendor/_tmp_noto_emoji/
+noto-emoji/
+noto-emoji-main/
+*.zip
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python cache / local server junk
+__pycache__/
+*.pyc
+
+# Logs
+*.log

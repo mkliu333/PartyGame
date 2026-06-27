@@ -1,0 +1,71 @@
+window.PartyGame = window.PartyGame || {};
+window.PartyGame.Core = window.PartyGame.Core || {};
+
+    const $ = (selector, root = document) => root.querySelector(selector);
+
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    const elements = {
+      screens: $$(".screen"),
+      clockHourHand: $("#clockHourHand"),
+      clockMinuteHand: $("#clockMinuteHand"),
+      clockSecondHand: $("#clockSecondHand"),
+      clock: $("#clock"),
+      themeSwitcher: $("#themeSwitcher"),
+      themeFloatLayer: $("#themeFloatLayer"),
+      avatarGrid: $("#avatarGrid"),
+      participantName: $("#participantName"),
+      participantList: $("#participantList"),
+      setupTitle: $("#setupTitle"),
+      setupSubtitle: $("#setupSubtitle"),
+      setupError: $("#setupError"),
+      roundError: $("#roundError"),
+      roundInfo: $("#roundInfo"),
+      nameLabel: $("#nameLabel"),
+      listTitle: $("#listTitle"),
+      addParticipant: $("#addParticipant"),
+      cancelParticipantEdit: $("#cancelParticipantEdit"),
+      resetAllGames: $("#resetAllGames"),
+      birthdaySongToggle: $("#birthdaySongToggle"),
+      startGame: $("#startGame"),
+      startRound: $("#startRound"),
+      scoreboard: $("#scoreboard"),
+      mediaCard: $("#mediaCard"),
+      clip: $("#clip"),
+      questionImage: $("#questionImage"),
+      toast: $("#toast"),
+      questionTitle: $("#questionTitle"),
+      questionMeta: $("#questionMeta"),
+      answerState: $("#answerState"),
+      answerText: $("#answerText"),
+      categoryStats: $("#categoryStats"),
+      questionBankInspectPanel: $("#questionBankInspectPanel"),
+      roundExtraOptions: $("#roundExtraOptions"),
+      totalScoreTitle: $("#totalScoreTitle"),
+      totalScoreList: $("#totalScoreList"),
+      playPrompt: $("#playPrompt"),
+      revealAnswer: $("#revealAnswer"),
+      toggleAnswerText: $("#toggleAnswerText"),
+      confirmScore: $("#confirmScore"),
+      roundSecondaryAction: $("#roundSecondaryAction"),
+      roundResultOverlay: $("#roundResultOverlay"),
+      roundResultKicker: $("#roundResultKicker"),
+      roundResultTitle: $("#roundResultTitle"),
+      roundResultCopy: $("#roundResultCopy"),
+      roundResultScores: $("#roundResultScores"),
+      returnToRoundSetup: $("#returnToRoundSetup"),
+      finalResultOverlay: $("#finalResultOverlay"),
+      finalResultKicker: $("#finalResultKicker"),
+      finalResultTitle: $("#finalResultTitle"),
+      finalWinnerNames: $("#finalWinnerNames"),
+      finalResultCopy: $("#finalResultCopy"),
+      certificateEncouragement: $("#certificateEncouragement"),
+      finalRanking: $("#finalRanking"),
+      finalReturnHome: $("#finalReturnHome"),
+      exitConfirmOverlay: $("#exitConfirmOverlay"),
+      cancelExitGame: $("#cancelExitGame"),
+      confirmExitGame: $("#confirmExitGame")
+    };
+
+elements.gamesGrid = $("#gamesGrid");
+Object.assign(window.PartyGame.Core, { $, $$, elements });

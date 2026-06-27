@@ -1,0 +1,257 @@
+﻿<!doctype html>
+<!--
+App Name: PartyGame
+Version: v3.1.6
+Update Theme: 代码结构清理 + CSS去冗余 + 主题系统模块化
+Main Entry: PartyGame.html
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>聚会Party小游戏合集</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="theme-float-layer" id="themeFloatLayer" aria-hidden="true"></div>
+  <main class="app">
+    <nav class="topbar">
+      <div class="brand">
+        <div class="brand-mark live-clock" aria-hidden="true">
+          <svg class="clock-svg" viewBox="0 0 100 100">
+            <circle class="clock-face" cx="50" cy="50" r="38"></circle>
+            <line class="clock-tick" x1="50" y1="14" x2="50" y2="20"></line>
+            <line class="clock-tick" x1="86" y1="50" x2="80" y2="50"></line>
+            <line class="clock-tick" x1="50" y1="86" x2="50" y2="80"></line>
+            <line class="clock-tick" x1="14" y1="50" x2="20" y2="50"></line>
+            <line class="clock-hour" id="clockHourHand" x1="50" y1="50" x2="50" y2="35"></line>
+            <line class="clock-minute" id="clockMinuteHand" x1="50" y1="50" x2="50" y2="25"></line>
+            <line class="clock-second" id="clockSecondHand" x1="50" y1="55" x2="50" y2="18"></line>
+            <circle class="clock-center" cx="50" cy="50" r="4"></circle>
+          </svg>
+        </div>
+        <span class="clock" id="clock">0000年0月0日，00:00:00</span>
+      </div>
+      <div class="theme-switcher" id="themeSwitcher" aria-label="界面主题"></div>
+      <div class="top-actions">
+        <button class="ghost-btn" type="button" id="resetAllGames">重置所有游戏</button>
+        <button class="ghost-btn" type="button" data-nav="home">回到首页</button>
+      </div>
+    </nav>
+
+    <section class="screen active" id="home">
+      <div class="hero-card">
+        <div class="decor star" style="right: 12%; top: 18%; --rot: 14deg;"></div>
+        <div class="decor sparkle" style="right: 28%; bottom: 16%; --rot: -8deg;">✧</div>
+        <div class="decor ribbon" style="right: 6%; bottom: 28%; --rot: -16deg;"></div>
+        <div class="decor candy" style="left: 6%; bottom: 10%; --rot: 12deg;"></div>
+        <h1>聚会Party小游戏合集</h1>
+        <p>欢迎大家来到Melody的生日聚会，希望大家玩的开心 <button class="birthday-song-toggle" type="button" id="birthdaySongToggle" aria-label="播放或停止生日歌" title="播放/停止生日歌" aria-pressed="false">🎂</button></p>
+      </div>
+
+      <div class="games-grid" id="gamesGrid">
+      </div>
+    </section>
+
+    <section class="screen" id="mode">
+      <div class="panel">
+        <h1 class="section-title">选择比赛模式</h1>
+        <div class="mode-row">
+          <button class="pill-btn selected" type="button" data-mode="single">单人赛</button>
+          <button class="pill-btn" type="button" data-mode="team">团体赛</button>
+        </div>
+        <div class="action-row">
+          <button class="primary-btn" type="button" data-nav="setup">下一步</button>
+          <button class="ghost-btn" type="button" data-nav="home">返回</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="setup">
+      <div class="panel">
+        <h1 class="section-title" id="setupTitle">创建玩家档案</h1>
+        <p class="section-subtitle" id="setupSubtitle">取个好记的名字，挑一个软乎乎的头像。至少添加 2 位玩家即可开始。</p>
+        <div class="setup-grid">
+          <div>
+            <label class="field">
+              <span id="nameLabel">玩家名称</span>
+              <input id="participantName" maxlength="24" placeholder="例如：Melody">
+            </label>
+            <div class="avatar-grid" id="avatarGrid"></div>
+            <div class="error-message" id="setupError"></div>
+            <div class="action-row">
+              <button class="primary-btn" type="button" id="addParticipant">添加玩家</button>
+              <button class="ghost-btn" type="button" id="cancelParticipantEdit" hidden>取消编辑</button>
+              <button class="ghost-btn" type="button" id="startGame">开始游戏</button>
+            </div>
+          </div>
+          <div class="side-panel">
+            <h2 id="listTitle">玩家列表</h2>
+            <div class="participant-list" id="participantList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="round">
+      <div class="panel">
+        <div class="round-layout">
+          <div class="round-main">
+            <h1 class="section-title">设置本轮题目</h1>
+            <p class="section-subtitle">选择本轮题量和题库范围。已抽过的题目会暂时从题库里拿走，避免连续重复。</p>
+
+            <h2>题目数量</h2>
+            <div class="round-size-options" id="roundSizeOptions">
+            </div>
+
+            <h2>题库分类</h2>
+            <div class="round-options compact" id="roundCategoryOptions">
+              <button class="option-btn selected" type="button" data-round-category="all">大合集</button>
+              <button class="option-btn" type="button" data-round-category="movie">电影</button>
+              <button class="option-btn" type="button" data-round-category="tv">电视剧</button>
+              <button class="option-btn" type="button" data-round-category="variety">综艺</button>
+              <button class="option-btn" type="button" data-round-category="meme">网络热梗</button>
+            </div>
+            <div class="round-extra-options" id="roundExtraOptions"></div>
+
+            <div class="error-message" id="roundError"></div>
+            <div class="info-message" id="roundInfo"></div>
+            <div class="action-row">
+              <button class="primary-btn" type="button" id="startRound">开始本轮</button>
+              <button class="ghost-btn" type="button" id="roundSecondaryAction">返回分组</button>
+            </div>
+          </div>
+          <div class="round-side-stack">
+            <aside class="stats-card round-stock" id="categoryStatsCard">
+              <div class="stock-header">
+                <h2>题库库存</h2>
+                <div class="inspect-wrapper">
+                  <button class="inspect-btn" type="button" aria-label="查看题库检查">🔍</button>
+                  <div class="inspect-panel" id="questionBankInspectPanel"></div>
+                </div>
+              </div>
+              <div id="categoryStats"></div>
+              <div class="action-row">
+                <button class="ghost-btn" type="button" id="resetQuestionPool">重置</button>
+              </div>
+            </aside>
+            <aside class="stats-card">
+              <h2 id="totalScoreTitle">个人总分</h2>
+              <div class="total-score-list" id="totalScoreList"></div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="play">
+      <div class="gameplay-grid">
+        <section class="media-wrap">
+          <div class="media-card" id="mediaCard">
+            <video id="clip" controls playsinline></video>
+            <img class="question-image" id="questionImage" alt="题目图片">
+            <div class="empty-media">本轮暂时没有可播放题目，请返回设置本轮题目或重置题库。</div>
+            <div class="media-footer">
+              <div class="question-label">
+                <strong id="questionTitle">第 1 / 1 题</strong>
+                <span id="questionMeta">准备播放提示片段</span>
+              </div>
+              <button class="ghost-btn answer-toggle" type="button" id="toggleAnswerText">点击翻看答案</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="gameplay-side-stack">
+          <div class="side-panel">
+            <h2>主持控制</h2>
+            <div class="host-controls">
+              <button class="primary-btn" type="button" id="playPrompt">播放题目</button>
+              <button class="ghost-btn" type="button" id="revealAnswer">揭晓答案</button>
+            </div>
+            <div class="answer-panel">
+              <h3 id="answerState">答案未揭晓</h3>
+              <p id="answerText">先播放题目片段，大家抢答后再揭晓答案视频。</p>
+            </div>
+          </div>
+
+          <div class="side-panel">
+            <div class="scoreboard-header">
+              <h2>计分板</h2>
+              <button class="primary-btn confirm-score-btn" type="button" id="confirmScore">确定</button>
+            </div>
+            <div class="scoreboard" id="scoreboard"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="roundResultOverlay" aria-live="polite">
+    <div class="result-card">
+      <div class="confetti"><span>✦</span><span>🏆</span><span>🎀</span><span>✨</span></div>
+      <div class="result-kicker" id="roundResultKicker">本轮获胜</div>
+      <h2 id="roundResultTitle">恭喜获胜！</h2>
+      <p id="roundResultCopy"></p>
+      <div class="result-scores" id="roundResultScores"></div>
+      <div class="modal-actions">
+        <button class="primary-btn" type="button" id="returnToRoundSetup">返回设置题目</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="finalResultOverlay" aria-live="polite">
+    <div class="certificate-card">
+      <div class="certificate-frame"></div>
+      <div class="confetti"><span>✦</span><span>🎖️</span><span>🎀</span><span>✨</span></div>
+      <div class="award-seal">🏅</div>
+      <div class="certificate-kicker" id="finalResultKicker">HONOR CERTIFICATE</div>
+      <h2 id="finalResultTitle">最佳影视题库王</h2>
+      <div class="certificate-awarded">颁发给</div>
+      <div class="certificate-winners" id="finalWinnerNames">等待结算</div>
+      <p id="finalResultCopy"></p>
+      <p class="certificate-encouragement" id="certificateEncouragement">特发此证，以资鼓励</p>
+      <div class="final-ranking" id="finalRanking"></div>
+      <div class="modal-actions">
+        <button class="primary-btn" type="button" id="finalReturnHome">回到首页</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="exitConfirmOverlay" role="dialog" aria-modal="true" aria-labelledby="exitConfirmTitle">
+    <div class="result-card exit-confirm-card">
+      <div class="result-kicker">退出当前游戏</div>
+      <h2 id="exitConfirmTitle">确认回到首页？</h2>
+      <p>当前游戏正在进行中。如果现在回到首页，本场游戏结果不会记录，当前本轮已消耗的题目/音频会退回库存。是否继续退出？</p>
+      <div class="modal-actions">
+        <button class="ghost-btn" type="button" id="cancelExitGame">返回游戏</button>
+        <button class="primary-btn" type="button" id="confirmExitGame">确认退出</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/emoji/emoji_index.js"></script>
+  <script src="data/script_guess/questions_v3.js"></script>
+  <script src="data/triple_music/triple_music_questions_v3.js"></script>
+  <script src="data/emoji_guess/emoji_guess_questions_v2.js"></script>
+  <script src="js/core/config.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/core/dom.js"></script>
+  <script src="js/core/themes.js"></script>
+  <script src="js/core/router.js"></script>
+  <script src="js/core/participants.js"></script>
+  <script src="js/core/scoring.js"></script>
+  <script src="js/core/round_engine.js"></script>
+  <script src="js/core/settlement.js"></script>
+  <script src="js/core/media.js"></script>
+  <script src="js/games/game_registry.js"></script>
+  <script src="js/games/line_guess.js"></script>
+  <script src="js/games/triple_music.js"></script>
+  <script src="js/games/single_music.js"></script>
+  <script src="js/games/emoji_guess.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+
+
