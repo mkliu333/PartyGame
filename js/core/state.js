@@ -29,7 +29,7 @@ window.PartyGame.State = window.PartyGame.State || {};
       skippedQuestionIds: new Set(),
       skippedMusicTrackIds: new Set(),
       questionBankSource: "内置备用",
-      tripleMusicSource: "triple_music/triple_music_questions_v3.js",
+      tripleMusicSource: "triple_music/triple_music_questions_v4.js",
       tripleMusicPreflight: { loaded: 0, skipped: 0, issues: [] },
       emojiGuessPreflight: { loaded: 0, skipped: 0, warnings: [], issues: [] },
       preflight: { loaded: BUILT_IN_QUESTIONS.length, skipped: 0, warnings: [], issues: [] },

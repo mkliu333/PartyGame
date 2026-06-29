@@ -25,14 +25,11 @@ function isBrowserRelativeMusicPath(path) {
 }
 
 function getTripleMusicSegmentType(id) {
-  const normalized = String(id || "").trim().toLowerCase();
-  if (/^tt\d+$/.test(normalized)) return "instrumental";
-  if (/^t\d+$/.test(normalized)) return "vocal";
-  return "invalid";
+  return window.PartyGame.Games.musicCommon.getMusicSegmentType(id);
 }
 
 function getTripleMusicSegmentTypeLabel(segmentType) {
-  return segmentType === "instrumental" ? "间奏版" : "唱歌版";
+  return window.PartyGame.Games.musicCommon.getMusicSegmentTypeLabel(segmentType);
 }
 
 function getTripleMusicIdNumber(id) {
@@ -93,11 +90,7 @@ function loadTripleMusicTrackBank() {
 }
 
 function getTripleMusicCategories() {
-  const categoryIds = new Set();
-  state.tripleMusicTracks.forEach((track) => {
-    if (track.category) categoryIds.add(track.category);
-  });
-  return [...categoryIds].map((id) => ({ id, label: id }));
+  return window.PartyGame.Games.musicCommon.getMusicDisplayCategories(state.tripleMusicTracks);
 }
 
 function getTripleMusicRoundConfig() {
@@ -106,23 +99,21 @@ function getTripleMusicRoundConfig() {
     subtitle: "选择本轮题量和歌手范围。每题会动态组合最多 3 段音频，同一段音频重置前不会重复。",
     stockTitle: "音频库存",
     sizes: [5, 7, 11],
-    categories: [{ id: "all", label: "大合集" }, ...getTripleMusicCategories()]
+    categories: getTripleMusicCategories()
   };
 }
 
 function getTripleMusicCategoryLabel(category) {
-  if (category === "all") return "大合集";
   return getTripleMusicCategories().find((item) => item.id === category)?.label || category || "歌手";
 }
 
 function getAvailableTripleMusicTracks(category = "all", excludeIds = new Set(), segmentType = "all") {
-  return state.tripleMusicTracks.filter((track) => (
-    (category === "all" || track.category === category)
-    && (segmentType === "all" || getTripleMusicSegmentType(track.id) === segmentType)
-    && !state.consumedMusicTrackIds.has(track.id)
-    && !state.skippedMusicTrackIds.has(track.id)
-    && !excludeIds.has(track.id)
-  ));
+  return window.PartyGame.Games.musicCommon.getAvailableTracksByDisplayCategory(state.tripleMusicTracks, category, {
+    consumedIds: state.consumedMusicTrackIds,
+    skippedIds: state.skippedMusicTrackIds,
+    excludeIds,
+    segmentType
+  });
 }
 
 function uniqueAnswerEligibleTracks(tracks) {
@@ -140,11 +131,10 @@ function updateTripleMusicCategoryStatsDisplay() {
   elements.categoryStats.innerHTML = categories.map((category) => {
     const vocalRemaining = getAvailableTripleMusicTracks(category.id, new Set(), "vocal").length;
     const instrumentalRemaining = getAvailableTripleMusicTracks(category.id, new Set(), "instrumental").length;
-    const estimated = Math.ceil(vocalRemaining / 3) + Math.ceil(instrumentalRemaining / 3);
     return `
       <div class="stats-row">
         <span>${escapeHTML(category.label)}</span>
-        <span>唱歌 ${vocalRemaining} 段 / 间奏 ${instrumentalRemaining} 段，预计可出 ${estimated} 题</span>
+        <span>唱歌 ${vocalRemaining} 段 / 间奏 ${instrumentalRemaining} 段</span>
       </div>
     `;
   }).join("");
@@ -162,14 +152,55 @@ function drawUniqueAnswerTracks(pool, count, usedIds = new Set(), usedAnswers = 
   return selected;
 }
 
+function groupTracksByArtist(tracks) {
+  const groups = new Map();
+  tracks.forEach((track) => {
+    const artist = track.category || "";
+    if (!groups.has(artist)) groups.set(artist, []);
+    groups.get(artist).push(track);
+  });
+  return groups;
+}
+
+function drawBestEffortSameSegmentTracks(displayCategory, localUsedIds) {
+  const segmentTypes = shuffleArray(["vocal", "instrumental"]);
+  for (const segmentType of segmentTypes) {
+    const pool = getAvailableTripleMusicTracks(displayCategory, localUsedIds, segmentType);
+    const selected = drawUniqueAnswerTracks(pool, 3, localUsedIds, new Set());
+    if (selected.length) return selected;
+  }
+  return [];
+}
+
+function drawStandaloneTripleMusicQuestion(displayCategory, localUsedIds) {
+  return drawBestEffortSameSegmentTracks(displayCategory, localUsedIds);
+}
+
+function drawGroupedTripleMusicQuestion(displayCategory, localUsedIds) {
+  const comboCandidates = [];
+  shuffleArray(["vocal", "instrumental"]).forEach((segmentType) => {
+    const pool = getAvailableTripleMusicTracks(displayCategory, localUsedIds, segmentType);
+    groupTracksByArtist(pool).forEach((artistTracks, artist) => {
+      if (uniqueAnswerEligibleTracks(artistTracks).length >= 3) {
+        comboCandidates.push({ artist, segmentType, pool: artistTracks });
+      }
+    });
+  });
+
+  const selectedCombo = shuffleArray(comboCandidates)[0];
+  if (selectedCombo) {
+    return drawUniqueAnswerTracks(selectedCombo.pool, 3, localUsedIds, new Set());
+  }
+
+  return drawBestEffortSameSegmentTracks(displayCategory, localUsedIds);
+}
+
 function buildTripleMusicQuestion(index, tracks) {
-  const firstCategory = tracks[0]?.category || state.selectedCategory;
-  const allSameCategory = tracks.every((track) => track.category === firstCategory);
   const segmentType = getTripleMusicSegmentType(tracks[0]?.id);
   return {
     id: window.PartyGame.Games.musicCommon.createMusicQuestionId("triple_music", index),
     type: "triple_music",
-    category: allSameCategory ? firstCategory : "all",
+    category: state.selectedCategory,
     segmentType,
     source: "三歌混播",
     tracks
@@ -177,23 +208,11 @@ function buildTripleMusicQuestion(index, tracks) {
 }
 
 function drawTripleMusicQuestion(selectedCategory, localUsedIds) {
-  const candidatePools = [];
-  const categories = selectedCategory === "all"
-    ? getTripleMusicCategories().map((category) => category.id)
-    : [selectedCategory];
-
-  categories.forEach((category) => {
-    ["vocal", "instrumental"].forEach((segmentType) => {
-      const pool = getAvailableTripleMusicTracks(category, localUsedIds, segmentType);
-      if (uniqueAnswerEligibleTracks(pool).length) {
-        candidatePools.push({ category, segmentType, pool });
-      }
-    });
-  });
-
-  const selectedPool = shuffleArray(candidatePools)[0];
-  if (!selectedPool) return [];
-  return drawUniqueAnswerTracks(selectedPool.pool, 3, localUsedIds, new Set());
+  const common = window.PartyGame.Games.musicCommon;
+  if (selectedCategory !== common.MUSIC_ALL_CATEGORY_ID && selectedCategory !== common.MUSIC_MISC_CATEGORY_ID) {
+    return drawStandaloneTripleMusicQuestion(selectedCategory, localUsedIds);
+  }
+  return drawGroupedTripleMusicQuestion(selectedCategory, localUsedIds);
 }
 
 function generateTripleMusicRoundQuestions() {
@@ -329,8 +348,9 @@ function renderTripleMusicQuestionFooter(question) {
   const trackCount = question.tracks.length;
   const trackWord = trackCount === 1 ? "播放" : "混播";
   const segmentLabel = getTripleMusicSegmentTypeLabel(question.segmentType);
+  const artistLabel = window.PartyGame.Games.musicCommon.getInvolvedArtistLabel(question.tracks);
   elements.questionTitle.textContent = `第 ${state.currentQuestionIndex + 1} / ${state.currentRoundQuestions.length} 题`;
-  elements.questionMeta.textContent = `${getTripleMusicCategoryLabel(question.category)} · ${segmentLabel} · 本题 ${trackCount} 首歌${trackWord}`;
+  elements.questionMeta.textContent = `${artistLabel} · ${segmentLabel} · 本题 ${trackCount} 首歌${trackWord}`;
 }
 
 function renderTripleMusicStageControls() {

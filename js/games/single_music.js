@@ -63,7 +63,7 @@ function getSingleMusicRoundConfig() {
     subtitle: "选择本轮题量和歌手范围。每题播放 1 段音频，同一段音频重置前不会重复。",
     stockTitle: "音频库存",
     sizes: [5, 10, 20],
-    categories: [{ id: "all", label: "大合集" }, ...shared.getCategories()]
+    categories: shared.getCategories()
   };
 }
 
@@ -90,7 +90,6 @@ function setSingleMusicPlaybackMode(mode) {
 }
 
 function getSingleMusicCategoryLabel(category) {
-  if (category === "all") return "大合集";
   return getSingleMusicShared().getCategories().find((item) => item.id === category)?.label || category || "歌手";
 }
 

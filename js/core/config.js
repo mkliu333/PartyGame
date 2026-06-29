@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v3.1.9";
+    const APP_VERSION = "v3.2.0";
 
-    const UPDATE_THEME = "修复复古街机标题换行与单曲正放揭晓按钮";
+    const UPDATE_THEME = "音乐题库 v4 + 自动歌单分类 + 三歌混播抽题逻辑升级";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
