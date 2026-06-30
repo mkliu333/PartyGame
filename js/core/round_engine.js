@@ -3,6 +3,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
 
     function getCategoryLabel(category) {
       if (isEmojiGuessActive()) return window.PartyGame.Games.emojiGuess.getCategoryLabel(category);
+      if (isWodiActive()) return window.PartyGame.Games.wodi.getCategoryLabel(category);
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         return musicGame.getCategoryLabel(category);
@@ -33,6 +34,10 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         window.PartyGame.Games.emojiGuess.updateCategoryStatsDisplay();
         return;
       }
+      if (isWodiActive()) {
+        window.PartyGame.Games.wodi.updateCategoryStatsDisplay();
+        return;
+      }
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         musicGame.updateCategoryStatsDisplay();
@@ -51,6 +56,10 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       if (!elements.questionBankInspectPanel) return;
       if (isEmojiGuessActive()) {
         window.PartyGame.Games.emojiGuess.renderQuestionBankInspector();
+        return;
+      }
+      if (isWodiActive()) {
+        window.PartyGame.Games.wodi.renderQuestionBankInspector();
         return;
       }
       if (isMusicGameActive()) {
@@ -177,6 +186,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
 
     function generateRoundQuestions() {
       if (isEmojiGuessActive()) return window.PartyGame.Games.emojiGuess.generateRoundQuestions();
+      if (isWodiActive()) return window.PartyGame.Games.wodi.generateRoundQuestions();
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         return musicGame.generateRoundQuestions();
@@ -213,6 +223,10 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         window.PartyGame.Games.emojiGuess.resetQuestionPool();
         return;
       }
+      if (isWodiActive()) {
+        window.PartyGame.Games.wodi.resetQuestionPool();
+        return;
+      }
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         musicGame.resetQuestionPool();
@@ -233,7 +247,8 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       state.activeRoundInventorySnapshot = {
         questionIds: new Set(state.consumedQuestionIds),
         musicTrackIds: new Set(state.consumedMusicTrackIds),
-        emojiQuestionIds: new Set(state.consumedEmojiGuessQuestionIds)
+        emojiQuestionIds: new Set(state.consumedEmojiGuessQuestionIds),
+        wodiQuestionIds: new Set(state.wodiConsumedQuestionIds)
       };
     }
 
@@ -260,6 +275,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       restoreSetFromSnapshot(state.consumedQuestionIds, state.activeRoundInventorySnapshot.questionIds);
       restoreSetFromSnapshot(state.consumedMusicTrackIds, state.activeRoundInventorySnapshot.musicTrackIds);
       restoreSetFromSnapshot(state.consumedEmojiGuessQuestionIds, state.activeRoundInventorySnapshot.emojiQuestionIds || new Set());
+      restoreSetFromSnapshot(state.wodiConsumedQuestionIds, state.activeRoundInventorySnapshot.wodiQuestionIds || new Set());
       state.activeRoundScoreSnapshot.forEach((saved) => {
         const participant = findParticipantById(saved.id);
         if (!participant) return;
@@ -270,6 +286,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       state.currentRoundQuestions = [];
       state.currentQuestionIndex = 0;
       state.currentRoundResult = null;
+      state.wodiRound = null;
       state.hasStartedAnyRound = state.completedRoundCount > 0;
       resetQuestionFlowState();
       return true;
@@ -282,6 +299,8 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       state.skippedMusicTrackIds.clear();
       state.consumedEmojiGuessQuestionIds.clear();
       state.skippedEmojiGuessQuestionIds.clear();
+      state.wodiConsumedQuestionIds.clear();
+      state.wodiSkippedQuestionIds.clear();
       if (state.screen === "round") updateCategoryStatsDisplay();
       showToast("所有游戏题库库存已重置");
     }

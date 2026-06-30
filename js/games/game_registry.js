@@ -24,17 +24,24 @@ window.PartyGame.Games.registry = [
     dataSourceLabel: "triple_music/triple_music_questions_v3.js"
   },
   {
-    id: "celebrity_image",
-    title: "看图猜名人",
-    subtitle: "看图片，抢答人物名。",
-    status: "coming_soon"
-  },
-  {
     id: "emoji_guess",
     title: "Emoji猜猜猜",
     subtitle: "根据 emoji 谐音线索，抢答名人、歌名或成语。",
     status: "available",
     dataSourceLabel: "emoji_guess/emoji_guess_questions_v2.js"
+  },
+  {
+    id: "wodi",
+    title: "谁是卧底",
+    subtitle: "扫码发词，线下描述投票。",
+    status: "available",
+    dataSourceLabel: "wodi/wodi_questions_v1.js"
+  },
+  {
+    id: "celebrity_image",
+    title: "看图猜名人",
+    subtitle: "看图片，抢答人物名。",
+    status: "coming_soon"
   }
 ];
 
@@ -62,6 +69,10 @@ function isEmojiGuessActive() {
   return state.activeGameId === "emoji_guess";
 }
 
+function isWodiActive() {
+  return state.activeGameId === "wodi";
+}
+
 function getActiveMusicGame() {
   if (isSingleMusicActive()) return window.PartyGame.Games.singleMusic;
   if (isTripleMusicActive()) return window.PartyGame.Games.tripleMusic;
@@ -71,12 +82,18 @@ function getActiveMusicGame() {
 function selectGame(gameId) {
   const game = getGameById(gameId);
   if (!game || game.status !== "available") return false;
+  const wasWodiActive = isWodiActive();
   if (typeof stopActiveGameMedia === "function") stopActiveGameMedia();
+  if (wasWodiActive && game.id !== "wodi" && window.PartyGame.Games.wodi?.restoreHost) {
+    window.PartyGame.Games.wodi.restoreHost();
+  }
   state.activeGameId = game.id;
   state.currentRoundQuestions = [];
   state.currentQuestionIndex = 0;
   state.selectedCategory = "all";
+  state.wodiSelectedCategory = "all";
   state.roundSize = isMusicGameActive() ? 5 : 20;
+  if (isWodiActive()) state.mode = "single";
   state.hasStartedAnyRound = false;
   state.completedRoundCount = 0;
   state.activeRoundScoreSnapshot = null;
@@ -87,6 +104,7 @@ function selectGame(gameId) {
     participant.totalScore = 0;
   });
   resetQuestionFlowState();
+  if (isWodiActive()) state.wodiRound = null;
   return true;
 }
 
@@ -95,7 +113,7 @@ function renderHomepageGameCards() {
   elements.gamesGrid.innerHTML = window.PartyGame.Games.registry.map((game) => {
     const available = game.status === "available";
     const classes = available ? "game-card main" : "game-card placeholder";
-    const nav = available ? ' data-nav="mode"' : " disabled";
+    const nav = available ? ` data-nav="${game.id === "wodi" ? "setup" : "mode"}"` : " disabled";
     const tag = available ? "立即开玩" : "敬请期待";
     return `
       <button class="${classes}" type="button" data-game-id="${escapeHTML(game.id)}"${nav}>
@@ -108,5 +126,5 @@ function renderHomepageGameCards() {
   }).join("");
 }
 
-Object.assign(window.PartyGame.Games, { getGameById, getActiveGame, isTripleMusicActive, isSingleMusicActive, isMusicGameActive, isEmojiGuessActive, getActiveMusicGame, selectGame, renderHomepageGameCards });
+Object.assign(window.PartyGame.Games, { getGameById, getActiveGame, isTripleMusicActive, isSingleMusicActive, isMusicGameActive, isEmojiGuessActive, isWodiActive, getActiveMusicGame, selectGame, renderHomepageGameCards });
 

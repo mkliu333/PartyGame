@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v3.2.0";
+    const APP_VERSION = "v4.0.0";
 
-    const UPDATE_THEME = "音乐题库 v4 + 自动歌单分类 + 三歌混播抽题逻辑升级";
+    const UPDATE_THEME = "新增谁是卧底扫码发词游戏";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

@@ -9,11 +9,17 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       clearRoundMessages();
 
       if (screen === "setup") {
+        if (isWodiActive()) state.mode = "single";
         updateModeCopy();
         renderParticipants();
       }
 
       if (screen === "round") {
+        if (isWodiActive()) {
+          window.PartyGame.Games.wodi.renderSetupOptions();
+          updateTopbarActions();
+          return;
+        }
         renderRoundOptions();
         updateCategoryStatsDisplay();
         renderTotalScores();
@@ -73,7 +79,12 @@ window.PartyGame.Core = window.PartyGame.Core || {};
     function renderRoundOptions() {
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       const emojiGame = isEmojiGuessActive() ? window.PartyGame.Games.emojiGuess : null;
+      const wodiGame = isWodiActive() ? window.PartyGame.Games.wodi : null;
       const activeConfiguredGame = musicGame || emojiGame;
+      if (wodiGame) {
+        wodiGame.renderSetupOptions();
+        return;
+      }
       const roundConfig = activeConfiguredGame
         ? activeConfiguredGame.getRoundConfig()
         : {

@@ -1773,6 +1773,180 @@
     }
 
 /* 12. Game-specific: emoji */
+/* 12b. Game-specific: wodi */
+    .wodi-setup {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .wodi-setup section {
+      padding: 14px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 18px;
+      background: var(--score-row-bg);
+    }
+
+    .wodi-option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .wodi-distribution {
+      padding: 14px 16px;
+      border: 2px dashed var(--accent-border);
+      border-radius: 18px;
+      color: var(--text-muted);
+      background: var(--ghost-bg);
+      font-weight: 900;
+    }
+
+    .wodi-mode {
+      min-height: 560px;
+      padding: clamp(18px, 3vw, 34px);
+      background: var(--hero-bg);
+    }
+
+    .wodi-identity-stage,
+    .wodi-vote-stage,
+    .wodi-result-card {
+      display: grid;
+      gap: 18px;
+      width: 100%;
+      min-height: 500px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .wodi-identity-stage h1,
+    .wodi-vote-stage h1,
+    .wodi-result-card h1 {
+      margin: 0;
+      font-size: clamp(28px, 4.5vw, 52px);
+      line-height: 1.12;
+    }
+
+    .wodi-current-player {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 999px;
+      background: var(--panel-bg-strong);
+      box-shadow: var(--shadow-soft);
+      font-size: 20px;
+    }
+
+    .wodi-qr-card {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      width: min(340px, 100%);
+      padding: 18px;
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      background: var(--panel-bg-strong);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .wodi-qr-card canvas {
+      max-width: 100%;
+      border: 10px solid #fff;
+      border-radius: 14px;
+    }
+
+    .wodi-fallback-link {
+      width: 100%;
+      min-height: 78px;
+      resize: vertical;
+      padding: 10px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      background: var(--ghost-bg);
+      font-size: 12px;
+    }
+
+    .wodi-vote-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      width: 100%;
+    }
+
+    .wodi-player-tile {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      min-height: 150px;
+      padding: 16px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 20px;
+      color: var(--text-main);
+      background: var(--panel-bg-strong);
+      box-shadow: var(--shadow-soft);
+      font-weight: 900;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .wodi-player-tile:hover,
+    .wodi-player-tile:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow), var(--ring);
+      outline: none;
+    }
+
+    .wodi-player-tile.eliminated {
+      opacity: 0.74;
+      transform: none;
+      background: var(--accent-soft);
+    }
+
+    .wodi-role-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: var(--button-text);
+      background: var(--button-bg);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .wodi-confirm-box {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 14px;
+      border: 2px dashed var(--accent-border);
+      border-radius: 18px;
+      background: var(--ghost-bg);
+    }
+
+    .wodi-result-grid {
+      display: grid;
+      gap: 10px;
+      width: min(720px, 100%);
+      padding: 18px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 20px;
+      background: var(--panel-bg-strong);
+      color: var(--text-muted);
+      text-align: left;
+      font-weight: 850;
+    }
+
+    .wodi-side-copy {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-weight: 800;
+    }
+
     .emoji-guess-panel {
       display: grid;
       min-height: 360px;

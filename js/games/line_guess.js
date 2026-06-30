@@ -137,6 +137,10 @@ window.PartyGame.Games = window.PartyGame.Games || {};
         window.PartyGame.Games.emojiGuess.renderGameplay();
         return;
       }
+      if (isWodiActive()) {
+        window.PartyGame.Games.wodi.renderGameplay();
+        return;
+      }
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         musicGame.renderGameplay();
@@ -160,6 +164,7 @@ window.PartyGame.Games = window.PartyGame.Games || {};
         window.PartyGame.Games.emojiGuess.revealAnswer();
         return;
       }
+      if (isWodiActive()) return;
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         musicGame.revealAnswer();
@@ -173,6 +178,7 @@ window.PartyGame.Games = window.PartyGame.Games || {};
 
     function toggleAnswerText() {
       if (isEmojiGuessActive()) return;
+      if (isWodiActive()) return;
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       if (musicGame) {
         musicGame.toggleAnswerText();

@@ -25,6 +25,7 @@ window.PartyGame.State = window.PartyGame.State || {};
       questionBank: [...BUILT_IN_QUESTIONS],
       tripleMusicTracks: [],
       emojiGuessQuestions: [],
+      wodiQuestions: [],
       emojiHintVisible: false,
       skippedQuestionIds: new Set(),
       skippedMusicTrackIds: new Set(),
@@ -32,6 +33,7 @@ window.PartyGame.State = window.PartyGame.State || {};
       tripleMusicSource: "triple_music/triple_music_questions_v4.js",
       tripleMusicPreflight: { loaded: 0, skipped: 0, issues: [] },
       emojiGuessPreflight: { loaded: 0, skipped: 0, warnings: [], issues: [] },
+      wodiPreflight: { loaded: 0, skipped: 0, issues: [] },
       preflight: { loaded: BUILT_IN_QUESTIONS.length, skipped: 0, warnings: [], issues: [] },
       preflightSummary: { missingAnswer: 0, missingAnswerClip: 0, invalidCount: 0 },
       currentRoundResult: null,
@@ -41,6 +43,14 @@ window.PartyGame.State = window.PartyGame.State || {};
       consumedMusicTrackIds: new Set(),
       consumedEmojiGuessQuestionIds: new Set(),
       skippedEmojiGuessQuestionIds: new Set(),
+      wodiConsumedQuestionIds: new Set(),
+      wodiSkippedQuestionIds: new Set(),
+      wodiSelectedCategory: "all",
+      wodiUndercoverCount: 1,
+      wodiUseBlank: false,
+      wodiBlankCount: 0,
+      wodiRevealRole: false,
+      wodiRound: null,
       currentRoundQuestions: []
     };
 

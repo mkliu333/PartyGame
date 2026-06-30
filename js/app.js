@@ -116,6 +116,45 @@ function handleMusicPreviewClick(event) {
 }
 
 function handleRoundOptionClick(event) {
+  if (isWodiActive() && window.PartyGame.Games.wodi) {
+    const wodiCategoryTarget = event.target.closest("[data-wodi-category]");
+    if (wodiCategoryTarget) {
+      state.wodiSelectedCategory = wodiCategoryTarget.dataset.wodiCategory;
+      window.PartyGame.Games.wodi.renderSetupOptions();
+      return true;
+    }
+
+    const undercoverTarget = event.target.closest("[data-wodi-undercover-count]");
+    if (undercoverTarget) {
+      state.wodiUndercoverCount = Number(undercoverTarget.dataset.wodiUndercoverCount);
+      window.PartyGame.Games.wodi.renderSetupOptions();
+      return true;
+    }
+
+    const useBlankTarget = event.target.closest("[data-wodi-use-blank]");
+    if (useBlankTarget) {
+      state.wodiUseBlank = useBlankTarget.dataset.wodiUseBlank === "true";
+      state.wodiBlankCount = state.wodiUseBlank ? Math.max(1, state.wodiBlankCount || 1) : 0;
+      window.PartyGame.Games.wodi.renderSetupOptions();
+      return true;
+    }
+
+    const blankCountTarget = event.target.closest("[data-wodi-blank-count]");
+    if (blankCountTarget) {
+      state.wodiBlankCount = Number(blankCountTarget.dataset.wodiBlankCount);
+      state.wodiUseBlank = true;
+      window.PartyGame.Games.wodi.renderSetupOptions();
+      return true;
+    }
+
+    const revealRoleTarget = event.target.closest("[data-wodi-reveal-role]");
+    if (revealRoleTarget) {
+      state.wodiRevealRole = revealRoleTarget.dataset.wodiRevealRole === "true";
+      window.PartyGame.Games.wodi.renderSetupOptions();
+      return true;
+    }
+  }
+
   const sizeTarget = event.target.closest("[data-round-size]");
   if (sizeTarget) {
     state.roundSize = sizeTarget.dataset.roundSize === "ALL" ? "ALL" : Number(sizeTarget.dataset.roundSize);
@@ -134,6 +173,50 @@ function handleRoundOptionClick(event) {
   return false;
 }
 
+function handleWodiClick(event) {
+  if (!window.PartyGame.Games.wodi) return false;
+  const wodi = window.PartyGame.Games.wodi;
+  if (event.target.closest("[data-wodi-start-round]")) return wodi.startWodiRound();
+  if (event.target.closest("[data-wodi-prev-identity]")) {
+    wodi.showPreviousIdentity();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-next-identity]")) {
+    wodi.showNextIdentity();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-start-discussion]")) {
+    wodi.startDiscussion();
+    return true;
+  }
+  const eliminateTarget = event.target.closest("[data-wodi-eliminate-id]");
+  if (eliminateTarget) {
+    wodi.eliminatePlayer(eliminateTarget.dataset.wodiEliminateId);
+    return true;
+  }
+  if (event.target.closest("[data-wodi-confirm-elimination]")) {
+    wodi.confirmElimination();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-cancel-elimination]")) {
+    wodi.cancelElimination();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-new-round]")) {
+    wodi.newRound();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-return-home]")) {
+    wodi.returnHome();
+    return true;
+  }
+  if (event.target.closest("[data-wodi-reset-pool]")) {
+    wodi.resetQuestionPool();
+    return true;
+  }
+  return false;
+}
+
 function bindEvents() {
   document.addEventListener("click", (event) => {
     if (handleThemeClick(event)) return;
@@ -145,6 +228,7 @@ function bindEvents() {
     if (handleScoringClick(event)) return;
     if (handleMusicPreviewClick(event)) return;
     if (handleRoundOptionClick(event)) return;
+    if (handleWodiClick(event)) return;
   });
 
   document.addEventListener("change", (event) => {
@@ -167,6 +251,10 @@ function bindEvents() {
     if (validateStart()) switchScreen("round");
   });
   elements.startRound.addEventListener("click", () => {
+    if (isWodiActive()) {
+      window.PartyGame.Games.wodi.startWodiRound();
+      return;
+    }
     clearRoundMessages();
     beginActiveRoundSnapshot();
     if (generateRoundQuestions()) {
@@ -176,6 +264,10 @@ function bindEvents() {
     }
   });
   elements.roundSecondaryAction.addEventListener("click", () => {
+    if (isWodiActive()) {
+      switchScreen("setup");
+      return;
+    }
     if (state.hasStartedAnyRound) {
       showFinalSettlementOverlay();
     } else {
@@ -183,6 +275,7 @@ function bindEvents() {
     }
   });
   elements.playPrompt.addEventListener("click", () => {
+    if (isWodiActive()) return;
     if (isEmojiGuessActive()) {
       window.PartyGame.Games.emojiGuess.showHint();
       return;
@@ -219,6 +312,9 @@ async function init() {
   }
   if (window.PartyGame.Games.emojiGuess) {
     window.PartyGame.Games.emojiGuess.loadQuestionBank();
+  }
+  if (window.PartyGame.Games.wodi) {
+    window.PartyGame.Games.wodi.loadQuestionBank();
   }
   console.info("[PartyGame]", {
     version: APP_VERSION,
