@@ -17,6 +17,7 @@ function rememberWodiHostShell() {
 }
 
 function restoreWodiHostShell() {
+  $(".gameplay-grid")?.classList.remove("wodi-fullscreen");
   if (wodiOriginalMediaCardHtml) {
     elements.mediaCard.innerHTML = wodiOriginalMediaCardHtml;
     elements.clip = $("#clip");
@@ -30,6 +31,7 @@ function restoreWodiHostShell() {
   }
   const sideStack = $(".gameplay-side-stack");
   if (sideStack && wodiOriginalSideStackHtml) {
+    sideStack.hidden = false;
     sideStack.innerHTML = wodiOriginalSideStackHtml;
     elements.playPrompt = $("#playPrompt");
     elements.revealAnswer = $("#revealAnswer");
@@ -119,6 +121,42 @@ function getAvailableWodiQuestions(category = WODI_ALL_CATEGORY) {
   ));
 }
 
+function getWodiRemainingCount(category = state.wodiSelectedCategory) {
+  return getAvailableWodiQuestions(category).length;
+}
+
+function getWodiInventoryWarning() {
+  const remaining = getWodiRemainingCount(state.wodiSelectedCategory);
+  // Wodi consumes exactly one word pair per game. Show a soft warning at 0,
+  // and also at 1 to tell hosts the next click will exhaust this category.
+  return remaining <= 1
+    ? "\u9898\u76ee\u5e93\u5b58\u4e0d\u8db3\uff0c\u9898\u76ee\u7528\u5c3d\u540e\u4f1a\u81ea\u52a8\u4ece\u5176\u5b83\u5206\u7c7b\u62bd\u9898\u6216\u8005\u91cd\u7f6e\u9898\u76ee\uff0c\u6709\u53ef\u80fd\u4f1a\u5f71\u54cd\u6e38\u620f\u4f53\u9a8c\u3002"
+    : "";
+}
+
+function resolveWodiQuestionForRound() {
+  let pool = getAvailableWodiQuestions(state.wodiSelectedCategory);
+  let note = "";
+
+  if (!pool.length && state.wodiSelectedCategory !== WODI_ALL_CATEGORY) {
+    pool = getAvailableWodiQuestions(WODI_ALL_CATEGORY);
+    if (pool.length) note = "\u5f53\u524d\u5206\u7c7b\u9898\u76ee\u5df2\u7528\u5c3d\uff0c\u5df2\u81ea\u52a8\u4ece\u5176\u5b83\u5206\u7c7b\u62bd\u9898\u3002";
+  }
+
+  if (!pool.length) {
+    state.wodiConsumedQuestionIds.clear();
+    pool = state.wodiSelectedCategory === WODI_ALL_CATEGORY
+      ? getAvailableWodiQuestions(WODI_ALL_CATEGORY)
+      : getAvailableWodiQuestions(state.wodiSelectedCategory);
+    if (!pool.length && state.wodiSelectedCategory !== WODI_ALL_CATEGORY) {
+      pool = getAvailableWodiQuestions(WODI_ALL_CATEGORY);
+    }
+    note = "\u6240\u6709\u9898\u76ee\u5df2\u7528\u5c3d\uff0c\u7cfb\u7edf\u5df2\u81ea\u52a8\u91cd\u7f6e\u9898\u5e93\u3002";
+  }
+
+  return { question: shuffleArray(pool)[0] || null, note };
+}
+
 function getWodiRoundConfig() {
   return {
     title: "\u8bbe\u7f6e\u8c01\u662f\u5367\u5e95",
@@ -172,7 +210,7 @@ function validateWodiConfig() {
   if (civilianCount < 2) return "\u5e73\u6c11\u4eba\u6570\u5fc5\u987b\u81f3\u5c11 2 \u4eba\u3002";
   if (undercoverCount < 1) return "\u5367\u5e95\u4eba\u6570\u5fc5\u987b\u81f3\u5c11 1 \u4eba\u3002";
   if (undercoverCount + blankCount >= total) return "\u5367\u5e95 + \u767d\u677f\u5fc5\u987b\u5c11\u4e8e\u603b\u53c2\u4e0e\u4eba\u6570\u3002";
-  if (!getAvailableWodiQuestions(state.wodiSelectedCategory).length) return "\u5f53\u524d\u5206\u7c7b\u6ca1\u6709\u53ef\u7528\u8bcd\u7ec4\uff0c\u8bf7\u91cd\u7f6e\u9898\u5e93\u6216\u9009\u62e9\u5176\u5b83\u5206\u7c7b\u3002";
+  if (!state.wodiQuestions.length) return "\u8c01\u662f\u5367\u5e95\u9898\u5e93\u672a\u52a0\u8f7d\uff0c\u8bf7\u68c0\u67e5 data/wodi/wodi_questions_v1.js\u3002";
   return "";
 }
 
@@ -184,44 +222,50 @@ function renderWodiSetupOptions() {
   const categories = [{ id: WODI_ALL_CATEGORY, label: "\u5927\u5408\u96c6" }, ...getWodiCategories()];
   const canTwoUndercover = total >= 6;
   const canTwoBlank = total >= 8;
+  const inventoryWarning = getWodiInventoryWarning();
 
+  $(".round-main").classList.add("wodi-round-main");
   $(".round-main .section-title").textContent = "\u8bbe\u7f6e\u8c01\u662f\u5367\u5e95";
   $(".round-main .section-subtitle").textContent = "\u9009\u62e9\u9898\u5e93\u3001\u5367\u5e95\u548c\u767d\u677f\u6570\u91cf\u3002\u53ea\u6709\u53c2\u4e0e\u73a9\u5bb6\u4f1a\u8fdb\u5165\u672c\u5c40\u3002";
   $("#roundSizeOptions").innerHTML = "";
   $("#roundCategoryOptions").classList.remove("music-category-select-wrap");
-  $("#roundCategoryOptions").innerHTML = categories.map((category) => `
-    <button class="option-btn ${category.id === state.wodiSelectedCategory ? "selected" : ""}" type="button" data-wodi-category="${escapeHTML(category.id)}">${escapeHTML(category.label)}</button>
-  `).join("");
+  $("#roundCategoryOptions").innerHTML = "";
   elements.roundExtraOptions.innerHTML = `
     <div class="wodi-setup">
-      <section>
-        <h2>\u5367\u5e95\u6570\u91cf</h2>
-        <div class="wodi-option-grid">
-          <button class="option-btn ${state.wodiUndercoverCount === 1 ? "selected" : ""}" type="button" data-wodi-undercover-count="1">1</button>
-          <button class="option-btn ${state.wodiUndercoverCount === 2 ? "selected" : ""}" type="button" data-wodi-undercover-count="2" ${canTwoUndercover ? "" : "disabled"}>2</button>
-        </div>
-      </section>
-      <section>
-        <h2>\u662f\u5426\u52a0\u5165\u767d\u677f</h2>
-        <div class="wodi-option-grid">
-          <button class="option-btn ${!state.wodiUseBlank ? "selected" : ""}" type="button" data-wodi-use-blank="false">\u5426</button>
-          <button class="option-btn ${state.wodiUseBlank ? "selected" : ""}" type="button" data-wodi-use-blank="true">\u662f</button>
-        </div>
-      </section>
-      <section>
-        <h2>\u767d\u677f\u6570\u91cf</h2>
-        <div class="wodi-option-grid">
-          <button class="option-btn ${state.wodiBlankCount === 1 ? "selected" : ""}" type="button" data-wodi-blank-count="1" ${state.wodiUseBlank ? "" : "disabled"}>1</button>
-          <button class="option-btn ${state.wodiBlankCount === 2 ? "selected" : ""}" type="button" data-wodi-blank-count="2" ${state.wodiUseBlank && canTwoBlank ? "" : "disabled"}>2</button>
-        </div>
-      </section>
-      <section>
-        <h2>\u9635\u8425\u663e\u793a</h2>
-        <div class="wodi-option-grid">
-          <button class="option-btn ${!state.wodiRevealRole ? "selected" : ""}" type="button" data-wodi-reveal-role="false">\u9690\u85cf\u9635\u8425</button>
-          <button class="option-btn ${state.wodiRevealRole ? "selected" : ""}" type="button" data-wodi-reveal-role="true">\u660e\u793a\u9635\u8425</button>
-        </div>
-      </section>
+      <label class="wodi-field">
+        <span>\u9898\u5e93\u5206\u7c7b</span>
+        <select data-wodi-category-select>
+          ${categories.map((category) => `<option value="${escapeHTML(category.id)}" ${category.id === state.wodiSelectedCategory ? "selected" : ""}>${escapeHTML(category.label)}</option>`).join("")}
+        </select>
+      </label>
+      <label class="wodi-field">
+        <span>\u5367\u5e95\u6570\u91cf</span>
+        <select data-wodi-undercover-select>
+          <option value="1" ${state.wodiUndercoverCount === 1 ? "selected" : ""}>1</option>
+          <option value="2" ${state.wodiUndercoverCount === 2 ? "selected" : ""} ${canTwoUndercover ? "" : "disabled"}>2</option>
+        </select>
+      </label>
+      <label class="wodi-switch">
+        <input type="checkbox" data-wodi-use-blank-checkbox ${state.wodiUseBlank ? "checked" : ""}>
+        <span class="wodi-switch-track" aria-hidden="true"></span>
+        <span>\u52a0\u5165\u767d\u677f</span>
+      </label>
+      <label class="wodi-field">
+        <span>\u767d\u677f\u6570\u91cf</span>
+        <select data-wodi-blank-select ${state.wodiUseBlank ? "" : "disabled"}>
+          <option value="0" ${state.wodiBlankCount === 0 ? "selected" : ""}>0</option>
+          <option value="1" ${state.wodiBlankCount === 1 ? "selected" : ""}>1</option>
+          <option value="2" ${state.wodiBlankCount === 2 ? "selected" : ""} ${canTwoBlank ? "" : "disabled"}>2</option>
+        </select>
+      </label>
+      <label class="wodi-field">
+        <span>\u9635\u8425\u663e\u793a</span>
+        <select data-wodi-reveal-role-select>
+          <option value="false" ${!state.wodiRevealRole ? "selected" : ""}>\u9690\u85cf\u9635\u8425\uff0c\u53ea\u663e\u793a\u8bcd</option>
+          <option value="true" ${state.wodiRevealRole ? "selected" : ""}>\u660e\u793a\u9635\u8425\uff0c\u663e\u793a\u8eab\u4efd + \u8bcd</option>
+        </select>
+      </label>
+      ${inventoryWarning ? `<div class="wodi-warning">${inventoryWarning}</div>` : ""}
       ${renderWodiIdentityDistribution()}
     </div>`;
   $(".round-stock h2").textContent = "\u8c01\u662f\u5367\u5e95\u9898\u5e93\u5e93\u5b58";
@@ -250,7 +294,11 @@ function startWodiRound() {
     return false;
   }
   const players = getWodiActivePlayers();
-  const [question] = shuffleArray(getAvailableWodiQuestions(state.wodiSelectedCategory));
+  const { question, note } = resolveWodiQuestionForRound();
+  if (!question) {
+    showRoundError("\u8c01\u662f\u5367\u5e95\u9898\u5e93\u6ca1\u6709\u53ef\u7528\u8bcd\u7ec4\u3002");
+    return false;
+  }
   const roles = [
     ...Array(Number(state.wodiUndercoverCount) || 1).fill("undercover"),
     ...Array(state.wodiUseBlank ? Number(state.wodiBlankCount) || 1 : 0).fill("blank")
@@ -284,6 +332,7 @@ function startWodiRound() {
   };
   state.hasStartedAnyRound = true;
   updateWodiCategoryStatsDisplay();
+  if (note) showToast(note);
   switchScreen("play");
   return true;
 }
@@ -301,32 +350,51 @@ function buildWodiIdentityPayload(assignment) {
 
 function buildWodiIdentityHtml(assignment) {
   const payload = buildWodiIdentityPayload(assignment);
-  const roleBlock = payload.revealRole
-    ? `<div class="label">\u4f60\u7684\u8eab\u4efd</div><div class="value">${escapeHTML(payload.roleLabel)}</div>`
-    : "";
-  const wordBlock = payload.role === "blank"
-    ? `<div class="value">\u4f60\u6ca1\u6709\u8bcd</div><p>\u8bf7\u6839\u636e\u5927\u5bb6\u7684\u63cf\u8ff0\u4e34\u573a\u53d1\u6325\u3002</p>`
-    : `<div class="label">\u4f60\u7684\u8bcd</div><div class="value">${escapeHTML(payload.word)}</div><p>\u8bf7\u8bb0\u4f4f\u4f60\u7684\u8bcd\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</p>`;
-  const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${payload.title}</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#fff8ea,#f3fbff);font-family:system-ui,"Microsoft YaHei",sans-serif;color:#594253}.card{width:min(92vw,420px);padding:28px;border-radius:24px;background:#fffdf8;box-shadow:0 18px 46px rgba(80,55,70,.2);text-align:center}.kicker{font-weight:900;color:#ff719d}.name{margin:8px 0 22px;font-size:20px;font-weight:900}.label{margin-top:14px;color:#8d7684;font-weight:800}.value{margin:8px 0;font-size:42px;line-height:1.1;font-weight:900}p{font-weight:800;line-height:1.6;color:#8d7684}button{width:100%;margin-top:18px;padding:14px 18px;border:0;border-radius:999px;background:linear-gradient(135deg,#ff719d,#ffc09b,#ffe58d);font-weight:900;color:#594253}.hidden .secret{display:none}.done{display:none}.hidden .done{display:block;font-size:28px;font-weight:900}</style></head><body><main class="card" id="card"><div class="secret"><div class="kicker">\u8c01\u662f\u5367\u5e95</div><div class="name">\u73a9\u5bb6\uff1a${escapeHTML(payload.name)}</div>${roleBlock}${wordBlock}<button id="ok">\u6211\u5df2\u8bb0\u4f4f</button></div><div class="done">\u8bf7\u628a\u624b\u673a\u6536\u8d77\u6765\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</div></main><script>document.getElementById("ok").onclick=function(){document.getElementById("card").className="card hidden"};</script></body></html>`;
+  const safeName = escapeHTML(payload.name);
+  const safeWord = escapeHTML(payload.word);
+  const safeRole = escapeHTML(payload.roleLabel);
+  const secret = payload.role === "blank"
+    ? `<b>\u4f60\u6ca1\u6709\u8bcd</b><p>\u8bf7\u6839\u636e\u5927\u5bb6\u7684\u63cf\u8ff0\u4e34\u573a\u53d1\u6325\u3002</p>`
+    : `${payload.revealRole ? `<small>\u4f60\u7684\u8eab\u4efd</small><b>${safeRole}</b>` : ""}<small>\u4f60\u7684\u8bcd</small><b>${safeWord}</b><p>\u8bf7\u8bb0\u4f4f\u4f60\u7684\u8bcd\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</p>`;
+  const html = `<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>\u8c01\u662f\u5367\u5e95</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff8ea;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#594253}.c{width:min(90vw,390px);padding:26px;border-radius:22px;background:#fff;box-shadow:0 18px 44px #0002;text-align:center}.k{color:#ff719d;font-weight:900}.n{margin:8px 0 18px;font-weight:900}small{display:block;color:#8d7684;font-weight:800}b{display:block;margin:8px 0 14px;font-size:38px}p{color:#8d7684;font-weight:800;line-height:1.5}button{width:100%;padding:14px;border:0;border-radius:999px;background:#ffc09b;font-weight:900}.h .s{display:none}.d{display:none}.h .d{display:block;font-size:26px;font-weight:900}</style><main class=c id=c><div class=s><div class=k>\u8c01\u662f\u5367\u5e95</div><div class=n>\u73a9\u5bb6\uff1a${safeName}</div>${secret}<button id=o>\u6211\u5df2\u8bb0\u4f4f</button></div><div class=d>\u8bf7\u628a\u624b\u673a\u6536\u8d77\u6765\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</div></main><script>o.onclick=()=>c.className="c h"</script>`;
   return `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
+}
+
+function renderWodiQRFallback(container, link) {
+  const fallback = document.createElement("textarea");
+  fallback.className = "wodi-fallback-link show";
+  fallback.readOnly = true;
+  fallback.value = link;
+  container.appendChild(fallback);
 }
 
 function renderWodiQRCode(container, assignment) {
   const link = buildWodiIdentityHtml(assignment);
-  if (typeof QRCode === "function") {
-    try {
-      new QRCode(container, { text: link, width: 220, height: 220, correctLevel: QRCode.CorrectLevel?.M });
-    } catch (error) {
-      container.innerHTML = `<div class="error-message show">\u4e8c\u7ef4\u7801\u5e93\u672a\u52a0\u8f7d\uff0c\u8bf7\u68c0\u67e5 vendor/qrcode.min.js</div>`;
-    }
-  } else {
+  container.replaceChildren();
+  if (typeof QRCode !== "function") {
+    console.error("[Wodi] QRCode global is missing. Check vendor/qrcode.min.js load order.");
     container.innerHTML = `<div class="error-message show">\u4e8c\u7ef4\u7801\u5e93\u672a\u52a0\u8f7d\uff0c\u8bf7\u68c0\u67e5 vendor/qrcode.min.js</div>`;
+    renderWodiQRFallback(container, link);
+    return;
   }
-  const fallback = document.createElement("textarea");
-  fallback.className = "wodi-fallback-link";
-  fallback.readOnly = true;
-  fallback.value = link;
-  container.appendChild(fallback);
+
+  try {
+    // QR strategy: keep the phone page inside a compact data:text/html URL so it
+    // still works offline, then render it with qrcodejs at low correction level.
+    // The fallback textarea is shown only if rendering actually fails.
+    new QRCode(container, {
+      text: link,
+      width: 240,
+      height: 240,
+      colorDark: "#111111",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel?.L ?? 1
+    });
+  } catch (error) {
+    console.error("[Wodi] QR render failed:", error, { payloadLength: link.length });
+    container.innerHTML = `<div class="error-message show">\u4e8c\u7ef4\u7801\u751f\u6210\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5 vendor/qrcode.min.js</div>`;
+    renderWodiQRFallback(container, link);
+  }
 }
 
 function renderWodiAssigning() {
@@ -334,6 +402,9 @@ function renderWodiAssigning() {
   const assignment = round.assignments[round.revealIndex];
   const avatar = getAvatar(assignment.avatarId);
   rememberWodiHostShell();
+  $(".gameplay-grid")?.classList.add("wodi-fullscreen");
+  const sideStack = $(".gameplay-side-stack");
+  if (sideStack) sideStack.hidden = true;
   elements.mediaCard.className = "media-card wodi-mode";
   elements.mediaCard.innerHTML = `
     <div class="wodi-identity-stage">
@@ -349,7 +420,6 @@ function renderWodiAssigning() {
       </div>
     </div>`;
   renderWodiQRCode($("#wodiQrCard"), assignment);
-  renderWodiSidePanel();
 }
 
 function renderWodiSidePanel() {
@@ -424,6 +494,9 @@ function checkWodiWinCondition() {
 function renderWodiVoteStage() {
   const round = state.wodiRound;
   rememberWodiHostShell();
+  $(".gameplay-grid")?.classList.add("wodi-fullscreen");
+  const sideStack = $(".gameplay-side-stack");
+  if (sideStack) sideStack.hidden = true;
   elements.mediaCard.className = "media-card wodi-mode";
   elements.mediaCard.innerHTML = `
     <div class="wodi-vote-stage">
@@ -439,13 +512,24 @@ function renderWodiVoteStage() {
           </button>`;
         }).join("")}
       </div>
+      ${renderWodiEliminationModal()}
     </div>`;
-  const pending = round.assignments.find((item) => item.participantId === round.pendingEliminationId);
-  $(".gameplay-side-stack").innerHTML = `
-    <div class="side-panel">
-      <h2>\u6295\u7968\u6dd8\u6c70</h2>
-      <p class="wodi-side-copy">\u73b0\u573a\u8ba8\u8bba\u548c\u6295\u7968\u540e\uff0c\u4e3b\u6301\u4eba\u70b9\u51fb\u88ab\u7968\u51fa\u7684\u73a9\u5bb6\u3002</p>
-      ${pending ? `<div class="wodi-confirm-box"><strong>\u786e\u8ba4\u6dd8\u6c70 ${escapeHTML(pending.name)} \u5417\uff1f</strong><div class="action-row"><button class="ghost-btn" type="button" data-wodi-cancel-elimination>\u53d6\u6d88</button><button class="primary-btn" type="button" data-wodi-confirm-elimination>\u786e\u8ba4\u6dd8\u6c70</button></div></div>` : ""}
+}
+
+function renderWodiEliminationModal() {
+  const pending = state.wodiRound.assignments.find((item) => item.participantId === state.wodiRound.pendingEliminationId);
+  if (!pending) return "";
+  return `
+    <div class="wodi-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wodiEliminateTitle">
+      <div class="wodi-modal-card">
+        <div class="result-kicker">\u6295\u7968\u6dd8\u6c70</div>
+        <h2 id="wodiEliminateTitle">\u786e\u8ba4\u6dd8\u6c70</h2>
+        <p>\u786e\u8ba4\u6dd8\u6c70 ${escapeHTML(pending.name)} \u5417\uff1f</p>
+        <div class="modal-actions">
+          <button class="ghost-btn" type="button" data-wodi-cancel-elimination>\u53d6\u6d88</button>
+          <button class="primary-btn" type="button" data-wodi-confirm-elimination>\u786e\u8ba4\u6dd8\u6c70</button>
+        </div>
+      </div>
     </div>`;
 }
 
@@ -454,27 +538,38 @@ function renderWodiResult() {
   const winnerLabel = `${WODI_ROLE_LABELS[round.winner]}\u80dc\u5229`;
   const winners = round.assignments.filter((item) => item.role === round.winner && (round.winner !== "blank" || !item.eliminated));
   const grouped = (role) => round.assignments.filter((item) => item.role === role).map((item) => item.name).join("\u3001") || "\u65e0";
+  const playerChip = (assignment) => {
+    const avatar = getAvatar(assignment.avatarId);
+    return `<span class="wodi-winner-chip"><span class="mini-avatar" style="background: ${avatar.color}">${avatar.emoji}</span>${escapeHTML(assignment.name)}</span>`;
+  };
   rememberWodiHostShell();
+  $(".gameplay-grid")?.classList.add("wodi-fullscreen");
+  const sideStack = $(".gameplay-side-stack");
+  if (sideStack) sideStack.hidden = true;
   elements.mediaCard.className = "media-card wodi-mode";
   elements.mediaCard.innerHTML = `
     <div class="wodi-result-card">
+      <div class="wodi-celebrate" aria-hidden="true">\u2726</div>
       <div class="result-kicker">\u6e38\u620f\u7ed3\u675f</div>
       <h1>${winnerLabel}</h1>
-      <p>\u83b7\u80dc\u73a9\u5bb6\uff1a${escapeHTML(winners.map((item) => item.name).join("\u3001") || "\u65e0")}</p>
+      <div class="wodi-winner-panel">
+        <div class="wodi-role-badge">${winnerLabel}</div>
+        <h2>\u83b7\u80dc\u73a9\u5bb6</h2>
+        <div class="wodi-winner-row">${winners.length ? winners.map(playerChip).join("") : "\u65e0"}</div>
+      </div>
       <div class="wodi-result-grid">
-        <div>\u5e73\u6c11\u8bcd\uff1a<strong>${escapeHTML(round.goodWord)}</strong></div>
-        <div>\u5367\u5e95\u8bcd\uff1a<strong>${escapeHTML(round.undercoverWord)}</strong></div>
-        <div>\u5e73\u6c11\u73a9\u5bb6\uff1a${escapeHTML(grouped("civilian"))}</div>
-        <div>\u5367\u5e95\u73a9\u5bb6\uff1a${escapeHTML(grouped("undercover"))}</div>
-        <div>\u767d\u677f\u73a9\u5bb6\uff1a${escapeHTML(grouped("blank"))}</div>
-        <div>\u672c\u5c40\u9898\u5e93\u5206\u7c7b\uff1a${escapeHTML(round.question.category)}</div>
+        <div class="wodi-result-item"><span>\u5e73\u6c11\u8bcd</span><strong>${escapeHTML(round.goodWord)}</strong></div>
+        <div class="wodi-result-item"><span>\u5367\u5e95\u8bcd</span><strong>${escapeHTML(round.undercoverWord)}</strong></div>
+        <div class="wodi-result-item"><span>\u5e73\u6c11\u73a9\u5bb6</span><strong>${escapeHTML(grouped("civilian"))}</strong></div>
+        <div class="wodi-result-item"><span>\u5367\u5e95\u73a9\u5bb6</span><strong>${escapeHTML(grouped("undercover"))}</strong></div>
+        <div class="wodi-result-item"><span>\u767d\u677f\u73a9\u5bb6</span><strong>${escapeHTML(grouped("blank"))}</strong></div>
+        <div class="wodi-result-item"><span>\u672c\u5c40\u9898\u5e93\u5206\u7c7b</span><strong>${escapeHTML(round.question.category)}</strong></div>
       </div>
       <div class="action-row">
         <button class="primary-btn" type="button" data-wodi-new-round>\u518d\u6765\u4e00\u5c40</button>
         <button class="ghost-btn" type="button" data-wodi-return-home>\u56de\u5230\u9996\u9875</button>
       </div>
     </div>`;
-  renderWodiSidePanel();
 }
 
 function renderWodiGameplay() {

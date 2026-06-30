@@ -33,7 +33,7 @@ window.PartyGame.Games.registry = [
   {
     id: "wodi",
     title: "谁是卧底",
-    subtitle: "扫码发词，线下描述投票。",
+    subtitle: "来一决胜负吧！",
     status: "available",
     dataSourceLabel: "wodi/wodi_questions_v1.js"
   },

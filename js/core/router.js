@@ -77,6 +77,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
     }
 
     function renderRoundOptions() {
+      $(".round-main")?.classList.remove("wodi-round-main");
       const musicGame = isMusicGameActive() ? getActiveMusicGame() : null;
       const emojiGame = isEmojiGuessActive() ? window.PartyGame.Games.emojiGuess : null;
       const wodiGame = isWodiActive() ? window.PartyGame.Games.wodi : null;

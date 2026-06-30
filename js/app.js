@@ -232,6 +232,36 @@ function bindEvents() {
   });
 
   document.addEventListener("change", (event) => {
+    if (isWodiActive() && window.PartyGame.Games.wodi) {
+      if (event.target.matches("[data-wodi-category-select]")) {
+        state.wodiSelectedCategory = event.target.value;
+        window.PartyGame.Games.wodi.renderSetupOptions();
+        return;
+      }
+      if (event.target.matches("[data-wodi-undercover-select]")) {
+        state.wodiUndercoverCount = Number(event.target.value);
+        window.PartyGame.Games.wodi.renderSetupOptions();
+        return;
+      }
+      if (event.target.matches("[data-wodi-use-blank-checkbox]")) {
+        state.wodiUseBlank = event.target.checked;
+        state.wodiBlankCount = state.wodiUseBlank ? Math.max(1, state.wodiBlankCount || 1) : 0;
+        window.PartyGame.Games.wodi.renderSetupOptions();
+        return;
+      }
+      if (event.target.matches("[data-wodi-blank-select]")) {
+        state.wodiBlankCount = Number(event.target.value);
+        state.wodiUseBlank = state.wodiBlankCount > 0;
+        window.PartyGame.Games.wodi.renderSetupOptions();
+        return;
+      }
+      if (event.target.matches("[data-wodi-reveal-role-select]")) {
+        state.wodiRevealRole = event.target.value === "true";
+        window.PartyGame.Games.wodi.renderSetupOptions();
+        return;
+      }
+    }
+
     if (event.target.matches("#musicCategorySelect")) {
       state.selectedCategory = event.target.value;
       updateCategoryStatsDisplay();
