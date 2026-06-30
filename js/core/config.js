@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.0.1";
+    const APP_VERSION = "v4.0.2";
 
-    const UPDATE_THEME = "谁是卧底界面精修、二维码修复、库存逻辑优化、README更新";
+    const UPDATE_THEME = "修复谁是卧底专属页面与手机扫码链接";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

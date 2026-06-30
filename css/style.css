@@ -1898,6 +1898,14 @@
       min-width: 0;
     }
 
+    .gameplay-grid.wodi-fullscreen .gameplay-side-stack,
+    .gameplay-grid.wodi-fullscreen .host-controls,
+    .gameplay-grid.wodi-fullscreen .answer-panel,
+    .gameplay-grid.wodi-fullscreen .scoreboard,
+    .gameplay-grid.wodi-fullscreen .confirm-score-btn {
+      display: none !important;
+    }
+
     .wodi-mode {
       min-height: 560px;
       padding: clamp(18px, 3vw, 34px);
@@ -1946,6 +1954,43 @@
       border-radius: 24px;
       background: var(--panel-bg-strong);
       box-shadow: var(--shadow-soft);
+    }
+
+    .wodi-mobile-url-field {
+      display: grid;
+      gap: 7px;
+      width: min(560px, 100%);
+      color: var(--text-main);
+      text-align: left;
+      font-weight: 900;
+    }
+
+    .wodi-mobile-url-field span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .wodi-mobile-url-field input {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 12px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      background: var(--panel-bg-strong);
+      box-shadow: var(--shadow-soft);
+      font: inherit;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .wodi-mobile-url-note {
+      max-width: 680px;
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 800;
     }
 
     .wodi-qr-card canvas,

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>谁是卧底</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      color: #594253;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255, 229, 141, 0.5), transparent 28%),
+        linear-gradient(135deg, #fff8ea, #f3fbff);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+    .card {
+      width: min(100%, 430px);
+      padding: 28px;
+      border: 3px solid rgba(255, 255, 255, 0.86);
+      border-radius: 26px;
+      background: rgba(255, 253, 248, 0.96);
+      box-shadow: 0 22px 54px rgba(80, 55, 70, 0.2);
+      text-align: center;
+    }
+    .kicker {
+      color: #ff719d;
+      font-weight: 900;
+    }
+    h1 {
+      margin: 8px 0 4px;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+    .player {
+      margin: 0 0 22px;
+      color: #8d7684;
+      font-weight: 900;
+    }
+    .label {
+      display: block;
+      margin-top: 14px;
+      color: #8d7684;
+      font-weight: 900;
+    }
+    .value {
+      display: block;
+      margin: 8px 0 12px;
+      font-size: 42px;
+      line-height: 1.1;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+    p {
+      margin: 10px 0;
+      color: #8d7684;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 800;
+    }
+    button {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 999px;
+      color: #594253;
+      background: linear-gradient(135deg, #ff719d, #ffc09b, #ffe58d);
+      font: inherit;
+      font-weight: 900;
+    }
+    .done,
+    .hidden .secret { display: none; }
+    .hidden .done {
+      display: block;
+      padding: 32px 0;
+      font-size: 26px;
+      line-height: 1.35;
+      font-weight: 900;
+    }
+    .error {
+      color: #9d334f;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" id="card">
+    <div class="secret" id="secret"></div>
+    <div class="done">请把手机收起来，不要给别人看。</div>
+  </main>
+  <script>
+    function decodeBase64Url(value) {
+      const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+      const binary = atob(padded);
+      const encoded = Array.from(binary)
+        .map((char) => "%" + char.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("");
+      return JSON.parse(decodeURIComponent(encoded));
+    }
+
+    function escapeHTML(value) {
+      return String(value || "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function getPayload() {
+      const params = new URLSearchParams(location.hash.replace(/^#/, ""));
+      const raw = params.get("payload");
+      if (!raw) throw new Error("Missing payload");
+      return decodeBase64Url(raw);
+    }
+
+    function render() {
+      const secret = document.getElementById("secret");
+      try {
+        const payload = getPayload();
+        const roleLabels = { civilian: "平民", undercover: "卧底", blank: "白板" };
+        const playerName = escapeHTML(payload.playerName);
+        const roleLabel = escapeHTML(roleLabels[payload.role] || payload.role || "");
+        const word = escapeHTML(payload.word || "");
+        const roleHtml = payload.revealRole ? `<span class="label">你的身份</span><span class="value">${roleLabel}</span>` : "";
+        const wordHtml = payload.role === "blank"
+          ? `<span class="value">你没有词</span><p>请根据大家的描述临场发挥。</p>`
+          : `${roleHtml}<span class="label">你的词</span><span class="value">${word}</span><p>请记住你的词，不要给别人看。</p>`;
+        secret.innerHTML = `
+          <div class="kicker">${escapeHTML(payload.roundTitle || "谁是卧底")}</div>
+          <h1>谁是卧底</h1>
+          <p class="player">玩家：${playerName}</p>
+          ${wordHtml}
+          <button type="button" id="remember">我已记住</button>
+        `;
+        document.getElementById("remember").addEventListener("click", () => {
+          document.getElementById("card").classList.add("hidden");
+        });
+      } catch (error) {
+        console.error("[Wodi Identity] Invalid payload:", error);
+        secret.innerHTML = `<h1>谁是卧底</h1><p class="error">身份信息无效，请返回主持人页面重新扫码。</p>`;
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

@@ -268,6 +268,16 @@ function bindEvents() {
     }
   });
 
+  document.addEventListener("input", (event) => {
+    if (
+      isWodiActive()
+      && window.PartyGame.Games.wodi
+      && event.target.matches("[data-wodi-mobile-base-url]")
+    ) {
+      window.PartyGame.Games.wodi.updateIdentityBaseUrl(event.target.value);
+    }
+  });
+
   elements.addParticipant.addEventListener("click", createParticipant);
   elements.cancelParticipantEdit.addEventListener("click", cancelParticipantEdit);
   elements.resetAllGames.addEventListener("click", resetAllGameInventories);

@@ -9,6 +9,7 @@ const WODI_ROLE_LABELS = {
 };
 let wodiOriginalMediaCardHtml = "";
 let wodiOriginalSideStackHtml = "";
+let wodiIdentityBaseUrl = "";
 
 function rememberWodiHostShell() {
   if (!wodiOriginalMediaCardHtml) wodiOriginalMediaCardHtml = elements.mediaCard.innerHTML;
@@ -119,6 +120,48 @@ function getAvailableWodiQuestions(category = WODI_ALL_CATEGORY) {
     && !state.wodiConsumedQuestionIds.has(question.id)
     && !state.wodiSkippedQuestionIds.has(question.id)
   ));
+}
+
+function encodeBase64Url(value) {
+  const json = JSON.stringify(value);
+  const utf8 = encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (_, p1) => (
+    String.fromCharCode(parseInt(p1, 16))
+  ));
+  return btoa(utf8).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function getDefaultWodiIdentityBaseUrl() {
+  const path = `${location.protocol}//${location.host}/wodi_identity.html`;
+  return path;
+}
+
+function getWodiIdentityBaseUrl() {
+  if (!wodiIdentityBaseUrl) wodiIdentityBaseUrl = getDefaultWodiIdentityBaseUrl();
+  return wodiIdentityBaseUrl;
+}
+
+function setWodiIdentityBaseUrl(value) {
+  wodiIdentityBaseUrl = String(value || "").trim() || getDefaultWodiIdentityBaseUrl();
+  if (state.wodiRound?.status === "assigning") renderWodiGameplay();
+}
+
+function updateWodiIdentityBaseUrl(value) {
+  wodiIdentityBaseUrl = String(value || "").trim() || getDefaultWodiIdentityBaseUrl();
+  const round = state.wodiRound;
+  const assignment = round?.assignments?.[round.revealIndex];
+  const container = $("#wodiQrCard");
+  if (assignment && container) renderWodiQRCode(container, assignment);
+  const warning = $("#wodiMobileUrlWarning");
+  if (warning) warning.hidden = !isWodiIdentityBaseUrlLocalhost();
+}
+
+function isWodiIdentityBaseUrlLocalhost() {
+  try {
+    const parsed = new URL(getWodiIdentityBaseUrl(), location.href);
+    return parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
+  } catch (error) {
+    return false;
+  }
 }
 
 function getWodiRemainingCount(category = state.wodiSelectedCategory) {
@@ -339,25 +382,19 @@ function startWodiRound() {
 
 function buildWodiIdentityPayload(assignment) {
   return {
-    title: "\u8c01\u662f\u5367\u5e95",
-    name: assignment.name,
+    playerName: assignment.name,
     role: assignment.role,
-    roleLabel: WODI_ROLE_LABELS[assignment.role],
     word: assignment.word,
-    revealRole: Boolean(state.wodiRevealRole)
+    revealRole: Boolean(state.wodiRevealRole),
+    roundTitle: "\u8c01\u662f\u5367\u5e95"
   };
 }
 
-function buildWodiIdentityHtml(assignment) {
+function buildWodiIdentityUrl(assignment) {
   const payload = buildWodiIdentityPayload(assignment);
-  const safeName = escapeHTML(payload.name);
-  const safeWord = escapeHTML(payload.word);
-  const safeRole = escapeHTML(payload.roleLabel);
-  const secret = payload.role === "blank"
-    ? `<b>\u4f60\u6ca1\u6709\u8bcd</b><p>\u8bf7\u6839\u636e\u5927\u5bb6\u7684\u63cf\u8ff0\u4e34\u573a\u53d1\u6325\u3002</p>`
-    : `${payload.revealRole ? `<small>\u4f60\u7684\u8eab\u4efd</small><b>${safeRole}</b>` : ""}<small>\u4f60\u7684\u8bcd</small><b>${safeWord}</b><p>\u8bf7\u8bb0\u4f4f\u4f60\u7684\u8bcd\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</p>`;
-  const html = `<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>\u8c01\u662f\u5367\u5e95</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff8ea;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#594253}.c{width:min(90vw,390px);padding:26px;border-radius:22px;background:#fff;box-shadow:0 18px 44px #0002;text-align:center}.k{color:#ff719d;font-weight:900}.n{margin:8px 0 18px;font-weight:900}small{display:block;color:#8d7684;font-weight:800}b{display:block;margin:8px 0 14px;font-size:38px}p{color:#8d7684;font-weight:800;line-height:1.5}button{width:100%;padding:14px;border:0;border-radius:999px;background:#ffc09b;font-weight:900}.h .s{display:none}.d{display:none}.h .d{display:block;font-size:26px;font-weight:900}</style><main class=c id=c><div class=s><div class=k>\u8c01\u662f\u5367\u5e95</div><div class=n>\u73a9\u5bb6\uff1a${safeName}</div>${secret}<button id=o>\u6211\u5df2\u8bb0\u4f4f</button></div><div class=d>\u8bf7\u628a\u624b\u673a\u6536\u8d77\u6765\uff0c\u4e0d\u8981\u7ed9\u522b\u4eba\u770b\u3002</div></main><script>o.onclick=()=>c.className="c h"</script>`;
-  return `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
+  const baseUrl = getWodiIdentityBaseUrl();
+  const separator = baseUrl.includes("#") ? "&" : "#";
+  return `${baseUrl}${separator}payload=${encodeBase64Url(payload)}`;
 }
 
 function renderWodiQRFallback(container, link) {
@@ -369,7 +406,7 @@ function renderWodiQRFallback(container, link) {
 }
 
 function renderWodiQRCode(container, assignment) {
-  const link = buildWodiIdentityHtml(assignment);
+  const link = buildWodiIdentityUrl(assignment);
   container.replaceChildren();
   if (typeof QRCode !== "function") {
     console.error("[Wodi] QRCode global is missing. Check vendor/qrcode.min.js load order.");
@@ -379,9 +416,9 @@ function renderWodiQRCode(container, assignment) {
   }
 
   try {
-    // QR strategy: keep the phone page inside a compact data:text/html URL so it
-    // still works offline, then render it with qrcodejs at low correction level.
-    // The fallback textarea is shown only if rendering actually fails.
+    // QR strategy: encode only a short static-page URL plus base64url JSON hash.
+    // This is much easier for iPhone Camera and common scanner apps to read than
+    // a dense QR containing a full data:text/html document.
     new QRCode(container, {
       text: link,
       width: 240,
@@ -392,7 +429,7 @@ function renderWodiQRCode(container, assignment) {
     });
   } catch (error) {
     console.error("[Wodi] QR render failed:", error, { payloadLength: link.length });
-    container.innerHTML = `<div class="error-message show">\u4e8c\u7ef4\u7801\u751f\u6210\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5 vendor/qrcode.min.js</div>`;
+    container.innerHTML = `<div class="error-message show">\u4e8c\u7ef4\u7801\u751f\u6210\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u624b\u673a\u8bbf\u95ee\u5730\u5740\u3002</div>`;
     renderWodiQRFallback(container, link);
   }
 }
@@ -412,6 +449,12 @@ function renderWodiAssigning() {
       <p>\u6b63\u5728\u53d1\u653e\uff1a\u7b2c ${round.revealIndex + 1} / ${round.assignments.length} \u4f4d</p>
       <div class="wodi-current-player"><span class="mini-avatar" style="background: ${avatar.color}">${avatar.emoji}</span><strong>${escapeHTML(assignment.name)}</strong></div>
       <div class="wodi-qr-card" id="wodiQrCard"></div>
+      <label class="wodi-mobile-url-field">
+        <span>\u624b\u673a\u8bbf\u95ee\u5730\u5740</span>
+        <input value="${escapeHTML(getWodiIdentityBaseUrl())}" data-wodi-mobile-base-url>
+      </label>
+      <p class="wodi-mobile-url-note">\u624b\u673a\u626b\u7801\u9700\u8981\u548c\u7535\u8111\u5728\u540c\u4e00\u4e2a Wi-Fi \u4e0b\u3002\u8bf7\u786e\u8ba4\u4e0a\u9762\u5730\u5740\u662f\u624b\u673a\u53ef\u4ee5\u8bbf\u95ee\u7684\u7535\u8111\u5730\u5740\u3002</p>
+      <p class="wodi-warning" id="wodiMobileUrlWarning" ${isWodiIdentityBaseUrlLocalhost() ? "" : "hidden"}>\u5f53\u524d\u4f7f\u7528\u7684\u662f localhost\uff0c\u624b\u673a\u901a\u5e38\u65e0\u6cd5\u8bbf\u95ee\u3002\u8bf7\u628a localhost \u6539\u6210\u7535\u8111\u5c40\u57df\u7f51 IP\uff0c\u4f8b\u5982 http://192.168.x.x:8000/wodi_identity.html</p>
       <p>\u8bf7\u5f53\u524d\u73a9\u5bb6\u626b\u7801\u67e5\u770b\u81ea\u5df1\u7684\u8eab\u4efd\u8bcd\uff0c\u4e0d\u8981\u8ba9\u5176\u4ed6\u4eba\u770b\u5230\u624b\u673a\u3002</p>
       <div class="action-row">
         <button class="ghost-btn" type="button" data-wodi-prev-identity ${round.revealIndex === 0 ? "disabled" : ""}>\u4e0a\u4e00\u4f4d\u73a9\u5bb6</button>
@@ -629,8 +672,11 @@ window.PartyGame.Games.wodi = {
   confirmElimination: confirmWodiElimination,
   checkWinCondition: checkWodiWinCondition,
   buildIdentityPayload: buildWodiIdentityPayload,
-  buildIdentityHtml: buildWodiIdentityHtml,
+  buildIdentityHtml: buildWodiIdentityUrl,
+  buildIdentityUrl: buildWodiIdentityUrl,
   renderQRCode: renderWodiQRCode,
+  setIdentityBaseUrl: setWodiIdentityBaseUrl,
+  updateIdentityBaseUrl: updateWodiIdentityBaseUrl,
   showPreviousIdentity: showPreviousWodiIdentity,
   showNextIdentity: showNextWodiIdentity,
   startDiscussion: startWodiDiscussion,
