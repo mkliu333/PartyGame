@@ -388,6 +388,7 @@ function startWodiRound() {
   updateWodiCategoryStatsDisplay();
   if (note) showToast(note);
   switchScreen("play");
+  window.PartyGame.Core.BackgroundAudio?.sync();
   return true;
 }
 

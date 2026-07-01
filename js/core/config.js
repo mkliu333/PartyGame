@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.0";
+    const APP_VERSION = "v4.1.1";
 
-    const UPDATE_THEME = "全局背景音乐系统";
+    const UPDATE_THEME = "修复背景音乐状态切换与生日歌互斥";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

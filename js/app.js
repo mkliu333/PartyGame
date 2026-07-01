@@ -303,6 +303,7 @@ function bindEvents() {
     beginActiveRoundSnapshot();
     if (generateRoundQuestions()) {
       switchScreen("play");
+      window.PartyGame.Core.BackgroundAudio?.sync();
     } else {
       discardActiveRoundSnapshot();
     }
