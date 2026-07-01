@@ -10,6 +10,7 @@ const WODI_ROLE_LABELS = {
 let wodiOriginalMediaCardHtml = "";
 let wodiOriginalSideStackHtml = "";
 let wodiIdentityBaseUrl = "";
+let wodiInventoryModalOpen = false;
 
 function rememberWodiHostShell() {
   if (!wodiOriginalMediaCardHtml) wodiOriginalMediaCardHtml = elements.mediaCard.innerHTML;
@@ -170,34 +171,17 @@ function getWodiRemainingCount(category = state.wodiSelectedCategory) {
 
 function getWodiInventoryWarning() {
   const remaining = getWodiRemainingCount(state.wodiSelectedCategory);
-  // Wodi consumes exactly one word pair per game. Show a soft warning at 0,
-  // and also at 1 to tell hosts the next click will exhaust this category.
-  return remaining <= 1
-    ? "\u9898\u76ee\u5e93\u5b58\u4e0d\u8db3\uff0c\u9898\u76ee\u7528\u5c3d\u540e\u4f1a\u81ea\u52a8\u4ece\u5176\u5b83\u5206\u7c7b\u62bd\u9898\u6216\u8005\u91cd\u7f6e\u9898\u76ee\uff0c\u6709\u53ef\u80fd\u4f1a\u5f71\u54cd\u6e38\u620f\u4f53\u9a8c\u3002"
+  return remaining === 0
+    ? "\u5f53\u524d\u5206\u7c7b\u5df2\u6ca1\u6709\u65b0\u9898\uff0c\u8bf7\u9009\u62e9\u5176\u5b83\u5206\u7c7b\u6216\u8005\u91cd\u7f6e\u9898\u5e93\u3002"
     : "";
 }
 
 function resolveWodiQuestionForRound() {
-  let pool = getAvailableWodiQuestions(state.wodiSelectedCategory);
-  let note = "";
-
-  if (!pool.length && state.wodiSelectedCategory !== WODI_ALL_CATEGORY) {
-    pool = getAvailableWodiQuestions(WODI_ALL_CATEGORY);
-    if (pool.length) note = "\u5f53\u524d\u5206\u7c7b\u9898\u76ee\u5df2\u7528\u5c3d\uff0c\u5df2\u81ea\u52a8\u4ece\u5176\u5b83\u5206\u7c7b\u62bd\u9898\u3002";
-  }
-
-  if (!pool.length) {
-    state.wodiConsumedQuestionIds.clear();
-    pool = state.wodiSelectedCategory === WODI_ALL_CATEGORY
-      ? getAvailableWodiQuestions(WODI_ALL_CATEGORY)
-      : getAvailableWodiQuestions(state.wodiSelectedCategory);
-    if (!pool.length && state.wodiSelectedCategory !== WODI_ALL_CATEGORY) {
-      pool = getAvailableWodiQuestions(WODI_ALL_CATEGORY);
-    }
-    note = "\u6240\u6709\u9898\u76ee\u5df2\u7528\u5c3d\uff0c\u7cfb\u7edf\u5df2\u81ea\u52a8\u91cd\u7f6e\u9898\u5e93\u3002";
-  }
-
-  return { question: shuffleArray(pool)[0] || null, note };
+  const pool = getAvailableWodiQuestions(state.wodiSelectedCategory);
+  return {
+    question: shuffleArray(pool)[0] || null,
+    note: pool.length === 1 ? "\u8fd9\u662f\u5f53\u524d\u5206\u7c7b\u6700\u540e\u4e00\u9053\u65b0\u9898\u3002" : ""
+  };
 }
 
 function getWodiRoundConfig() {
@@ -310,6 +294,7 @@ function renderWodiSetupOptions() {
       </label>
       ${inventoryWarning ? `<div class="wodi-warning">${inventoryWarning}</div>` : ""}
       ${renderWodiIdentityDistribution()}
+      ${renderWodiInventoryModal()}
     </div>`;
   $(".round-stock h2").textContent = "\u8c01\u662f\u5367\u5e95\u9898\u5e93\u5e93\u5b58";
   elements.totalScoreTitle.textContent = "\u672c\u5c40\u53c2\u4e0e\u73a9\u5bb6";
@@ -320,6 +305,31 @@ function renderWodiSetupOptions() {
   elements.startRound.textContent = "\u5f00\u59cb\u672c\u8f6e";
   elements.roundSecondaryAction.textContent = "\u8fd4\u56de\u73a9\u5bb6";
   updateWodiCategoryStatsDisplay();
+}
+
+function renderWodiInventoryModal() {
+  if (!wodiInventoryModalOpen) return "";
+  return `
+    <div class="wodi-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="wodiInventoryTitle">
+      <div class="wodi-modal-card">
+        <div class="result-kicker">\u9898\u5e93\u5e93\u5b58</div>
+        <h2 id="wodiInventoryTitle">\u9898\u5e93\u5df2\u7528\u5b8c</h2>
+        <p>\u5f53\u524d\u5206\u7c7b\u5df2\u6ca1\u6709\u65b0\u9898\uff0c\u8bf7\u9009\u62e9\u5176\u5b83\u5206\u7c7b\u6216\u8005\u91cd\u7f6e\u9898\u5e93\u3002</p>
+        <div class="modal-actions">
+          <button class="primary-btn" type="button" data-wodi-close-inventory-modal>\u77e5\u9053\u4e86</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function showWodiInventoryModal() {
+  wodiInventoryModalOpen = true;
+  renderWodiSetupOptions();
+}
+
+function closeWodiInventoryModal() {
+  wodiInventoryModalOpen = false;
+  renderWodiSetupOptions();
 }
 
 function renderWodiIdentityDistribution() {
@@ -339,7 +349,7 @@ function startWodiRound() {
   const players = getWodiActivePlayers();
   const { question, note } = resolveWodiQuestionForRound();
   if (!question) {
-    showRoundError("\u8c01\u662f\u5367\u5e95\u9898\u5e93\u6ca1\u6709\u53ef\u7528\u8bcd\u7ec4\u3002");
+    showWodiInventoryModal();
     return false;
   }
   const roles = [
@@ -374,6 +384,7 @@ function startWodiRound() {
     pendingEliminationId: null
   };
   state.hasStartedAnyRound = true;
+  wodiInventoryModalOpen = false;
   updateWodiCategoryStatsDisplay();
   if (note) showToast(note);
   switchScreen("play");
@@ -629,8 +640,10 @@ function renderWodiGameplay() {
 function resetWodiQuestionPool() {
   state.wodiConsumedQuestionIds.clear();
   state.wodiSkippedQuestionIds.clear();
+  wodiInventoryModalOpen = false;
   updateWodiCategoryStatsDisplay();
-  showToast("\u8c01\u662f\u5367\u5e95\u9898\u5e93\u5df2\u91cd\u7f6e");
+  renderWodiSetupOptions();
+  showToast("\u8c01\u662f\u5367\u5e95\u9898\u5e93\u5df2\u91cd\u7f6e\uff0c\u6240\u6709\u8bcd\u7ec4\u53ef\u4ee5\u91cd\u65b0\u62bd\u53d6\u3002");
 }
 
 function newWodiRound() {
@@ -681,6 +694,7 @@ window.PartyGame.Games.wodi = {
   showNextIdentity: showNextWodiIdentity,
   startDiscussion: startWodiDiscussion,
   cancelElimination: cancelWodiElimination,
+  closeInventoryModal: closeWodiInventoryModal,
   newRound: newWodiRound,
   returnHome: returnWodiHome,
   getDebugInfo: getWodiDebugInfo,

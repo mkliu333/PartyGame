@@ -176,6 +176,10 @@ function handleRoundOptionClick(event) {
 function handleWodiClick(event) {
   if (!window.PartyGame.Games.wodi) return false;
   const wodi = window.PartyGame.Games.wodi;
+  if (event.target.closest("[data-wodi-close-inventory-modal]")) {
+    wodi.closeInventoryModal();
+    return true;
+  }
   if (event.target.closest("[data-wodi-start-round]")) return wodi.startWodiRound();
   if (event.target.closest("[data-wodi-prev-identity]")) {
     wodi.showPreviousIdentity();
