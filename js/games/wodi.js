@@ -500,6 +500,7 @@ function startWodiDiscussion() {
   if (!state.wodiRound) return;
   state.wodiRound.status = "voting";
   renderWodiGameplay();
+  window.PartyGame.Core.BackgroundAudio?.sync();
 }
 
 function eliminateWodiPlayer(id) {
@@ -589,6 +590,10 @@ function renderWodiEliminationModal() {
 
 function renderWodiResult() {
   const round = state.wodiRound;
+  if (!round.victoryAudioPlayed) {
+    round.victoryAudioPlayed = true;
+    window.PartyGame.Core.BackgroundAudio?.playVictoryRound();
+  }
   const winnerLabel = `${WODI_ROLE_LABELS[round.winner]}\u80dc\u5229`;
   const winners = round.assignments.filter((item) => item.role === round.winner && (round.winner !== "blank" || !item.eliminated));
   const grouped = (role) => round.assignments.filter((item) => item.role === role).map((item) => item.name).join("\u3001") || "\u65e0";
@@ -649,11 +654,13 @@ function resetWodiQuestionPool() {
 function newWodiRound() {
   state.wodiRound = null;
   switchScreen("round");
+  window.PartyGame.Core.BackgroundAudio?.sync();
 }
 
 function returnWodiHome() {
   state.wodiRound = null;
   switchScreen("home");
+  window.PartyGame.Core.BackgroundAudio?.sync();
 }
 
 function getWodiDebugInfo() {

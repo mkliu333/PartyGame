@@ -18,6 +18,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         if (isWodiActive()) {
           window.PartyGame.Games.wodi.renderSetupOptions();
           updateTopbarActions();
+          window.PartyGame.Core.BackgroundAudio?.sync();
           return;
         }
         renderRoundOptions();
@@ -30,6 +31,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         renderGameplay();
       }
       updateTopbarActions();
+      window.PartyGame.Core.BackgroundAudio?.sync();
     }
 
     function updateTopbarActions() {
@@ -47,6 +49,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
     function closeExitGameConfirmation() {
       elements.exitConfirmOverlay.classList.remove("show");
       updateTopbarActions();
+      window.PartyGame.Core.BackgroundAudio?.sync();
     }
 
     function requestReturnHome() {

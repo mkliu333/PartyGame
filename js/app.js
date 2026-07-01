@@ -350,6 +350,7 @@ async function init() {
   renderParticipants();
   renderTotalScores();
   bindEvents();
+  window.PartyGame.Core.BackgroundAudio?.init();
   await loadQuestionBank();
   if (window.PartyGame.Games.tripleMusic) {
     window.PartyGame.Games.tripleMusic.loadTrackBank();

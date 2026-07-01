@@ -67,6 +67,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       elements.roundResultScores.innerHTML = `<h3 class="ranking-title">本轮排行榜</h3>${renderScoreRows(result.scores, "score")}`;
       elements.roundResultOverlay.classList.add("show");
       updateTopbarActions();
+      window.PartyGame.Core.BackgroundAudio?.playVictoryRound();
     }
 
     function closeRoundResultAndReturnSetup() {
@@ -78,6 +79,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       resetQuestionFlowState();
       renderTotalScores();
       switchScreen("round");
+      window.PartyGame.Core.BackgroundAudio?.sync();
     }
 
     function getFinalWinners() {
@@ -104,6 +106,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         elements.finalRanking.innerHTML = renderScoreRows([], "totalScore");
         elements.finalResultOverlay.classList.add("show");
         updateTopbarActions();
+        window.PartyGame.Core.BackgroundAudio?.playVictoryFinal();
         return;
       }
       const winners = getFinalWinners();
@@ -123,6 +126,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       elements.finalRanking.innerHTML = `<h3 class="ranking-title">最终排行榜</h3>${renderScoreRows(participants, "totalScore")}`;
       elements.finalResultOverlay.classList.add("show");
       updateTopbarActions();
+      window.PartyGame.Core.BackgroundAudio?.playVictoryFinal();
     }
 
     function resetFullGameSession() {
@@ -145,6 +149,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       updateCategoryStatsDisplay();
       renderTotalScores();
       switchScreen("home");
+      window.PartyGame.Core.BackgroundAudio?.sync();
     }
 
 Object.assign(window.PartyGame.Core, { getRoundWinners, renderScoreRows, settleCurrentRound, showRoundResultOverlay, closeRoundResultAndReturnSetup, getFinalWinners, getFinalAwardTitle, showFinalSettlementOverlay, resetFullGameSession });

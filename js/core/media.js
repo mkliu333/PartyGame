@@ -13,14 +13,32 @@ window.PartyGame.Core = window.PartyGame.Core || {};
         elements.birthdaySongToggle.classList.remove("playing");
         elements.birthdaySongToggle.setAttribute("aria-pressed", "false");
       }
+      window.PartyGame.Core.BackgroundAudio?.resumeAfterBirthday();
     }
 
     function getBirthdaySongAudio() {
       if (birthdaySongAudio) return birthdaySongAudio;
       birthdaySongAudio = new Audio("assets/birthday_song/Birthday.mp3");
-      birthdaySongAudio.loop = true;
+      birthdaySongAudio.loop = false;
+      birthdaySongAudio.volume = 0.7;
       birthdaySongAudio.addEventListener("error", handleBirthdaySongError);
+      birthdaySongAudio.addEventListener("ended", handleBirthdaySongEnded);
       return birthdaySongAudio;
+    }
+
+    function setBirthdaySongTogglePlaying(playing) {
+      if (!elements.birthdaySongToggle) return;
+      elements.birthdaySongToggle.classList.toggle("playing", playing);
+      elements.birthdaySongToggle.setAttribute("aria-pressed", String(playing));
+    }
+
+    function handleBirthdaySongEnded() {
+      setBirthdaySongTogglePlaying(false);
+      window.PartyGame.Core.BackgroundAudio?.resumeAfterBirthday();
+    }
+
+    function isBirthdaySongPlaying() {
+      return Boolean(birthdaySongAudio && !birthdaySongAudio.paused && !birthdaySongAudio.ended);
     }
 
     function toggleBirthdaySong() {
@@ -28,16 +46,19 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       if (!audio.paused) {
         audio.pause();
         audio.currentTime = 0;
-        elements.birthdaySongToggle.classList.remove("playing");
-        elements.birthdaySongToggle.setAttribute("aria-pressed", "false");
+        setBirthdaySongTogglePlaying(false);
+        window.PartyGame.Core.BackgroundAudio?.resumeAfterBirthday();
         return;
       }
       birthdaySongErrorShown = false;
+      window.PartyGame.Core.BackgroundAudio?.suspendForBirthday();
       audio.currentTime = 0;
       audio.play().then(() => {
-        elements.birthdaySongToggle.classList.add("playing");
-        elements.birthdaySongToggle.setAttribute("aria-pressed", "true");
-      }).catch(handleBirthdaySongError);
+        setBirthdaySongTogglePlaying(true);
+      }).catch((error) => {
+        handleBirthdaySongError(error);
+        window.PartyGame.Core.BackgroundAudio?.resumeAfterBirthday();
+      });
     }
 
     async function mediaExists(path) {
@@ -191,4 +212,4 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       }
     }
 
-Object.assign(window.PartyGame.Core, { toggleBirthdaySong, mediaExists, getCurrentQuestion, resetQuestionFlowState, isImageQuestion, setEmptyGameplayState, renderQuestionMedia, renderAnswerPanel, renderQuestionFooter, renderStageControls, handleMediaLoadError, stopActiveGameMedia });
+Object.assign(window.PartyGame.Core, { toggleBirthdaySong, isBirthdaySongPlaying, mediaExists, getCurrentQuestion, resetQuestionFlowState, isImageQuestion, setEmptyGameplayState, renderQuestionMedia, renderAnswerPanel, renderQuestionFooter, renderStageControls, handleMediaLoadError, stopActiveGameMedia });

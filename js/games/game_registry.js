@@ -105,6 +105,7 @@ function selectGame(gameId) {
   });
   resetQuestionFlowState();
   if (isWodiActive()) state.wodiRound = null;
+  window.PartyGame.Core.BackgroundAudio?.sync();
   return true;
 }
 

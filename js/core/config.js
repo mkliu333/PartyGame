@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.0.3";
+    const APP_VERSION = "v4.1.0";
 
-    const UPDATE_THEME = "修正谁是卧底题库库存消耗逻辑";
+    const UPDATE_THEME = "全局背景音乐系统";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
