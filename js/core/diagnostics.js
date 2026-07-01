@@ -47,7 +47,8 @@ function getProjectStructureDebugInfo() {
       diagnostics: Boolean(window.PartyGame.Diagnostics),
       backgroundAudio: Boolean(window.PartyGame.Core?.BackgroundAudio),
       musicCommon: Boolean(window.PartyGame.Games?.musicCommon),
-      musicBank: Boolean(window.PartyGame.Games?.musicBank)
+      musicBank: Boolean(window.PartyGame.Games?.musicBank),
+      wodiInternal: Boolean(window.PartyGame.Games?.WodiInternal)
     },
     games: {
       registryCount: window.PartyGame.Games?.registry?.length || 0,
@@ -55,7 +56,12 @@ function getProjectStructureDebugInfo() {
       tripleMusic: Boolean(window.PartyGame.Games?.tripleMusic),
       singleMusic: Boolean(window.PartyGame.Games?.singleMusic),
       emojiGuess: Boolean(window.PartyGame.Games?.emojiGuess),
-      wodi: Boolean(window.PartyGame.Games?.wodi)
+      wodi: Boolean(window.PartyGame.Games?.wodi),
+      wodiApiComplete: Boolean(
+        window.PartyGame.Games?.wodi?.renderGameplay
+        && window.PartyGame.Games?.wodi?.startWodiRound
+        && window.PartyGame.Games?.wodi?.renderQRCode
+      )
     },
     data: {
       lineQuestions: Array.isArray(window.PARTY_QUESTIONS) ? window.PARTY_QUESTIONS.length : 0,

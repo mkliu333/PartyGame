@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.4";
+    const APP_VERSION = "v4.1.5";
 
-    const UPDATE_THEME = "音乐题库共享模块解耦";
+    const UPDATE_THEME = "谁是卧底模块拆分，不改变玩法";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
