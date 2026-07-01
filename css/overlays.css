@@ -45,10 +45,25 @@
     }
 
     .certificate-card {
+      padding-bottom: clamp(72px, 8vh, 104px);
       border-color: #ffd980;
       background:
         linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(255, 246, 218, 0.98)),
         repeating-linear-gradient(45deg, rgba(255, 217, 128, 0.18) 0 10px, transparent 10px 20px);
+      scrollbar-gutter: stable;
+    }
+
+    .certificate-card > *:not(.certificate-frame):not(.confetti) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .certificate-card .modal-actions {
+      position: relative;
+      z-index: 3;
+      justify-content: center;
+      margin-top: 28px;
+      padding-bottom: 8px;
     }
 
     .result-kicker,
@@ -173,10 +188,15 @@
     .certificate-frame {
       position: absolute;
       inset: 16px;
+      z-index: 0;
       border: 2px solid rgba(255, 192, 107, 0.62);
       border-radius: 26px;
       pointer-events: none;
       box-shadow: inset 0 0 0 8px rgba(255, 229, 141, 0.16);
+    }
+
+    .certificate-card .confetti {
+      z-index: 0;
     }
 
     .certificate-awarded {
