@@ -45,7 +45,9 @@ function getProjectStructureDebugInfo() {
       core: Boolean(window.PartyGame.Core),
       games: Boolean(window.PartyGame.Games),
       diagnostics: Boolean(window.PartyGame.Diagnostics),
-      backgroundAudio: Boolean(window.PartyGame.Core?.BackgroundAudio)
+      backgroundAudio: Boolean(window.PartyGame.Core?.BackgroundAudio),
+      musicCommon: Boolean(window.PartyGame.Games?.musicCommon),
+      musicBank: Boolean(window.PartyGame.Games?.musicBank)
     },
     games: {
       registryCount: window.PartyGame.Games?.registry?.length || 0,

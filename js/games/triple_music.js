@@ -9,24 +9,6 @@ const tripleMusicRuntime = {
   previewAudio: null
 };
 
-function normalizeTripleMusicTrack(track) {
-  const safe = track || {};
-  return {
-    id: normalizeCodeField(safe.id),
-    category: normalizeField(safe.category),
-    answer: normalizeField(safe.answer),
-    music: normalizeField(safe.music)
-  };
-}
-
-function isBrowserRelativeMusicPath(path) {
-  return path
-    && path.startsWith("assets/triple_music/")
-    && !path.startsWith("./")
-    && !path.startsWith("/")
-    && !/^[a-zA-Z]:[\\/]/.test(path);
-}
-
 function getTripleMusicSegmentType(id) {
   return window.PartyGame.Games.musicCommon.getMusicSegmentType(id);
 }
@@ -35,65 +17,12 @@ function getTripleMusicSegmentTypeLabel(segmentType) {
   return window.PartyGame.Games.musicCommon.getMusicSegmentTypeLabel(segmentType);
 }
 
-function getTripleMusicIdNumber(id) {
-  const match = String(id || "").trim().toLowerCase().match(/^tt?(\d+)$/);
-  return match ? match[1] : "";
-}
-
-function validateTripleMusicTrack(track) {
-  const errors = [];
-  if (!track.id) errors.push("缺少 id");
-  if (track.id && getTripleMusicSegmentType(track.id) === "invalid") errors.push("ID 必须使用 t### 或 tt### 格式");
-  if (!track.category) errors.push("缺少 category");
-  if (!track.answer) errors.push("缺少 answer");
-  if (!isBrowserRelativeMusicPath(track.music)) errors.push("Music 路径必须是 assets/triple_music/ 开头的浏览器相对路径");
-  if (track.music && !track.music.toLowerCase().endsWith(".mp3")) errors.push("Music 文件必须使用 .mp3 格式");
-  return { valid: errors.length === 0, errors };
-}
-
 function loadTripleMusicTrackBank() {
-  const rawTracks = Array.isArray(window.PARTY_TRIPLE_MUSIC_TRACKS) ? window.PARTY_TRIPLE_MUSIC_TRACKS : [];
-  const seenIds = new Set();
-  const seenIdNumbers = new Map();
-  const validTracks = [];
-  const issues = [];
-
-  rawTracks.forEach((rawTrack) => {
-    const track = normalizeTripleMusicTrack(rawTrack);
-    if (track.id && seenIds.has(track.id)) {
-      issues.push(`${track.id}: 重复 ID，已跳过`);
-      return;
-    }
-    const result = validateTripleMusicTrack(track);
-    if (!result.valid) {
-      result.errors.forEach((error) => issues.push(`${track.id || "未知音频"}: ${error}`));
-      return;
-    }
-    const idNumber = getTripleMusicIdNumber(track.id);
-    if (seenIdNumbers.has(idNumber)) {
-      issues.push(`重复数字编号：${idNumber}，不能同时存在 ${seenIdNumbers.get(idNumber)} 和 ${track.id}`);
-      return;
-    }
-    validTracks.push(track);
-    seenIds.add(track.id);
-    seenIdNumbers.set(idNumber, track.id);
-  });
-
-  state.tripleMusicTracks = validTracks;
-  state.tripleMusicPreflight = {
-    loaded: validTracks.length,
-    skipped: rawTracks.length - validTracks.length,
-    issues
-  };
-
-  if (!Array.isArray(window.PARTY_TRIPLE_MUSIC_TRACKS)) {
-    console.warn("window.PARTY_TRIPLE_MUSIC_TRACKS not found. Using empty triple_music track bank.");
-  }
-  if (issues.length) console.warn("Triple music skipped invalid tracks:", issues);
+  return window.PartyGame.Games.musicBank.loadTrackBank();
 }
 
 function getTripleMusicCategories() {
-  return window.PartyGame.Games.musicCommon.getMusicDisplayCategories(state.tripleMusicTracks);
+  return window.PartyGame.Games.musicBank.getCategories();
 }
 
 function getTripleMusicRoundConfig() {
@@ -107,16 +36,11 @@ function getTripleMusicRoundConfig() {
 }
 
 function getTripleMusicCategoryLabel(category) {
-  return getTripleMusicCategories().find((item) => item.id === category)?.label || category || "歌手";
+  return window.PartyGame.Games.musicBank.getCategoryLabel(category);
 }
 
 function getAvailableTripleMusicTracks(category = "all", excludeIds = new Set(), segmentType = "all") {
-  return window.PartyGame.Games.musicCommon.getAvailableTracksByDisplayCategory(state.tripleMusicTracks, category, {
-    consumedIds: state.consumedMusicTrackIds,
-    skippedIds: state.skippedMusicTrackIds,
-    excludeIds,
-    segmentType
-  });
+  return window.PartyGame.Games.musicBank.getAvailableTracks(category, excludeIds, segmentType);
 }
 
 function uniqueAnswerEligibleTracks(tracks) {
@@ -273,9 +197,7 @@ function stopAllTripleMusicAudio() {
 }
 
 function handleTripleMusicAudioError(track) {
-  console.warn("Triple music audio unreadable:", track);
-  state.skippedMusicTrackIds.add(track.id);
-  showToast("当前音频无法读取，已跳过或请检查素材路径");
+  window.PartyGame.Games.musicBank.handleAudioError(track);
 }
 
 function playMixedAudio() {
@@ -393,8 +315,7 @@ function revealTripleMusicAnswer() {
 function toggleTripleMusicAnswerText() {}
 
 function resetTripleMusicQuestionPool() {
-  state.consumedMusicTrackIds.clear();
-  state.skippedMusicTrackIds.clear();
+  window.PartyGame.Games.musicBank.resetSharedPool();
   updateTripleMusicCategoryStatsDisplay();
   showToast("音频库已重置，所有音频段可以重新抽取啦");
 }

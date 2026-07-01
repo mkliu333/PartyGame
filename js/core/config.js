@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.3-hotfix-1";
+    const APP_VERSION = "v4.1.4";
 
-    const UPDATE_THEME = "修复最终结算页按钮重叠";
+    const UPDATE_THEME = "音乐题库共享模块解耦";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

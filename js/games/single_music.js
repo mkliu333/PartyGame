@@ -11,11 +11,8 @@ const singleMusicRuntime = {
   reverseBufferCache: new Map()
 };
 
-function getSingleMusicShared() {
-  // single_music currently reuses the shared music track bank and inventory logic
-  // from tripleMusic. Low-level reusable helpers live in musicCommon; full bank
-  // ownership can be migrated later.
-  return window.PartyGame.Games.tripleMusic;
+function getSingleMusicBank() {
+  return window.PartyGame.Games.musicBank;
 }
 
 function getSingleMusicAudioContext() {
@@ -60,13 +57,13 @@ function getSingleMusicAlternatePlaybackLabel() {
 }
 
 function getSingleMusicRoundConfig() {
-  const shared = getSingleMusicShared();
+  const musicBank = getSingleMusicBank();
   return {
     title: "设置单曲猜歌",
     subtitle: "选择本轮题量和歌手范围。每题播放 1 段音频，同一段音频重置前不会重复。",
     stockTitle: "音频库存",
     sizes: [5, 10, 20],
-    categories: shared.getCategories()
+    categories: musicBank.getCategories()
   };
 }
 
@@ -93,20 +90,21 @@ function setSingleMusicPlaybackMode(mode) {
 }
 
 function getSingleMusicCategoryLabel(category) {
-  return getSingleMusicShared().getCategories().find((item) => item.id === category)?.label || category || "歌手";
+  return getSingleMusicBank().getCategoryLabel(category);
 }
 
 function updateSingleMusicCategoryStatsDisplay() {
   renderQuestionBankInspector();
-  elements.categoryStats.innerHTML = getSingleMusicShared().getCategories().map((category) => {
-    const remaining = getSingleMusicShared().getAvailableTracks(category.id).length;
+  const musicBank = getSingleMusicBank();
+  elements.categoryStats.innerHTML = musicBank.getCategories().map((category) => {
+    const remaining = musicBank.getAvailableTracks(category.id).length;
     return `<div class="stats-row"><span>${escapeHTML(category.label)}</span><span>剩余 ${remaining} 段，可出 ${remaining} 题</span></div>`;
   }).join("");
 }
 
 function generateSingleMusicRoundQuestions() {
   const requestedCount = Number(state.roundSize) || 5;
-  const pool = shuffleArray(getSingleMusicShared().getAvailableTracks(state.selectedCategory));
+  const pool = shuffleArray(getSingleMusicBank().getAvailableTracks(state.selectedCategory));
   const tracks = pool.slice(0, requestedCount);
   state.currentRoundQuestions = tracks.map((track, index) => ({
     id: window.PartyGame.Games.musicCommon.createMusicQuestionId("single_music", index + 1),
@@ -139,14 +137,13 @@ function ensureSingleMusicPanel() {
 }
 
 function playSingleMusicForward(track) {
-  const shared = getSingleMusicShared();
   stopSingleMusicAudio();
-  shared.stopAllAudio();
+  window.PartyGame.Games.tripleMusic?.stopAllAudio?.();
   const audio = new Audio(track.music);
   audio.volume = 0.8;
-  audio.addEventListener("error", () => shared.handleAudioError(track), { once: true });
+  audio.addEventListener("error", () => getSingleMusicBank().handleAudioError(track), { once: true });
   singleMusicRuntime.activeForwardAudio = audio;
-  audio.play().catch(() => shared.handleAudioError(track));
+  audio.play().catch(() => getSingleMusicBank().handleAudioError(track));
 }
 
 async function getReversedAudioBuffer(track) {
@@ -172,9 +169,8 @@ async function getReversedAudioBuffer(track) {
 }
 
 async function playSingleMusicReverse(track) {
-  const shared = getSingleMusicShared();
   stopSingleMusicAudio();
-  shared.stopAllAudio();
+  window.PartyGame.Games.tripleMusic?.stopAllAudio?.();
   try {
     const context = getSingleMusicAudioContext();
     if (context.state === "suspended") await context.resume();
@@ -274,14 +270,13 @@ function renderSingleMusicGameplay() {
 function revealSingleMusicAnswer() {
   if (!getCurrentQuestion() || state.phase !== "prompt") return;
   stopSingleMusicAudio();
-  getSingleMusicShared().stopAllAudio();
+  window.PartyGame.Games.tripleMusic?.stopAllAudio?.();
   state.phase = "revealed";
   renderSingleMusicGameplay();
 }
 
 function resetSingleMusicQuestionPool() {
-  state.consumedMusicTrackIds.clear();
-  state.skippedMusicTrackIds.clear();
+  getSingleMusicBank().resetSharedPool();
   updateSingleMusicCategoryStatsDisplay();
   showToast("音频库已重置，两个猜歌游戏可重新抽取所有音频啦");
 }
