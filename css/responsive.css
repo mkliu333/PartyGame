@@ -1,0 +1,110 @@
+/* 14. Responsive */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .gameplay-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .media-wrap { order: 1; }
+      .gameplay-side-stack { order: 2; }
+    }
+
+    @media (max-width: 980px) {
+      .games-grid,
+      .setup-grid,
+      .round-layout {
+        grid-template-columns: 1fr;
+      }
+
+      body[data-theme="retro_arcade"] .hero-card h1 {
+        white-space: normal;
+      }
+
+      .round-options.compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .wodi-setup,
+      .wodi-result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .theme-switcher {
+        justify-content: flex-start;
+        order: 3;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 740px) {
+      .avatar-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        width: min(100% - 20px, 1180px);
+        padding-top: 14px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .theme-switcher {
+        min-width: 0;
+      }
+
+      .top-actions {
+        flex-wrap: wrap;
+      }
+
+      .clock { min-width: 0; }
+      .hero-card { border-radius: 28px; }
+      .mode-row { grid-template-columns: 1fr; }
+
+      .media-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .emoji-guess-panel {
+        padding: 22px 14px;
+      }
+
+      .emoji-clue-row {
+        gap: 10px;
+      }
+
+      .emoji-clue-token {
+        min-width: 76px;
+        min-height: 76px;
+        padding: 8px;
+      }
+
+      .emoji-clue-img {
+        width: 52px;
+        height: 52px;
+      }
+
+      .emoji-clue-missing {
+        width: 52px;
+        height: 52px;
+        font-size: 14px;
+      }
+
+      .round-stock .stats-row span:last-child {
+        white-space: normal;
+      }
+    }

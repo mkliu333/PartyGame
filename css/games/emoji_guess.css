@@ -1,0 +1,170 @@
+/* 12. Game-specific: emoji */
+
+    .emoji-guess-panel {
+      display: grid;
+      min-height: 360px;
+      place-content: center;
+      gap: clamp(18px, 3vw, 30px);
+      padding: clamp(28px, 6vw, 64px);
+      background: radial-gradient(circle at top, #fff9dc, #fff4f7);
+    }
+
+    .emoji-clue-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: clamp(12px, 2.5vw, 26px);
+    }
+
+    .emoji-clue-token {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: clamp(108px, 12vw, 132px);
+      min-height: clamp(108px, 12vw, 132px);
+      padding: 12px;
+      border: 3px solid rgba(255, 255, 255, 0.92);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--shadow-soft);
+      line-height: 1;
+    }
+
+    .emoji-clue-img {
+      display: none;
+      width: clamp(68px, 7vw, 78px);
+      height: clamp(68px, 7vw, 78px);
+      object-fit: contain;
+    }
+
+    .emoji-clue-fallback {
+      display: none;
+      font-size: clamp(48px, 8vw, 64px);
+      line-height: 1;
+    }
+
+    .media-card.emoji-mode .emoji-clue-fallback {
+      display: none !important;
+    }
+
+    .emoji-clue-missing {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: clamp(68px, 7vw, 78px);
+      height: clamp(68px, 7vw, 78px);
+      border: 2px dashed rgba(255, 120, 160, 0.55);
+      border-radius: 18px;
+      color: #9b6474;
+      background: rgba(255, 245, 248, 0.9);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .emoji-clue-token.has-image .emoji-clue-img {
+      display: block;
+    }
+
+    .emoji-clue-token.has-image .emoji-clue-missing {
+      display: none;
+    }
+
+    .emoji-clue-token.image-failed .emoji-clue-img {
+      display: none;
+    }
+
+    .emoji-clue-token.image-failed .emoji-clue-missing,
+    .emoji-clue-token.no-asset .emoji-clue-missing {
+      display: inline-flex;
+    }
+
+    .emoji-hint {
+      width: 100%;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 22px);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-card.emoji-mode .emoji-clue-img {
+      display: block;
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.has-image .emoji-clue-img {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.has-image .emoji-clue-missing,
+    .media-card.emoji-mode .emoji-clue-token.has-image .emoji-clue-loading {
+      display: none !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.image-pending .emoji-clue-img {
+      display: block;
+    }
+
+    .media-card.emoji-mode .emoji-clue-loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 78px;
+      height: 78px;
+      border-radius: 18px;
+      border: 2px dashed rgba(255, 180, 120, 0.55);
+      color: #9b6474;
+      font-size: 15px;
+      font-weight: 800;
+      background: rgba(255, 250, 245, 0.9);
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.image-pending .emoji-clue-loading {
+      display: none !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.image-pending .emoji-clue-missing {
+      display: none !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.image-failed .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.no-asset .emoji-clue-img {
+      display: none !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-missing {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 78px;
+      height: 78px;
+      border-radius: 18px;
+      border: 2px dashed rgba(255, 120, 160, 0.55);
+      color: #9b6474;
+      font-size: 16px;
+      font-weight: 800;
+      background: rgba(255, 245, 248, 0.9);
+    }
+
+    .media-card.emoji-mode .emoji-clue-token.image-failed .emoji-clue-missing,
+    .media-card.emoji-mode .emoji-clue-token.no-asset .emoji-clue-missing {
+      display: inline-flex !important;
+    }
+
+    .media-card.emoji-mode .emoji-clue-fallback {
+      display: none !important;
+    }

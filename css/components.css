@@ -1,0 +1,53 @@
+/* 4. Buttons */
+    .ghost-btn,
+    .primary-btn,
+    .pill-btn,
+    .score-btn,
+    .option-btn {
+      border-radius: var(--button-radius);
+      color: var(--button-text);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .ghost-btn {
+      padding: 11px 18px;
+      color: var(--ghost-text);
+      border: 2px solid var(--ghost-border);
+      background: var(--ghost-bg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .primary-btn {
+      min-height: 52px;
+      padding: 14px 24px;
+      font-weight: 900;
+      border: 2px solid var(--button-border);
+      background: var(--button-bg);
+      box-shadow: var(--button-shadow);
+    }
+
+    .ghost-btn:hover,
+    .primary-btn:hover,
+    .pill-btn:hover,
+    .score-btn:hover,
+    .option-btn:hover,
+    .game-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      background: var(--button-bg-hover);
+      box-shadow: var(--button-shadow), var(--ring);
+    }
+
+    .ghost-btn:focus-visible,
+    .primary-btn:focus-visible,
+    .pill-btn:focus-visible,
+    .score-btn:focus-visible,
+    .option-btn:focus-visible,
+    .game-card:focus-visible,
+    input:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow), var(--ring);
+    }

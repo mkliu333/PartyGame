@@ -1,0 +1,188 @@
+﻿/* Base */
+/* 1. Theme tokens */
+    :root,
+    body[data-theme="classic_cream"] {
+      --cream: #fff8ea;
+      --cream-2: #fff1d8;
+      --milk: #fffdf8;
+      --ink: #594253;
+      --muted: #8d7684;
+      --pink: #ff9fb9;
+      --blush: #ffd8df;
+      --peach: #ffc09b;
+      --butter: #ffe58d;
+      --mint: #aee8cc;
+      --sky: #a9dcff;
+      --lavender: #cfc2ff;
+      --rose: #ff719d;
+      --page-bg:
+        radial-gradient(circle at 8% 12%, rgba(255, 229, 141, 0.72) 0 90px, transparent 92px),
+        radial-gradient(circle at 90% 8%, rgba(207, 194, 255, 0.56) 0 120px, transparent 122px),
+        radial-gradient(circle at 80% 90%, rgba(174, 232, 204, 0.52) 0 140px, transparent 142px),
+        linear-gradient(135deg, #fff8ea 0%, #fff1f4 47%, #f3fbff 100%);
+      --panel-bg: rgba(255, 253, 248, 0.88);
+      --text-main: var(--ink);
+      --text-muted: var(--muted);
+      --accent-main: var(--rose);
+      --accent-soft: var(--cream-2);
+      --accent-border: rgba(255, 159, 185, 0.38);
+      --button-gradient: linear-gradient(135deg, var(--rose), var(--peach) 56%, var(--butter));
+      --card-shadow: var(--shadow);
+      --shadow: 0 18px 42px rgba(130, 91, 82, 0.16);
+      --shadow-soft: 0 10px 24px rgba(130, 91, 82, 0.11);
+      --ring: 0 0 0 4px rgba(255, 159, 185, 0.25);
+      --page-overlay:
+        radial-gradient(circle, rgba(255, 159, 185, 0.33) 0 2px, transparent 2.5px),
+        radial-gradient(circle, rgba(169, 220, 255, 0.3) 0 2px, transparent 2.5px);
+      --panel-bg-strong: rgba(255, 253, 248, 0.96);
+      --card-bg: rgba(255, 253, 248, 0.9);
+      --card-border: rgba(255, 255, 255, 0.9);
+      --text-soft: #a58c9a;
+      --text-inverse: #fffdf8;
+      --accent-secondary: var(--peach);
+      --accent-tertiary: var(--butter);
+      --accent-glow: var(--ring);
+      --button-bg: var(--button-gradient);
+      --button-bg-hover: linear-gradient(135deg, #ff5f92, #ffb18e 56%, #ffe06e);
+      --button-text: var(--ink);
+      --button-border: rgba(255, 255, 255, 0.72);
+      --button-radius: 999px;
+      --button-shadow: 0 12px 26px rgba(255, 113, 157, 0.26);
+      --ghost-bg: rgba(255, 253, 248, 0.82);
+      --ghost-border: var(--accent-border);
+      --ghost-text: var(--ink);
+      --hero-bg:
+        linear-gradient(135deg, var(--panel-bg), color-mix(in srgb, var(--accent-soft) 46%, transparent)),
+        radial-gradient(circle at 88% 26%, rgba(169, 220, 255, 0.46), transparent 30%);
+      --hero-border: rgba(255, 255, 255, 0.88);
+      --game-card-bg: var(--panel-bg);
+      --game-card-border: rgba(255, 255, 255, 0.9);
+      --score-row-bg: rgba(255, 255, 255, 0.62);
+      --decor-opacity: 0.38;
+      --decor-filter: drop-shadow(0 8px 12px rgba(130, 91, 82, 0.12));
+      --decor-float-speed: 8s;
+      --font-display: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --letter-spacing-title: 0;
+      --panel-radius: 32px;
+      --card-radius: 28px;
+    }
+
+/* 2. Base page layout */
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      background: var(--page-bg);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: var(--page-overlay);
+      background-position: 20px 30px, 95px 110px;
+      background-size: 150px 150px, 180px 180px;
+      opacity: 0.8;
+    }
+
+    .theme-float-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .theme-float-emoji {
+      position: absolute;
+      font-size: clamp(22px, 2vw, 38px);
+      opacity: var(--decor-opacity, 0.38);
+      filter: var(--decor-filter, none);
+      transform: scale(var(--float-scale, 1));
+      animation: themeFloat var(--decor-float-speed, 8s) ease-in-out infinite alternate;
+    }
+
+    button,
+    input,
+    select { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 42px;
+    }
+
+
+
+/* 15. Animations */
+    @keyframes popIn {
+      from {
+        transform: translateY(10px) scale(0.99);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scalePop {
+      from { transform: translateY(18px) scale(0.94); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes confettiFloat {
+      0%, 100% { transform: translateY(0) rotate(-8deg); opacity: 0.72; }
+      50% { transform: translateY(18px) rotate(10deg); opacity: 1; }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255, 113, 157, 0)); }
+      50% { transform: scale(1.06); filter: drop-shadow(0 0 18px rgba(255, 113, 157, 0.35)); }
+    }
+
+    @keyframes rankSlideIn {
+      from { transform: translateX(-14px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes rankGrow {
+      from { width: 0; }
+      to { width: var(--rank-width, 0%); }
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(-10px) rotate(var(--rot, 0deg)); }
+    }
+
+    @keyframes themeFloat {
+      from { transform: translate3d(0, 0, 0) scale(var(--float-scale, 1)) rotate(-6deg); }
+      to { transform: translate3d(14px, -18px, 0) scale(var(--float-scale, 1)) rotate(8deg); }
+    }

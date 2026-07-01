@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <!--
 App Name: PartyGame
-Version: v4.1.2
-Update Theme: 代码结构安全清理与重构基线
+Version: v4.1.3
+Update Theme: CSS 模块化拆分，不改变视觉效果
 Main Entry: PartyGame.html
 -->
 <html lang="zh-CN">
@@ -10,7 +10,16 @@ Main Entry: PartyGame.html
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>聚会Party小游戏合集</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/games/music.css">
+  <link rel="stylesheet" href="css/games/emoji_guess.css">
+  <link rel="stylesheet" href="css/games/wodi.css">
+  <link rel="stylesheet" href="css/overlays.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
   <div class="theme-float-layer" id="themeFloatLayer" aria-hidden="true"></div>

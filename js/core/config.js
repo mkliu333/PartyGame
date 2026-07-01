@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.2";
+    const APP_VERSION = "v4.1.3";
 
-    const UPDATE_THEME = "代码结构安全清理与重构基线";
+    const UPDATE_THEME = "CSS 模块化拆分，不改变视觉效果";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

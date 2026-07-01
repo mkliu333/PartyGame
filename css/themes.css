@@ -1,0 +1,436 @@
+/* 3. Topbar and theme switcher */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      min-width: 220px;
+      padding: 8px 12px;
+      border: 2px solid var(--ghost-border);
+      border-radius: var(--button-radius);
+      background: color-mix(in srgb, var(--panel-bg-strong) 76%, transparent);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+    }
+
+    .theme-switcher-label {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .theme-pill-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .theme-pill {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border: 2px solid var(--ghost-border);
+      border-radius: var(--button-radius);
+      color: var(--ghost-text);
+      background: var(--ghost-bg);
+      box-shadow: none;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .theme-pill:hover,
+    .theme-pill:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow), var(--ring);
+      outline: none;
+    }
+
+    .theme-pill.selected {
+      border-color: var(--accent-main);
+      color: var(--button-text);
+      background: var(--button-bg);
+      box-shadow: var(--button-shadow), var(--ring);
+    }
+
+    .theme-pill-icon,
+    .theme-pill-label {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .brand,
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand {
+      min-height: 42px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+/* 13. Theme-specific refinements */
+    body[data-theme="strawberry_pop"] {
+      --cream: #fff0f5;
+      --cream-2: #ffdce8;
+      --milk: #fff9fb;
+      --ink: #563144;
+      --muted: #8c6173;
+      --pink: #ff8cad;
+      --blush: #ffc8d8;
+      --peach: #ffb3b8;
+      --butter: #ffe0a8;
+      --mint: #c6ead8;
+      --sky: #ffd7e8;
+      --lavender: #f4c9ff;
+      --rose: #e94978;
+      --page-bg:
+        radial-gradient(circle at 8% 12%, rgba(255, 160, 185, 0.64) 0 92px, transparent 94px),
+        radial-gradient(circle at 90% 8%, rgba(255, 218, 230, 0.74) 0 120px, transparent 122px),
+        linear-gradient(135deg, #fff4f8 0%, #ffe2ec 50%, #fff8ea 100%);
+      --panel-bg: rgba(255, 249, 251, 0.9);
+      --text-main: var(--ink);
+      --text-muted: var(--muted);
+      --accent-main: var(--rose);
+      --accent-soft: var(--cream-2);
+      --accent-border: rgba(233, 73, 120, 0.32);
+      --button-gradient: linear-gradient(135deg, #e94978, #ffb3b8 58%, #ffe0a8);
+      --card-shadow: var(--shadow);
+      --page-overlay:
+        radial-gradient(circle, rgba(233, 73, 120, 0.24) 0 2px, transparent 2.6px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.52) 0 2px, transparent 2.8px);
+      --panel-bg-strong: rgba(255, 247, 250, 0.98);
+      --card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 220, 232, 0.76));
+      --card-border: rgba(233, 73, 120, 0.46);
+      --text-soft: #af748b;
+      --text-inverse: #fff9fb;
+      --accent-secondary: #ff8da8;
+      --accent-tertiary: #ffe0a8;
+      --accent-glow: 0 0 0 4px rgba(233, 73, 120, 0.22);
+      --button-bg: var(--button-gradient);
+      --button-bg-hover: linear-gradient(135deg, #d93668, #ff6690 54%, #ffc84d);
+      --button-text: #fff9fb;
+      --button-border: rgba(255, 255, 255, 0.64);
+      --button-radius: 22px;
+      --button-shadow: 5px 7px 0 rgba(164, 40, 83, 0.18), 0 12px 24px rgba(233, 73, 120, 0.22);
+      --ghost-bg: rgba(255, 255, 255, 0.72);
+      --ghost-border: rgba(233, 73, 120, 0.4);
+      --ghost-text: #563144;
+      --hero-bg:
+        repeating-radial-gradient(circle at 90% 24%, rgba(233, 73, 120, 0.22) 0 2px, transparent 2px 18px),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(255, 207, 223, 0.82));
+      --hero-border: rgba(233, 73, 120, 0.42);
+      --game-card-bg: var(--card-bg);
+      --game-card-border: rgba(233, 73, 120, 0.42);
+      --score-row-bg: rgba(255, 235, 242, 0.82);
+      --decor-opacity: 0.46;
+      --decor-filter: drop-shadow(0 8px 0 rgba(233, 73, 120, 0.12));
+      --decor-float-speed: 6.5s;
+      --font-display: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --letter-spacing-title: 0;
+      --panel-radius: 24px;
+      --card-radius: 22px;
+      --shadow: 8px 12px 0 rgba(233, 73, 120, 0.14), 0 18px 38px rgba(118, 48, 74, 0.15);
+      --shadow-soft: 4px 7px 0 rgba(233, 73, 120, 0.12), 0 10px 24px rgba(118, 48, 74, 0.1);
+      --ring: var(--accent-glow);
+    }
+
+    body[data-theme="mint_soda"] {
+      --cream: #effff9;
+      --cream-2: #d7fbef;
+      --milk: #fbfffd;
+      --ink: #2f4c4f;
+      --muted: #5e7d80;
+      --pink: #89e4cf;
+      --blush: #d7fbef;
+      --peach: #b9f0d9;
+      --butter: #e8f7a2;
+      --mint: #7ae0bf;
+      --sky: #9ddcf6;
+      --lavender: #c9e7ff;
+      --rose: #26b99a;
+      --page-bg:
+        radial-gradient(circle at 8% 12%, rgba(122, 224, 191, 0.56) 0 90px, transparent 92px),
+        radial-gradient(circle at 88% 10%, rgba(157, 220, 246, 0.58) 0 126px, transparent 128px),
+        linear-gradient(135deg, #f1fff9 0%, #dcf8ff 52%, #f8ffe7 100%);
+      --panel-bg: rgba(251, 255, 253, 0.9);
+      --text-main: var(--ink);
+      --text-muted: var(--muted);
+      --accent-main: var(--rose);
+      --accent-soft: var(--cream-2);
+      --accent-border: rgba(38, 185, 154, 0.34);
+      --button-gradient: linear-gradient(135deg, #26b99a, #9ddcf6 58%, #e8f7a2);
+      --card-shadow: var(--shadow);
+      --page-overlay:
+        radial-gradient(circle, rgba(75, 203, 184, 0.24) 0 5px, transparent 5.8px),
+        radial-gradient(circle, rgba(157, 220, 246, 0.24) 0 8px, transparent 9px);
+      --panel-bg-strong: rgba(251, 255, 253, 0.88);
+      --card-bg: rgba(251, 255, 253, 0.64);
+      --card-border: rgba(38, 185, 154, 0.34);
+      --text-soft: #72989a;
+      --text-inverse: #f8fffd;
+      --accent-secondary: #49c9e8;
+      --accent-tertiary: #d5ee78;
+      --accent-glow: 0 0 0 4px rgba(38, 185, 154, 0.22);
+      --button-bg: var(--button-gradient);
+      --button-bg-hover: linear-gradient(135deg, #19a98a, #58cdea 58%, #dbef7a);
+      --button-text: #163f42;
+      --button-border: rgba(255, 255, 255, 0.72);
+      --button-radius: 999px;
+      --button-shadow: 0 14px 28px rgba(38, 185, 154, 0.2);
+      --ghost-bg: rgba(251, 255, 253, 0.54);
+      --ghost-border: rgba(38, 185, 154, 0.36);
+      --ghost-text: #2f4c4f;
+      --hero-bg:
+        radial-gradient(circle at 86% 18%, rgba(255, 255, 255, 0.64), transparent 22%),
+        linear-gradient(135deg, rgba(251, 255, 253, 0.66), rgba(215, 251, 239, 0.58));
+      --hero-border: rgba(255, 255, 255, 0.72);
+      --game-card-bg: rgba(251, 255, 253, 0.62);
+      --game-card-border: rgba(38, 185, 154, 0.3);
+      --score-row-bg: rgba(238, 255, 250, 0.68);
+      --decor-opacity: 0.42;
+      --decor-filter: drop-shadow(0 12px 16px rgba(38, 185, 154, 0.16));
+      --decor-float-speed: 7s;
+      --font-display: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --letter-spacing-title: 0;
+      --panel-radius: 30px;
+      --card-radius: 26px;
+      --ring: var(--accent-glow);
+    }
+
+    body[data-theme="starry_neon"] {
+      --cream: #171b35;
+      --cream-2: #24284a;
+      --milk: #202442;
+      --ink: #f6f0ff;
+      --muted: #c7bddb;
+      --pink: #9b7cff;
+      --blush: #2d3155;
+      --peach: #ffb86b;
+      --butter: #ffe58d;
+      --mint: #64d7c3;
+      --sky: #74b8ff;
+      --lavender: #9b7cff;
+      --rose: #ff7ab6;
+      --ring: 0 0 0 4px rgba(255, 122, 182, 0.26);
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+      --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.24);
+      --page-bg:
+        radial-gradient(circle at 18% 16%, rgba(155, 124, 255, 0.34) 0 94px, transparent 96px),
+        radial-gradient(circle at 88% 14%, rgba(116, 184, 255, 0.26) 0 118px, transparent 120px),
+        linear-gradient(135deg, #10162f 0%, #1b2144 54%, #2a1740 100%);
+      --panel-bg: rgba(32, 36, 66, 0.92);
+      --text-main: var(--ink);
+      --text-muted: var(--muted);
+      --accent-main: var(--rose);
+      --accent-soft: #2d3155;
+      --accent-border: rgba(255, 122, 182, 0.36);
+      --button-gradient: linear-gradient(135deg, #ff7ab6, #9b7cff 58%, #74b8ff);
+      --card-shadow: var(--shadow);
+      --page-overlay:
+        radial-gradient(circle, rgba(255, 255, 255, 0.52) 0 1px, transparent 1.8px),
+        radial-gradient(circle, rgba(116, 184, 255, 0.32) 0 1px, transparent 2px);
+      --panel-bg-strong: rgba(28, 31, 58, 0.94);
+      --card-bg: rgba(32, 36, 66, 0.78);
+      --card-border: rgba(155, 124, 255, 0.5);
+      --text-soft: #aeb8e8;
+      --text-inverse: #14172f;
+      --accent-secondary: #9b7cff;
+      --accent-tertiary: #ffe58d;
+      --accent-glow: 0 0 0 4px rgba(255, 122, 182, 0.22), 0 0 28px rgba(155, 124, 255, 0.32);
+      --button-bg: var(--button-gradient);
+      --button-bg-hover: linear-gradient(135deg, #ff65aa, #8969ff 58%, #ffdb5e);
+      --button-text: #171b35;
+      --button-border: rgba(255, 229, 141, 0.44);
+      --button-radius: 18px;
+      --button-shadow: 0 0 22px rgba(155, 124, 255, 0.32), 0 14px 34px rgba(0, 0, 0, 0.28);
+      --ghost-bg: rgba(32, 36, 66, 0.72);
+      --ghost-border: rgba(155, 124, 255, 0.46);
+      --ghost-text: #f6f0ff;
+      --hero-bg:
+        radial-gradient(circle at 88% 24%, rgba(255, 229, 141, 0.18), transparent 30%),
+        linear-gradient(135deg, rgba(32, 36, 66, 0.78), rgba(43, 30, 70, 0.82));
+      --hero-border: rgba(155, 124, 255, 0.52);
+      --game-card-bg: rgba(32, 36, 66, 0.78);
+      --game-card-border: rgba(155, 124, 255, 0.48);
+      --score-row-bg: rgba(255, 255, 255, 0.08);
+      --decor-opacity: 0.58;
+      --decor-filter: drop-shadow(0 0 12px rgba(255, 229, 141, 0.38));
+      --decor-float-speed: 9s;
+      --font-display: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --letter-spacing-title: 0.02em;
+      --panel-radius: 24px;
+      --card-radius: 22px;
+      --ring: var(--accent-glow);
+    }
+
+    body[data-theme="retro_arcade"] {
+      --cream: #fff2cc;
+      --cream-2: #ffd56f;
+      --milk: #fff7df;
+      --ink: #3f2b1d;
+      --muted: #7c5b38;
+      --pink: #ff7a5c;
+      --blush: #ffd2a7;
+      --peach: #ff9f4a;
+      --butter: #ffd84d;
+      --mint: #9bcf62;
+      --sky: #70b9d8;
+      --lavender: #d49cff;
+      --rose: #e85d2a;
+      --page-bg:
+        radial-gradient(circle at 10% 12%, rgba(255, 216, 77, 0.7) 0 84px, transparent 86px),
+        radial-gradient(circle at 88% 12%, rgba(255, 122, 92, 0.38) 0 124px, transparent 126px),
+        linear-gradient(135deg, #fff2cc 0%, #ffdca0 52%, #f6b465 100%);
+      --panel-bg: rgba(255, 247, 223, 0.9);
+      --text-main: var(--ink);
+      --text-muted: var(--muted);
+      --accent-main: var(--rose);
+      --accent-soft: var(--cream-2);
+      --accent-border: rgba(232, 93, 42, 0.34);
+      --button-gradient: linear-gradient(135deg, #e85d2a, #ff9f4a 58%, #ffd84d);
+      --card-shadow: var(--shadow);
+      --page-overlay:
+        linear-gradient(90deg, rgba(63, 43, 29, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(63, 43, 29, 0.08) 1px, transparent 1px);
+      --panel-bg-strong: rgba(255, 247, 223, 0.98);
+      --card-bg: linear-gradient(135deg, rgba(255, 247, 223, 0.94), rgba(255, 213, 111, 0.42));
+      --card-border: rgba(63, 43, 29, 0.42);
+      --text-soft: #9b7146;
+      --text-inverse: #fff7df;
+      --accent-secondary: #4c2d80;
+      --accent-tertiary: #ffd84d;
+      --accent-glow: 0 0 0 4px rgba(255, 216, 77, 0.32);
+      --button-bg: var(--button-gradient);
+      --button-bg-hover: linear-gradient(135deg, #d84c1c, #ff9233 58%, #ffcf33);
+      --button-text: #321f18;
+      --button-border: rgba(63, 43, 29, 0.38);
+      --button-radius: 12px;
+      --button-shadow: 5px 6px 0 rgba(63, 43, 29, 0.22);
+      --ghost-bg: rgba(255, 247, 223, 0.82);
+      --ghost-border: rgba(63, 43, 29, 0.34);
+      --ghost-text: #3f2b1d;
+      --hero-bg:
+        linear-gradient(135deg, rgba(255, 247, 223, 0.94), rgba(255, 216, 77, 0.4)),
+        repeating-linear-gradient(90deg, rgba(76, 45, 128, 0.12) 0 10px, transparent 10px 20px);
+      --hero-border: rgba(63, 43, 29, 0.42);
+      --game-card-bg: var(--card-bg);
+      --game-card-border: rgba(63, 43, 29, 0.4);
+      --score-row-bg: rgba(255, 237, 180, 0.76);
+      --decor-opacity: 0.46;
+      --decor-filter: drop-shadow(4px 5px 0 rgba(63, 43, 29, 0.16));
+      --decor-float-speed: 6s;
+      --font-display: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      --letter-spacing-title: 0.03em;
+      --panel-radius: 18px;
+      --card-radius: 16px;
+      --shadow: 7px 8px 0 rgba(63, 43, 29, 0.18), 0 18px 34px rgba(117, 75, 28, 0.18);
+      --shadow-soft: 4px 5px 0 rgba(63, 43, 29, 0.14), 0 10px 24px rgba(117, 75, 28, 0.12);
+      --ring: var(--accent-glow);
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--pink), var(--butter));
+      box-shadow: var(--shadow-soft);
+      font-size: 24px;
+    }
+
+    .clock-svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .clock-face {
+      fill: rgba(255, 253, 248, 0.92);
+      stroke: rgba(89, 66, 83, 0.78);
+      stroke-width: 5;
+    }
+
+    .clock-hour,
+    .clock-minute,
+    .clock-second {
+      stroke-linecap: round;
+    }
+
+    .clock-hour {
+      stroke: var(--ink);
+      stroke-width: 6;
+    }
+
+    .clock-minute {
+      stroke: var(--ink);
+      stroke-width: 4;
+    }
+
+    .clock-second {
+      stroke: var(--rose);
+      stroke-width: 2.5;
+    }
+
+    .clock-center {
+      fill: var(--rose);
+    }
+
+    .clock-tick {
+      stroke: rgba(89, 66, 83, 0.42);
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+
+    .clock {
+      min-width: 230px;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .birthday-song-toggle {
+      display: inline-grid;
+      width: 34px;
+      height: 34px;
+      margin: -6px 0;
+      padding: 0;
+      place-items: center;
+      border-radius: 50%;
+      background: transparent;
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .birthday-song-toggle:hover,
+    .birthday-song-toggle:focus-visible,
+    .birthday-song-toggle.playing {
+      transform: rotate(-6deg) scale(1.08);
+      background: rgba(255, 253, 248, 0.72);
+      box-shadow: var(--ring);
+      outline: none;
+    }
