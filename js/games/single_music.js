@@ -1,6 +1,9 @@
 window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 
+// 单曲猜歌：复用音乐题库库存，负责单曲正放/倒放播放和答案阶段控制。
+// 与三歌混播共享底层音乐工具，但保留独立的播放运行态。
+
 const singleMusicRuntime = {
   audioContext: null,
   activeSource: null,
@@ -297,6 +300,7 @@ window.PartyGame.Games.singleMusic = {
   resetQuestionPool: resetSingleMusicQuestionPool,
   renderGameplay: renderSingleMusicGameplay,
   revealAnswer: revealSingleMusicAnswer,
+  // This game does not use text-answer toggling, but keeps the method to satisfy the shared game interface.
   toggleAnswerText() {},
   playAudio: playSingleMusicAudio,
   playForwardAudio: playSingleMusicForwardOnly,

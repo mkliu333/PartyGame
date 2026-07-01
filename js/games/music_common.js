@@ -2,6 +2,9 @@ window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 window.PartyGame.Games.musicCommon = window.PartyGame.Games.musicCommon || {};
 
+// 音乐游戏共享工具：只放三歌混播和单曲猜歌共用的纯工具函数。
+// 不直接读取 DOM，不直接修改游戏状态。
+
 const MUSIC_ALL_CATEGORY_ID = "all";
 const MUSIC_ALL_CATEGORY_LABEL = "大合集";
 const MUSIC_MISC_CATEGORY_ID = "华语乐坛";

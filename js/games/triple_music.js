@@ -1,6 +1,9 @@
 window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 
+// 三歌混播：负责三音轨题库预检、混播播放、预览和答案渲染。
+// 音乐题库通用分类工具由 music_common.js 提供。
+
 const tripleMusicRuntime = {
   mixedAudios: [],
   previewAudio: null
@@ -386,6 +389,7 @@ function revealTripleMusicAnswer() {
   renderTripleMusicGameplay();
 }
 
+// This game does not use text-answer toggling, but keeps the method to satisfy the shared game interface.
 function toggleTripleMusicAnswerText() {}
 
 function resetTripleMusicQuestionPool() {

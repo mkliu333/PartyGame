@@ -1,6 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 
+// 猜台词：负责影视台词题库预检、普通题目渲染和答案揭晓。
+// 共享流程仍由 app/router/round_engine 控制。
+
     function normalizeQuestion(question) {
       const safe = question || {};
       return {

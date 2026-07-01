@@ -1,6 +1,10 @@
 window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 window.PartyGame.EmojiAssets = window.PartyGame.EmojiAssets || {};
+
+// Emoji猜猜猜：负责 Emoji 题库预检、Noto SVG 覆盖诊断和线索渲染。
+// 回合抽题、计分和结算仍复用共享流程。
+
 window.PartyGame.EmojiAssets.missingRuntimeFiles = window.PartyGame.EmojiAssets.missingRuntimeFiles || new Map();
 window.PartyGame.EmojiAssets.loadedRuntimeFiles = window.PartyGame.EmojiAssets.loadedRuntimeFiles || new Map();
 window.PartyGame.EmojiAssets.probedRuntimeFiles = window.PartyGame.EmojiAssets.probedRuntimeFiles || new Set();
@@ -476,5 +480,6 @@ window.PartyGame.Games.emojiGuess = {
   renderGameplay: renderEmojiGuessGameplay,
   showHint: showEmojiGuessHint,
   revealAnswer: revealEmojiGuessAnswer,
+  // This game does not use text-answer toggling, but keeps the method to satisfy the shared game interface.
   toggleAnswerText() {}
 };

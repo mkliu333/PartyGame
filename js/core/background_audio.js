@@ -2,23 +2,30 @@ window.PartyGame = window.PartyGame || {};
 window.PartyGame.Core = window.PartyGame.Core || {};
 window.PartyGame.App = window.PartyGame.App || {};
 
+const BG_TRACKS = {
+  MAIN: "main",
+  GAME: "game",
+  VICTORY_ROUND: "victoryRound",
+  VICTORY_FINAL: "victoryFinal"
+};
+
 const BACKGROUND_AUDIO_TRACKS = {
-  main: {
+  [BG_TRACKS.MAIN]: {
     src: "assets/background_song/mainpage-music.mp3",
     volume: 0.28,
     loop: true
   },
-  game: {
+  [BG_TRACKS.GAME]: {
     src: "assets/background_song/game-music.mp3",
     volume: 0.22,
     loop: true
   },
-  victoryRound: {
+  [BG_TRACKS.VICTORY_ROUND]: {
     src: "assets/background_song/victory-1.mp3",
     volume: 0.55,
     loop: false
   },
-  victoryFinal: {
+  [BG_TRACKS.VICTORY_FINAL]: {
     src: "assets/background_song/victory-2.mp3",
     volume: 0.55,
     loop: false
@@ -47,7 +54,7 @@ function createBackgroundAudio(trackName, config) {
     if (backgroundAudioState.currentTrack === trackName) {
       backgroundAudioState.currentTrack = "";
     }
-    if (trackName === "victoryRound" || trackName === "victoryFinal") {
+    if (trackName === BG_TRACKS.VICTORY_ROUND || trackName === BG_TRACKS.VICTORY_FINAL) {
       backgroundAudioState.victoryActive = false;
     }
   });
@@ -107,7 +114,7 @@ function stopBackgroundTrack(trackName) {
   if (backgroundAudioState.pendingTrack === trackName) {
     backgroundAudioState.pendingTrack = "";
   }
-  if (trackName === "victoryRound" || trackName === "victoryFinal") {
+  if (trackName === BG_TRACKS.VICTORY_ROUND || trackName === BG_TRACKS.VICTORY_FINAL) {
     backgroundAudioState.victoryActive = false;
   }
 }
@@ -121,16 +128,16 @@ function pauseAllBackgroundAudio() {
 }
 
 function stopMainBackgroundAudio() {
-  stopBackgroundTrack("main");
+  stopBackgroundTrack(BG_TRACKS.MAIN);
 }
 
 function stopGameBackgroundAudio() {
-  stopBackgroundTrack("game");
+  stopBackgroundTrack(BG_TRACKS.GAME);
 }
 
 function stopVictoryBackgroundAudio() {
-  stopBackgroundTrack("victoryRound");
-  stopBackgroundTrack("victoryFinal");
+  stopBackgroundTrack(BG_TRACKS.VICTORY_ROUND);
+  stopBackgroundTrack(BG_TRACKS.VICTORY_FINAL);
 }
 
 function playBackgroundTrack(trackName) {
@@ -142,7 +149,7 @@ function playBackgroundTrack(trackName) {
     return;
   }
   const token = ++backgroundAudioState.playToken;
-  const isVictoryTrack = trackName === "victoryRound" || trackName === "victoryFinal";
+  const isVictoryTrack = trackName === BG_TRACKS.VICTORY_ROUND || trackName === BG_TRACKS.VICTORY_FINAL;
   backgroundAudioState.pendingTrack = trackName;
   if (!backgroundAudioState.unlocked) {
     backgroundAudioState.victoryActive = isVictoryTrack;
@@ -184,19 +191,19 @@ function playBackgroundTrack(trackName) {
 }
 
 function playMainBackgroundAudio() {
-  playBackgroundTrack("main");
+  playBackgroundTrack(BG_TRACKS.MAIN);
 }
 
 function playGameBackgroundAudio() {
-  playBackgroundTrack("game");
+  playBackgroundTrack(BG_TRACKS.GAME);
 }
 
 function playRoundVictoryAudio() {
-  playBackgroundTrack("victoryRound");
+  playBackgroundTrack(BG_TRACKS.VICTORY_ROUND);
 }
 
 function playFinalVictoryAudio() {
-  playBackgroundTrack("victoryFinal");
+  playBackgroundTrack(BG_TRACKS.VICTORY_FINAL);
 }
 
 function isOverlayOpen(overlay) {
@@ -266,7 +273,7 @@ function syncBackgroundAudio() {
   }
   if (
     backgroundAudioState.victoryActive
-    && (backgroundAudioState.currentTrack === "victoryRound" || backgroundAudioState.currentTrack === "victoryFinal")
+    && (backgroundAudioState.currentTrack === BG_TRACKS.VICTORY_ROUND || backgroundAudioState.currentTrack === BG_TRACKS.VICTORY_FINAL)
     && (isResultOverlayOpen() || isFinalOverlayOpen() || isWodiResultActive())
   ) {
     return;
@@ -307,10 +314,10 @@ function getBackgroundAudioDebugInfo() {
     currentTrack: backgroundAudioState.currentTrack,
     pendingTrack: backgroundAudioState.pendingTrack,
     playToken: backgroundAudioState.playToken,
-    mainPlaying: Boolean(backgroundAudioState.audios.main && !backgroundAudioState.audios.main.paused),
-    gamePlaying: Boolean(backgroundAudioState.audios.game && !backgroundAudioState.audios.game.paused),
-    victoryRoundPlaying: Boolean(backgroundAudioState.audios.victoryRound && !backgroundAudioState.audios.victoryRound.paused),
-    victoryFinalPlaying: Boolean(backgroundAudioState.audios.victoryFinal && !backgroundAudioState.audios.victoryFinal.paused),
+    mainPlaying: Boolean(backgroundAudioState.audios[BG_TRACKS.MAIN] && !backgroundAudioState.audios[BG_TRACKS.MAIN].paused),
+    gamePlaying: Boolean(backgroundAudioState.audios[BG_TRACKS.GAME] && !backgroundAudioState.audios[BG_TRACKS.GAME].paused),
+    victoryRoundPlaying: Boolean(backgroundAudioState.audios[BG_TRACKS.VICTORY_ROUND] && !backgroundAudioState.audios[BG_TRACKS.VICTORY_ROUND].paused),
+    victoryFinalPlaying: Boolean(backgroundAudioState.audios[BG_TRACKS.VICTORY_FINAL] && !backgroundAudioState.audios[BG_TRACKS.VICTORY_FINAL].paused),
     birthdaySuspended: backgroundAudioState.birthdaySuspended,
     birthdayPlaying: isBirthdaySongCurrentlyPlaying(),
     shouldPlayMain: shouldPlayMainMusic(),

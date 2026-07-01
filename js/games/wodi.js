@@ -1,6 +1,9 @@
 window.PartyGame = window.PartyGame || {};
 window.PartyGame.Games = window.PartyGame.Games || {};
 
+// 谁是卧底：负责扫码发词、线下投票、淘汰判定和阵营结算。
+// 这是特殊游戏，不使用普通计分板和普通回合题目渲染。
+
 const WODI_ALL_CATEGORY = "all";
 const WODI_ROLE_LABELS = {
   civilian: "\u5e73\u6c11",
@@ -99,10 +102,6 @@ function loadWodiQuestionBank() {
   state.wodiPreflight = { loaded: validQuestions.length, skipped, issues };
   if (!source.length) console.warn("window.PARTY_WODI_QUESTIONS not found or empty.");
   if (issues.length) console.warn("Wodi preflight:", issues);
-}
-
-function isWodiActive() {
-  return state.activeGameId === "wodi";
 }
 
 function getWodiCategories() {
