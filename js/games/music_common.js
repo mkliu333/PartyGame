@@ -9,7 +9,7 @@ const MUSIC_ALL_CATEGORY_ID = "all";
 const MUSIC_ALL_CATEGORY_LABEL = "大合集";
 const MUSIC_MISC_CATEGORY_ID = "华语乐坛";
 const MUSIC_MISC_CATEGORY_LABEL = "华语乐坛";
-const MUSIC_STANDALONE_ARTIST_THRESHOLD = 15;
+const MUSIC_STANDALONE_ARTIST_THRESHOLD = 18;
 
 function createMusicQuestionId(prefix, index) {
   return `${prefix}_${Date.now()}_${index}`;
