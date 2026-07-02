@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.8";
+    const APP_VERSION = "v4.1.9";
 
-    const UPDATE_THEME = "谁是卧底游戏提示精简与排版优化";
+    const UPDATE_THEME = "猜台词大屏播放布局与默认音量增强";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

@@ -11,6 +11,54 @@
       gap: 16px;
     }
 
+    #play.active .gameplay-grid.line-guess-cinema {
+      position: relative;
+      left: 50%;
+      grid-template-columns: 1fr;
+      width: min(1500px, calc(100vw - 48px));
+      max-width: min(1500px, calc(100vw - 48px));
+      gap: clamp(18px, 2.5vw, 28px);
+      align-items: start;
+      margin-inline: 0;
+      transform: translateX(-50%);
+    }
+
+    .gameplay-grid.line-guess-cinema .media-wrap {
+      width: 100%;
+      max-width: min(1280px, 100%);
+      margin: 0 auto;
+    }
+
+    .gameplay-grid.line-guess-cinema .media-card {
+      width: 100%;
+    }
+
+    .gameplay-grid.line-guess-cinema video,
+    .gameplay-grid.line-guess-cinema .question-image {
+      width: 100%;
+      max-height: min(72vh, 760px);
+      object-fit: contain;
+    }
+
+    .gameplay-grid.line-guess-cinema .gameplay-side-stack {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.1fr);
+      gap: clamp(14px, 2vw, 22px);
+      width: min(1280px, 100%);
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      #play.active .gameplay-grid.line-guess-cinema {
+        width: min(100%, calc(100vw - 20px));
+        max-width: min(100%, calc(100vw - 20px));
+      }
+
+      .gameplay-grid.line-guess-cinema .gameplay-side-stack {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .side-panel {
       padding: 18px;
       border: 3px solid var(--card-border);

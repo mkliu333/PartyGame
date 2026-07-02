@@ -4,6 +4,22 @@ window.PartyGame.Games = window.PartyGame.Games || {};
 // 猜台词：负责影视台词题库预检、普通题目渲染和答案揭晓。
 // 共享流程仍由 app/router/round_engine 控制。
 
+    const LINE_GUESS_DEFAULT_VIDEO_VOLUME = 1;
+
+    function setLineGuessVideoVolume() {
+      if (!elements?.clip) return;
+      // 录屏素材音量普遍偏小，猜台词默认将 video 元素音量拉满。
+      elements.clip.volume = LINE_GUESS_DEFAULT_VIDEO_VOLUME;
+    }
+
+    function syncLineGuessCinemaLayout() {
+      const gameplayGrid = $(".gameplay-grid");
+      if (!gameplayGrid) return;
+      const lineGuessActive = state.screen === "play" && state.activeGameId === "line_guess";
+      gameplayGrid.classList.toggle("line-guess-cinema", lineGuessActive);
+      if (lineGuessActive) gameplayGrid.classList.remove("wodi-fullscreen");
+    }
+
     function normalizeQuestion(question) {
       const safe = question || {};
       return {
@@ -136,6 +152,7 @@ window.PartyGame.Games = window.PartyGame.Games || {};
     }
 
     function renderGameplay() {
+      syncLineGuessCinemaLayout();
       if (isEmojiGuessActive()) {
         window.PartyGame.Games.emojiGuess.renderGameplay();
         return;
@@ -156,10 +173,22 @@ window.PartyGame.Games = window.PartyGame.Games || {};
       }
 
       renderQuestionMedia(question);
+      setLineGuessVideoVolume();
       renderQuestionFooter(question);
       renderAnswerPanel();
       renderStageControls();
       renderScoreboard();
+    }
+
+    function playPrompt() {
+      const question = getCurrentQuestion();
+      if (!question || state.phase !== "prompt") return;
+      setLineGuessVideoVolume();
+      if (elements.clip?.src || elements.clip?.currentSrc) {
+        elements.clip.play().catch((error) => {
+          console.warn("Line guess prompt playback was blocked:", error);
+        });
+      }
     }
 
     function revealAnswer() {
@@ -192,5 +221,5 @@ window.PartyGame.Games = window.PartyGame.Games || {};
       renderAnswerPanel();
     }
 
-window.PartyGame.Games.lineGuess = { id: "line_guess", normalizeQuestion, validateQuestion, loadQuestionBank, renderGameplay, revealAnswer, toggleAnswerText };
+window.PartyGame.Games.lineGuess = { id: "line_guess", normalizeQuestion, validateQuestion, loadQuestionBank, renderGameplay, revealAnswer, toggleAnswerText, playPrompt, setLineGuessVideoVolume, syncLineGuessCinemaLayout };
 

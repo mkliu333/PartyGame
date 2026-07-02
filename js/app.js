@@ -309,6 +309,10 @@ function bindEvents() {
   });
   elements.playPrompt.addEventListener("click", () => {
     if (isWodiActive()) return;
+    if (state.activeGameId === "line_guess") {
+      window.PartyGame.Games.lineGuess?.playPrompt();
+      return;
+    }
     if (isEmojiGuessActive()) {
       window.PartyGame.Games.emojiGuess.showHint();
       return;
