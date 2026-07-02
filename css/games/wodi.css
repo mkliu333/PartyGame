@@ -220,62 +220,57 @@
 
     .wodi-speech-tips {
       display: grid;
-      gap: 10px;
-      width: min(920px, 100%);
-      padding: 18px;
+      gap: 0;
+      width: min(980px, 100%);
+      padding: clamp(16px, 2.4vw, 24px);
       border: 2px dashed var(--accent-border);
-      border-radius: 22px;
-      background: var(--ghost-bg);
+      border-radius: 24px;
+      background: color-mix(in srgb, var(--panel-bg-strong) 78%, transparent);
       color: var(--text-main);
       text-align: left;
     }
 
-    .wodi-speech-tips h2 {
-      margin: 0;
-      font-size: clamp(20px, 2.5vw, 28px);
+    .wodi-speech-kicker {
+      color: var(--accent-main);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 900;
       line-height: 1.2;
-    }
-
-    .wodi-tips-subtitle {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 850;
-      line-height: 1.65;
     }
 
     .wodi-tips-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
     }
 
     .wodi-tip-card {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 9px;
+      gap: 10px;
       align-items: start;
       min-width: 0;
-      padding: 12px;
-      border: 2px solid var(--ghost-border);
-      border-radius: 16px;
+      padding: 14px 16px;
+      border: 2px solid var(--accent-border);
+      border-radius: 18px;
       background: var(--panel-bg-strong);
       box-shadow: var(--shadow-soft);
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: clamp(16px, 1.6vw, 20px);
       font-weight: 850;
-      line-height: 1.58;
+      line-height: 1.55;
     }
 
-    .wodi-tip-card strong {
+    .wodi-tip-number {
       display: inline-grid;
       place-items: center;
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       border-radius: 999px;
       color: var(--button-text);
       background: var(--button-bg);
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 900;
       line-height: 1;
     }
 
