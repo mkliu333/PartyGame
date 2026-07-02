@@ -36,7 +36,7 @@ function renderWodiResult() {
         <div class="wodi-result-item"><span>\u5e73\u6c11\u73a9\u5bb6</span><strong>${escapeHTML(grouped("civilian"))}</strong></div>
         <div class="wodi-result-item"><span>\u5367\u5e95\u73a9\u5bb6</span><strong>${escapeHTML(grouped("undercover"))}</strong></div>
         <div class="wodi-result-item"><span>\u767d\u677f\u73a9\u5bb6</span><strong>${escapeHTML(grouped("blank"))}</strong></div>
-        <div class="wodi-result-item"><span>\u672c\u5c40\u9898\u5e93\u5206\u7c7b</span><strong>${escapeHTML(round.question.category)}</strong></div>
+        <div class="wodi-result-item"><span>\u9898\u76ee\u7f16\u53f7</span><strong>${escapeHTML(round.question?.id || "\u672a\u77e5")}</strong></div>
       </div>
       <div class="action-row">
         <button class="primary-btn" type="button" data-wodi-new-round>\u518d\u6765\u4e00\u5c40</button>

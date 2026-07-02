@@ -35,7 +35,7 @@ window.PartyGame.Games.registry = [
     title: "谁是卧底",
     subtitle: "来一决胜负吧！",
     status: "available",
-    dataSourceLabel: "wodi/wodi_questions_v1.js"
+    dataSourceLabel: "wodi/wodi_questions_v2.js"
   },
   {
     id: "celebrity_image",

@@ -74,6 +74,7 @@ function renderWodiVoteStage() {
         }).join("")}
       </div>
       ${renderWodiEliminationModal()}
+      ${renderWodiSpeechTips()}
     </div>`;
 }
 

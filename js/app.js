@@ -117,13 +117,6 @@ function handleMusicPreviewClick(event) {
 
 function handleRoundOptionClick(event) {
   if (isWodiActive() && window.PartyGame.Games.wodi) {
-    const wodiCategoryTarget = event.target.closest("[data-wodi-category]");
-    if (wodiCategoryTarget) {
-      state.wodiSelectedCategory = wodiCategoryTarget.dataset.wodiCategory;
-      window.PartyGame.Games.wodi.renderSetupOptions();
-      return true;
-    }
-
     const undercoverTarget = event.target.closest("[data-wodi-undercover-count]");
     if (undercoverTarget) {
       state.wodiUndercoverCount = Number(undercoverTarget.dataset.wodiUndercoverCount);
@@ -237,11 +230,6 @@ function bindEvents() {
 
   document.addEventListener("change", (event) => {
     if (isWodiActive() && window.PartyGame.Games.wodi) {
-      if (event.target.matches("[data-wodi-category-select]")) {
-        state.wodiSelectedCategory = event.target.value;
-        window.PartyGame.Games.wodi.renderSetupOptions();
-        return;
-      }
       if (event.target.matches("[data-wodi-undercover-select]")) {
         state.wodiUndercoverCount = Number(event.target.value);
         window.PartyGame.Games.wodi.renderSetupOptions();

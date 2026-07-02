@@ -18,7 +18,7 @@ function validateWodiConfig() {
   if (civilianCount < 2) return "\u5e73\u6c11\u4eba\u6570\u5fc5\u987b\u81f3\u5c11 2 \u4eba\u3002";
   if (undercoverCount < 1) return "\u5367\u5e95\u4eba\u6570\u5fc5\u987b\u81f3\u5c11 1 \u4eba\u3002";
   if (undercoverCount + blankCount >= total) return "\u5367\u5e95 + \u767d\u677f\u5fc5\u987b\u5c11\u4e8e\u603b\u53c2\u4e0e\u4eba\u6570\u3002";
-  if (!state.wodiQuestions.length) return "\u8c01\u662f\u5367\u5e95\u9898\u5e93\u672a\u52a0\u8f7d\uff0c\u8bf7\u68c0\u67e5 data/wodi/wodi_questions_v1.js\u3002";
+  if (!state.wodiQuestions.length) return "\u8c01\u662f\u5367\u5e95\u9898\u5e93\u672a\u52a0\u8f7d\uff0c\u8bf7\u68c0\u67e5 data/wodi/wodi_questions_v2.js\u3002";
   return "";
 }
 
@@ -27,25 +27,18 @@ function renderWodiSetupOptions() {
   if (total < 6 && state.wodiUndercoverCount > 1) state.wodiUndercoverCount = 1;
   if (total < 8 && state.wodiBlankCount > 1) state.wodiBlankCount = 1;
   if (!state.wodiUseBlank) state.wodiBlankCount = 0;
-  const categories = [{ id: WODI_ALL_CATEGORY, label: "\u5927\u5408\u96c6" }, ...getWodiCategories()];
   const canTwoUndercover = total >= 6;
   const canTwoBlank = total >= 8;
   const inventoryWarning = getWodiInventoryWarning();
 
   $(".round-main").classList.add("wodi-round-main");
   $(".round-main .section-title").textContent = "\u8bbe\u7f6e\u8c01\u662f\u5367\u5e95";
-  $(".round-main .section-subtitle").textContent = "\u9009\u62e9\u9898\u5e93\u3001\u5367\u5e95\u548c\u767d\u677f\u6570\u91cf\u3002\u53ea\u6709\u53c2\u4e0e\u73a9\u5bb6\u4f1a\u8fdb\u5165\u672c\u5c40\u3002";
+  $(".round-main .section-subtitle").textContent = "\u9009\u62e9\u5367\u5e95\u548c\u767d\u677f\u6570\u91cf\u3002\u53ea\u6709\u53c2\u4e0e\u73a9\u5bb6\u4f1a\u8fdb\u5165\u672c\u5c40\uff0c\u6bcf\u5c40\u4f1a\u4ece\u5168\u9898\u5e93\u968f\u673a\u62bd\u53d6 1 \u7ec4\u8bcd\u3002";
   $("#roundSizeOptions").innerHTML = "";
   $("#roundCategoryOptions").classList.remove("music-category-select-wrap");
   $("#roundCategoryOptions").innerHTML = "";
   elements.roundExtraOptions.innerHTML = `
     <div class="wodi-setup">
-      <label class="wodi-field">
-        <span>\u9898\u5e93\u5206\u7c7b</span>
-        <select data-wodi-category-select>
-          ${categories.map((category) => `<option value="${escapeHTML(category.id)}" ${category.id === state.wodiSelectedCategory ? "selected" : ""}>${escapeHTML(category.label)}</option>`).join("")}
-        </select>
-      </label>
       <label class="wodi-field">
         <span>\u5367\u5e95\u6570\u91cf</span>
         <select data-wodi-undercover-select>
@@ -95,7 +88,7 @@ function renderWodiInventoryModal() {
       <div class="wodi-modal-card">
         <div class="result-kicker">\u9898\u5e93\u5e93\u5b58</div>
         <h2 id="wodiInventoryTitle">\u9898\u5e93\u5df2\u7528\u5b8c</h2>
-        <p>\u5f53\u524d\u5206\u7c7b\u5df2\u6ca1\u6709\u65b0\u9898\uff0c\u8bf7\u9009\u62e9\u5176\u5b83\u5206\u7c7b\u6216\u8005\u91cd\u7f6e\u9898\u5e93\u3002</p>
+        <p>\u8c01\u662f\u5367\u5e95\u9898\u5e93\u5df2\u6ca1\u6709\u65b0\u9898\uff0c\u8bf7\u91cd\u7f6e\u9898\u5e93\u540e\u518d\u5f00\u59cb\u3002</p>
         <div class="modal-actions">
           <button class="primary-btn" type="button" data-wodi-close-inventory-modal>\u77e5\u9053\u4e86</button>
         </div>

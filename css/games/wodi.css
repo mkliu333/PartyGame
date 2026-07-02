@@ -218,6 +218,71 @@
       font-weight: 800;
     }
 
+    .wodi-speech-tips {
+      display: grid;
+      gap: 10px;
+      width: min(920px, 100%);
+      padding: 18px;
+      border: 2px dashed var(--accent-border);
+      border-radius: 22px;
+      background: var(--ghost-bg);
+      color: var(--text-main);
+      text-align: left;
+    }
+
+    .wodi-speech-tips h2 {
+      margin: 0;
+      font-size: clamp(20px, 2.5vw, 28px);
+      line-height: 1.2;
+    }
+
+    .wodi-tips-subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.65;
+    }
+
+    .wodi-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .wodi-tip-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 9px;
+      align-items: start;
+      min-width: 0;
+      padding: 12px;
+      border: 2px solid var(--ghost-border);
+      border-radius: 16px;
+      background: var(--panel-bg-strong);
+      box-shadow: var(--shadow-soft);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 850;
+      line-height: 1.58;
+    }
+
+    .wodi-tip-card strong {
+      display: inline-grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      color: var(--button-text);
+      background: var(--button-bg);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .wodi-tip-card span {
+      min-width: 0;
+    }
+
     .wodi-qr-card canvas,
     .wodi-qr-card img,
     .wodi-qr-card svg {

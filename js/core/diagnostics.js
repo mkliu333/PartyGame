@@ -57,6 +57,8 @@ function getProjectStructureDebugInfo() {
       singleMusic: Boolean(window.PartyGame.Games?.singleMusic),
       emojiGuess: Boolean(window.PartyGame.Games?.emojiGuess),
       wodi: Boolean(window.PartyGame.Games?.wodi),
+      wodiQuestionBankVersion: "v2",
+      wodiUsesCategories: false,
       wodiApiComplete: Boolean(
         window.PartyGame.Games?.wodi?.renderGameplay
         && window.PartyGame.Games?.wodi?.startWodiRound
