@@ -379,8 +379,10 @@ function renderEmojiClues(question) {
   const panel = ensureEmojiCluePanel();
   panel.replaceChildren();
 
+  const clueCount = Array.isArray(question.clues) ? question.clues.length : 0;
   const clueRow = document.createElement("div");
-  clueRow.className = "emoji-clue-row";
+  clueRow.className = `emoji-clue-row emoji-clue-count-${clueCount}`;
+  if (clueCount >= 5) clueRow.classList.add("emoji-clue-row-multi");
 
   const basePath = getEmojiAssetBasePath();
 
