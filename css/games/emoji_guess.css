@@ -459,3 +459,158 @@
         justify-content: center;
       }
     }
+
+    .gameplay-grid.emoji-guess-play-layout {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+      grid-template-rows: auto auto !important;
+      gap: clamp(10px, 1vw, 16px) !important;
+      align-items: start !important;
+      min-height: auto !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .media-wrap {
+      width: 100% !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .media-card.emoji-mode {
+      width: 100% !important;
+      min-height: auto !important;
+      height: auto !important;
+      margin: 0 !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-guess-panel {
+      min-height: clamp(420px, 48vh, 560px) !important;
+      height: clamp(420px, 48vh, 560px) !important;
+      padding: clamp(26px, 4vw, 52px) !important;
+      place-content: center !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .gameplay-side-stack {
+      display: grid !important;
+      grid-template-columns: minmax(320px, 0.8fr) minmax(420px, 1.2fr) !important;
+      gap: clamp(12px, 1.4vw, 18px) !important;
+      align-items: stretch !important;
+      width: 100% !important;
+      margin-top: 0 !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-token {
+      min-width: clamp(165px, 14vw, 220px) !important;
+      min-height: clamp(165px, 14vw, 220px) !important;
+      padding: clamp(12px, 1.4vw, 20px) !important;
+      border-radius: 32px !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-token.emoji-hybrid-token .emoji-clue-img,
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-img {
+      width: clamp(118px, 10vw, 165px) !important;
+      height: clamp(118px, 10vw, 165px) !important;
+      object-fit: contain !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-token.emoji-hybrid-token .emoji-clue-fallback,
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-fallback {
+      width: clamp(118px, 10vw, 165px) !important;
+      height: clamp(118px, 10vw, 165px) !important;
+      font-size: clamp(92px, 8.8vw, 150px) !important;
+      line-height: 1 !important;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-wrap: wrap !important;
+      gap: clamp(24px, 3vw, 48px) !important;
+      max-width: min(100%, 1040px) !important;
+      margin: 0 auto !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 {
+      display: grid !important;
+      grid-template-columns: repeat(6, auto) !important;
+      justify-content: center !important;
+      align-items: center !important;
+      column-gap: clamp(10px, 1.4vw, 20px) !important;
+      row-gap: clamp(18px, 2vw, 30px) !important;
+      max-width: min(100%, 980px) !important;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 .emoji-clue-token:nth-child(1) {
+      grid-column: 1 / span 2;
+      grid-row: 1;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 .emoji-clue-token:nth-child(2) {
+      grid-column: 3 / span 2;
+      grid-row: 1;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 .emoji-clue-token:nth-child(3) {
+      grid-column: 5 / span 2;
+      grid-row: 1;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 .emoji-clue-token:nth-child(4) {
+      grid-column: 2 / span 2;
+      grid-row: 2;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5 .emoji-clue-token:nth-child(5) {
+      grid-column: 4 / span 2;
+      grid-row: 2;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-6 {
+      display: grid !important;
+      grid-template-columns: repeat(3, auto) !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: clamp(20px, 2.4vw, 36px) !important;
+      max-width: min(100%, 860px) !important;
+    }
+
+    @media (max-width: 900px) {
+      .gameplay-grid.emoji-guess-play-layout {
+        gap: 12px !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-guess-panel {
+        min-height: 380px !important;
+        height: auto !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .gameplay-side-stack {
+        grid-template-columns: 1fr !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-token {
+        min-width: clamp(120px, 26vw, 170px) !important;
+        min-height: clamp(120px, 26vw, 170px) !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-token.emoji-hybrid-token .emoji-clue-img,
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-img,
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-token.emoji-hybrid-token .emoji-clue-fallback,
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-fallback {
+        width: clamp(88px, 20vw, 130px) !important;
+        height: clamp(88px, 20vw, 130px) !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-token.emoji-hybrid-token .emoji-clue-fallback,
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-fallback {
+        font-size: clamp(70px, 17vw, 116px) !important;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-5,
+      .gameplay-grid.emoji-guess-play-layout .emoji-clue-row.emoji-clue-count-6 {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+      }
+    }
