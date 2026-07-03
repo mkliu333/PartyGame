@@ -189,3 +189,54 @@
     .media-card.emoji-mode .emoji-clue-token.no-asset .emoji-clue-missing {
       display: none !important;
     }
+
+    .emoji-clue-token.emoji-hybrid-token {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emoji-clue-token.emoji-hybrid-token .emoji-clue-fallback {
+      display: inline-flex !important;
+    }
+
+    .emoji-clue-token.emoji-hybrid-token .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.image-pending .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.image-failed .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.no-asset .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.fallback-emoji .emoji-clue-img {
+      display: none !important;
+      width: clamp(68px, 7vw, 78px);
+      height: clamp(68px, 7vw, 78px);
+      object-fit: contain;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .emoji-clue-token.emoji-hybrid-token.has-image .emoji-clue-img,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.has-image .emoji-clue-img {
+      display: block !important;
+    }
+
+    .emoji-clue-token.emoji-hybrid-token.has-image .emoji-clue-fallback,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.has-image .emoji-clue-fallback {
+      display: none !important;
+    }
+
+    .emoji-clue-token.emoji-hybrid-token.image-pending .emoji-clue-fallback,
+    .emoji-clue-token.emoji-hybrid-token.image-failed .emoji-clue-fallback,
+    .emoji-clue-token.emoji-hybrid-token.no-asset .emoji-clue-fallback,
+    .emoji-clue-token.emoji-hybrid-token.fallback-emoji .emoji-clue-fallback,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.image-pending .emoji-clue-fallback,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.image-failed .emoji-clue-fallback,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.no-asset .emoji-clue-fallback,
+    .media-card.emoji-mode .emoji-clue-token.emoji-hybrid-token.fallback-emoji .emoji-clue-fallback {
+      display: inline-flex !important;
+    }
+
+    .emoji-clue-missing,
+    .emoji-clue-token .emoji-clue-missing,
+    .media-card.emoji-mode .emoji-clue-missing {
+      display: none !important;
+      visibility: hidden !important;
+    }

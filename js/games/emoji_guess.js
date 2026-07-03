@@ -174,21 +174,18 @@ window.PartyGame.EmojiAssets.debugCurrentTiles = function () {
   return [...document.querySelectorAll(".emoji-clue-token")].map((token) => {
     const img = token.querySelector("img");
     const missing = token.querySelector(".emoji-clue-missing");
-    const loading = token.querySelector(".emoji-clue-loading");
     const fallback = token.querySelector(".emoji-clue-fallback");
     return {
       className: token.className,
       title: token.title,
-      imgSrc: img ? img.src : "",
-      complete: img ? img.complete : null,
-      naturalWidth: img ? img.naturalWidth : null,
-      naturalHeight: img ? img.naturalHeight : null,
-      imgDisplay: img ? getComputedStyle(img).display : null,
-      imgVisibility: img ? getComputedStyle(img).visibility : null,
+      tokenText: token.textContent,
       fallbackText: fallback ? fallback.textContent : "",
       fallbackDisplay: fallback ? getComputedStyle(fallback).display : null,
-      loadingDisplay: loading ? getComputedStyle(loading).display : null,
-      missingDisplay: missing ? getComputedStyle(missing).display : null,
+      imgSrc: img ? img.src : "",
+      imgDisplay: img ? getComputedStyle(img).display : null,
+      imgNaturalWidth: img ? img.naturalWidth : null,
+      imgNaturalHeight: img ? img.naturalHeight : null,
+      hasMissingNode: Boolean(missing),
       missingText: missing ? missing.textContent : ""
     };
   });
@@ -321,7 +318,7 @@ function renderEmojiGuessQuestionBankInspector() {
     : '<span class="inspect-issue">Emoji 题库检查暂未发现明显问题。</span>';
   const assetStatusHtml = `<div class="inspect-panel-title">Noto Emoji 素材状态：</div>
       <span class="inspect-issue">${isComplete ? "已加载本地 SVG：全部完成。" : `已加载本地 SVG：${loadedCount} / ${expectedCount}`}</span>
-      <span class="inspect-issue">${isComplete ? "当前题眼优先使用本地 Noto SVG。" : "当前缺少部分 Noto SVG。缺失时游戏界面会 fallback 显示系统 emoji，检查面板和 console 会保留 warning。"}</span>
+      <span class="inspect-issue">${isComplete ? "游戏界面采用 Noto 优先、系统 emoji 兜底。" : "游戏界面采用 Noto 优先、系统 emoji 兜底；缺失 SVG 不会显示缺图，检查面板和 console 保留 warning。"}</span>
       ${isComplete ? "" : '<span class="inspect-issue">请运行：node tools/import_noto_emoji_assets.js --source tools/_tmp_noto_emoji</span><span class="inspect-issue">然后运行：node tools/check_emoji_assets.js</span>'}
       ${missingFlags.length ? `<div class="inspect-panel-title">国旗素材缺失：</div>${missingFlags.map((item) => `<span class="inspect-issue">${escapeHTML(item.text)} 需要 ${escapeHTML(item.filename)}</span>`).join("")}` : ""}`;
   elements.questionBankInspectPanel.innerHTML = `
@@ -384,47 +381,63 @@ function renderEmojiClues(question) {
   const basePath = getEmojiAssetBasePath();
   question.clues.forEach((clue) => {
     const token = document.createElement("span");
-    token.className = "emoji-clue-token image-pending";
+    token.className = "emoji-clue-token emoji-hybrid-token fallback-emoji";
     const text = getEmojiClueText(clue);
     const asset = resolveEmojiClueAsset(clue, text);
-    const missing = document.createElement("span");
-    missing.className = "emoji-clue-missing";
-    missing.textContent = "\u7f3a\u56fe";
-    missing.title = asset ? `Missing Noto SVG: ${asset}` : `Missing emoji asset mapping: ${text}`;
-    token.title = asset ? `${text} -> ${asset}` : `${text} -> missing mapping`;
     const fallbackReason = asset
-      ? `${text} -> Missing Noto SVG: ${asset}; fallback to system emoji`
+      ? `${text} -> Noto SVG loading; system emoji fallback is visible`
       : `${text} -> Missing emoji asset mapping; fallback to system emoji`;
+    token.title = asset ? `${text} -> ${asset}; showing system emoji until Noto SVG loads` : fallbackReason;
     const fallback = createEmojiFallbackNode(text, fallbackReason);
+    token.appendChild(fallback);
     if (asset) {
+      token.classList.add("image-pending");
       const image = document.createElement("img");
       image.className = "emoji-clue-img";
       image.alt = text;
       image.decoding = "async";
       image.loading = "eager";
+      image.style.display = "none";
       image.addEventListener("load", () => {
-        syncEmojiImageState(image, token, text, asset);
+        if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+          recordLoadedEmojiAsset(text, asset, image.src);
+          token.classList.remove("image-pending", "image-failed", "no-asset", "fallback-emoji");
+          token.classList.add("has-image");
+          token.title = `${text} -> ${asset}`;
+          image.style.display = "";
+          fallback.style.display = "none";
+          return;
+        }
+        token.classList.remove("image-pending", "has-image");
+        token.classList.add("image-failed", "fallback-emoji");
+        token.title = `${text} -> Missing Noto SVG: ${asset}; fallback to system emoji`;
+        image.style.display = "none";
+        fallback.style.display = "";
+        recordMissingEmojiAsset(text, asset, image.src);
       });
       image.addEventListener("error", () => {
-        token.classList.remove("image-pending");
-        token.classList.remove("has-image");
+        token.classList.remove("image-pending", "has-image");
         token.classList.add("image-failed", "fallback-emoji");
-        token.title = fallbackReason;
+        token.title = `${text} -> Missing Noto SVG: ${asset}; fallback to system emoji`;
+        image.style.display = "none";
+        fallback.style.display = "";
         recordMissingEmojiAsset(text, asset, image.src);
       });
       image.src = `${basePath}${asset}`;
       token.appendChild(image);
-      syncEmojiImageState(image, token, text, asset);
-      requestAnimationFrame(() => syncEmojiImageState(image, token, text, asset));
-      window.setTimeout(() => syncEmojiImageState(image, token, text, asset), 120);
+      window.setTimeout(() => {
+        if (!token.classList.contains("image-pending")) return;
+        token.classList.remove("image-pending");
+        token.classList.add("fallback-emoji");
+        token.title = `${text} -> Noto SVG not confirmed; showing system emoji`;
+        image.style.display = "none";
+        fallback.style.display = "";
+      }, 800);
     } else {
-      token.classList.remove("image-pending");
       token.classList.add("no-asset", "fallback-emoji");
       token.title = fallbackReason;
       window.PartyGame.EmojiAssets.missingMappings.set(text, { text });
     }
-    token.appendChild(fallback);
-    token.appendChild(missing);
     clueRow.appendChild(token);
   });
   panel.appendChild(clueRow);
