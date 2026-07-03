@@ -28,7 +28,7 @@ window.PartyGame.Games.registry = [
     title: "Emoji猜猜猜",
     subtitle: "根据 emoji 谐音线索，抢答名人、歌名或成语。",
     status: "available",
-    dataSourceLabel: "emoji_guess/emoji_guess_questions_v2.js"
+    dataSourceLabel: "emoji_guess/emoji_guess_questions_v3.js"
   },
   {
     id: "wodi",

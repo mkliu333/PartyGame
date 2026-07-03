@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.1.9";
+    const APP_VERSION = "v4.2.0";
 
-    const UPDATE_THEME = "猜台词大屏播放布局与默认音量增强";
+    const UPDATE_THEME = "Emoji猜猜猜题库 v3 扩充";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

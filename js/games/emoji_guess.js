@@ -314,7 +314,7 @@ function renderEmojiGuessQuestionBankInspector() {
       ${missingFlags.length ? `<div class="inspect-panel-title">国旗素材缺失：</div>${missingFlags.map((item) => `<span class="inspect-issue">${escapeHTML(item.text)} 需要 ${escapeHTML(item.filename)}</span>`).join("")}` : ""}`;
   elements.questionBankInspectPanel.innerHTML = `
     <div class="inspect-panel-section">
-      <div class="inspect-panel-row"><span>题库来源</span><span>emoji_guess/emoji_guess_questions_v2.js</span></div>
+      <div class="inspect-panel-row"><span>题库来源</span><span>emoji_guess/emoji_guess_questions_v3.js</span></div>
       <div class="inspect-panel-row"><span>可用题目</span><span>${preflight.loaded}</span></div>
       <div class="inspect-panel-row"><span>跳过题目</span><span>${preflight.skipped}</span></div>
       <div class="inspect-panel-row"><span>Noto 覆盖率</span><span>${assetCoverage.runtimeCoveragePercent}%</span></div>
