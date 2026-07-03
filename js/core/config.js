@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.0-hotfix-3";
+    const APP_VERSION = "v4.2.0-hotfix-4";
 
-    const UPDATE_THEME = "Emoji 猜猜猜使用 Noto 优先 + 系统 emoji fallback";
+    const UPDATE_THEME = "修复 Emoji fallback 空白问题";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

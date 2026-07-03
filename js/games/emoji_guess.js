@@ -180,12 +180,14 @@ window.PartyGame.EmojiAssets.debugCurrentTiles = function () {
       title: token.title,
       tokenText: token.textContent,
       fallbackText: fallback ? fallback.textContent : "",
-      fallbackDisplay: fallback ? getComputedStyle(fallback).display : null,
+      fallbackDisplay: fallback ? getComputedStyle(fallback).display : "",
+      fallbackVisibility: fallback ? getComputedStyle(fallback).visibility : "",
       imgSrc: img ? img.src : "",
-      imgDisplay: img ? getComputedStyle(img).display : null,
+      imgDisplay: img ? getComputedStyle(img).display : "",
+      imgVisibility: img ? getComputedStyle(img).visibility : "",
       imgNaturalWidth: img ? img.naturalWidth : null,
       imgNaturalHeight: img ? img.naturalHeight : null,
-      hasMissingNode: Boolean(missing),
+      hasMissingNode: !!missing,
       missingText: missing ? missing.textContent : ""
     };
   });
@@ -376,71 +378,92 @@ function ensureEmojiCluePanel() {
 function renderEmojiClues(question) {
   const panel = ensureEmojiCluePanel();
   panel.replaceChildren();
+
   const clueRow = document.createElement("div");
   clueRow.className = "emoji-clue-row";
+
   const basePath = getEmojiAssetBasePath();
+
   question.clues.forEach((clue) => {
     const token = document.createElement("span");
     token.className = "emoji-clue-token emoji-hybrid-token fallback-emoji";
-    const text = getEmojiClueText(clue);
+
+    const text = getEmojiClueText(clue) || "？";
     const asset = resolveEmojiClueAsset(clue, text);
-    const fallbackReason = asset
-      ? `${text} -> Noto SVG loading; system emoji fallback is visible`
-      : `${text} -> Missing emoji asset mapping; fallback to system emoji`;
-    token.title = asset ? `${text} -> ${asset}; showing system emoji until Noto SVG loads` : fallbackReason;
-    const fallback = createEmojiFallbackNode(text, fallbackReason);
+
+    const fallback = document.createElement("span");
+    fallback.className = "emoji-clue-fallback";
+    fallback.textContent = text;
+    fallback.title = text;
+    fallback.style.display = "inline-flex";
+
     token.appendChild(fallback);
+
     if (asset) {
-      token.classList.add("image-pending");
       const image = document.createElement("img");
       image.className = "emoji-clue-img";
       image.alt = text;
       image.decoding = "async";
       image.loading = "eager";
       image.style.display = "none";
+      image.style.visibility = "hidden";
+
       image.addEventListener("load", () => {
         if (image.naturalWidth > 0 && image.naturalHeight > 0) {
           recordLoadedEmojiAsset(text, asset, image.src);
-          token.classList.remove("image-pending", "image-failed", "no-asset", "fallback-emoji");
+          token.classList.remove("fallback-emoji", "image-pending", "image-failed", "no-asset");
           token.classList.add("has-image");
-          token.title = `${text} -> ${asset}`;
-          image.style.display = "";
           fallback.style.display = "none";
+          image.style.display = "block";
+          image.style.visibility = "visible";
+          token.title = `${text} -> ${asset}`;
           return;
         }
         token.classList.remove("image-pending", "has-image");
-        token.classList.add("image-failed", "fallback-emoji");
-        token.title = `${text} -> Missing Noto SVG: ${asset}; fallback to system emoji`;
+        token.classList.add("fallback-emoji", "image-failed");
+        fallback.style.display = "inline-flex";
         image.style.display = "none";
-        fallback.style.display = "";
+        image.style.visibility = "hidden";
+        token.title = `${text} -> invalid Noto SVG; showing system emoji`;
         recordMissingEmojiAsset(text, asset, image.src);
       });
+
       image.addEventListener("error", () => {
         token.classList.remove("image-pending", "has-image");
-        token.classList.add("image-failed", "fallback-emoji");
-        token.title = `${text} -> Missing Noto SVG: ${asset}; fallback to system emoji`;
+        token.classList.add("fallback-emoji", "image-failed");
+        fallback.style.display = "inline-flex";
         image.style.display = "none";
-        fallback.style.display = "";
+        image.style.visibility = "hidden";
+        token.title = `${text} -> missing Noto SVG; showing system emoji`;
         recordMissingEmojiAsset(text, asset, image.src);
       });
+
+      token.classList.add("image-pending");
+      token.title = `${text} -> ${asset}; fallback visible while loading`;
       image.src = `${basePath}${asset}`;
       token.appendChild(image);
+
       window.setTimeout(() => {
-        if (!token.classList.contains("image-pending")) return;
-        token.classList.remove("image-pending");
-        token.classList.add("fallback-emoji");
-        token.title = `${text} -> Noto SVG not confirmed; showing system emoji`;
-        image.style.display = "none";
-        fallback.style.display = "";
-      }, 800);
+        if (token.classList.contains("image-pending")) {
+          token.classList.remove("image-pending");
+          token.classList.add("fallback-emoji");
+          fallback.style.display = "inline-flex";
+          image.style.display = "none";
+          image.style.visibility = "hidden";
+          token.title = `${text} -> Noto SVG still pending; showing system emoji`;
+        }
+      }, 600);
     } else {
       token.classList.add("no-asset", "fallback-emoji");
-      token.title = fallbackReason;
+      token.title = `${text} -> no Noto mapping; showing system emoji`;
       window.PartyGame.EmojiAssets.missingMappings.set(text, { text });
     }
+
     clueRow.appendChild(token);
   });
+
   panel.appendChild(clueRow);
+
   if (state.emojiHintVisible && state.phase === "prompt") {
     const hint = document.createElement("p");
     hint.className = "emoji-hint";
