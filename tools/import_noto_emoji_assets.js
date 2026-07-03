@@ -8,6 +8,7 @@ const {
   questionBankDisplayPath,
   indexDisplayPath,
   flagChecks,
+  getNotoFilenameForEmoji,
   collectRequiredAssets
 } = require("./check_emoji_assets");
 
@@ -81,6 +82,44 @@ function buildRequiredSummary() {
   const missingMappings = required.filter((item) => !item.filename);
   const requiredFilenames = [...new Set(mapped.map((item) => item.filename.toLowerCase()))].sort();
   return { required, mapped, missingMappings, requiredFilenames };
+}
+
+function readBrowserData(filePath) {
+  const vm = require("vm");
+  const context = { window: {} };
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync(filePath, "utf8"), context, { filename: filePath });
+  return context.window;
+}
+
+function collectIndexMappings(required) {
+  const indexPath = path.join(root, indexDisplayPath);
+  const indexWindow = readBrowserData(indexPath);
+  const currentItems = indexWindow.PARTY_EMOJI_ASSETS?.items || {};
+  const additions = {};
+  required.forEach((item) => {
+    if (!item.text || currentItems[item.text]) return;
+    const filename = item.filename || getNotoFilenameForEmoji(item.text);
+    if (filename) additions[item.text] = filename;
+  });
+  return additions;
+}
+
+function updateEmojiIndex(additions) {
+  const entries = Object.entries(additions);
+  if (!entries.length) return [];
+  const indexPath = path.join(root, indexDisplayPath);
+  let source = fs.readFileSync(indexPath, "utf8");
+  const insertionPoint = source.lastIndexOf("\n  }\n};");
+  if (insertionPoint < 0) throw new Error(`Cannot find insertion point in ${indexDisplayPath}`);
+  const needsComma = !source.slice(0, insertionPoint).trimEnd().endsWith("{");
+  const rendered = entries
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([text, filename], index) => `${index === 0 && needsComma ? "," : ""}\n    ${JSON.stringify(text)}: ${JSON.stringify(filename)}`)
+    .join(",");
+  source = `${source.slice(0, insertionPoint)}${rendered}${source.slice(insertionPoint)}`;
+  fs.writeFileSync(indexPath, source, "utf8");
+  return entries.map(([text, filename]) => ({ text, filename }));
 }
 
 function sourceHasRequiredSvgs(sourceDir, requiredFilenames) {
@@ -172,6 +211,8 @@ function copyRequiredFiles(sourceFolder, requiredFilenames) {
 
 function importAssets(options = {}) {
   const { required, mapped, missingMappings, requiredFilenames } = buildRequiredSummary();
+  const indexAdditions = collectIndexMappings(required);
+  const addedIndexMappings = updateEmojiIndex(indexAdditions);
   const explicitSource = options.source || "";
   const alreadyExistingTargets = requiredFilenames.filter((filename) => fs.existsSync(path.join(assetDir, filename)));
   const missingTargetFilenames = requiredFilenames.filter((filename) => !fs.existsSync(path.join(assetDir, filename)));
@@ -217,6 +258,7 @@ function importAssets(options = {}) {
     mappedClueTokens: mapped.length,
     copiedSvgFiles: copyResult.copied.length,
     alreadyExistingSvgFiles: copyResult.alreadyExisting.length,
+    addedIndexMappings,
     missingMappings,
     missingSvgFiles: copyResult.missingSvgFiles,
     flagReport,
@@ -237,6 +279,7 @@ function printReport(report) {
   console.log(`Mapped tokens: ${report.mappedClueTokens}`);
   console.log(`Copied SVG files: ${report.copiedSvgFiles}`);
   console.log(`Already existing SVG files: ${report.alreadyExistingSvgFiles}`);
+  console.log(`Added index mappings: ${report.addedIndexMappings.length}`);
   console.log(`Missing mappings: ${report.missingMappings.length}`);
   console.log(`Missing SVG files: ${report.missingSvgFiles.length}`);
   console.log("");
@@ -248,6 +291,11 @@ function printReport(report) {
   if (report.missingMappings.length) {
     console.log("\nMissing mappings:");
     report.missingMappings.forEach((item) => console.log(`- ${item.text}`));
+  }
+
+  if (report.addedIndexMappings.length) {
+    console.log("\nAdded index mappings:");
+    report.addedIndexMappings.forEach((item) => console.log(`- ${item.text} -> ${item.filename}`));
   }
 
   if (report.missingSvgFiles.length) {

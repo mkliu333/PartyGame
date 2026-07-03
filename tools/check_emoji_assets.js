@@ -3,10 +3,10 @@ const path = require("path");
 const vm = require("vm");
 
 const root = path.resolve(__dirname, "..");
-const questionBankPath = path.join(root, "data", "emoji_guess", "emoji_guess_questions_v2.js");
+const questionBankPath = path.join(root, "data", "emoji_guess", "emoji_guess_questions_v3.js");
 const indexPath = path.join(root, "assets", "emoji", "emoji_index.js");
 const assetDir = path.join(root, "assets", "emoji", "noto", "svg");
-const questionBankDisplayPath = "data/emoji_guess/emoji_guess_questions_v2.js";
+const questionBankDisplayPath = "data/emoji_guess/emoji_guess_questions_v3.js";
 const indexDisplayPath = "assets/emoji/emoji_index.js";
 const assetDisplayPath = "assets/emoji/noto/svg/";
 const flagChecks = new Map([
@@ -36,7 +36,13 @@ function resolveAsset(clue, text, items) {
     if (clue.asset) return String(clue.asset);
     if (clue.code) return `emoji_u${normalizeCode(clue.code)}.svg`;
   }
-  return items[text] || "";
+  return items[text] || getNotoFilenameForEmoji(text);
+}
+
+function getNotoFilenameForEmoji(text) {
+  const codepoints = [...String(text || "")]
+    .map((char) => char.codePointAt(0).toString(16).padStart(4, "0"));
+  return codepoints.length ? `emoji_u${codepoints.join("_")}.svg` : "";
 }
 
 function loadEmojiInputs() {
@@ -127,7 +133,7 @@ function printReport(report) {
   }
 
   if (!report.hasCompleteCoverage) {
-    console.log("\nNoto-only mode requires 100% SVG coverage. Missing files will show missing-asset placeholders, not system emoji.");
+    console.log("\nCurrent runtime falls back to system emoji when a Noto SVG is missing. Missing files remain listed here for diagnostics.");
   }
 
   console.log("\nCritical flags:");
@@ -151,6 +157,7 @@ module.exports = {
   indexDisplayPath,
   assetDisplayPath,
   flagChecks,
+  getNotoFilenameForEmoji,
   collectRequiredAssets,
   buildReport,
   printReport

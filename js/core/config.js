@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.0-hotfix-1";
+    const APP_VERSION = "v4.2.0-hotfix-2";
 
-    const UPDATE_THEME = "修复 Emoji v3 题库 clues 被错误替换的问题";
+    const UPDATE_THEME = "修复 Emoji v3 缺图并增加系统 emoji fallback";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
