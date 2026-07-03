@@ -1182,7 +1182,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep031",
     category: "猜名人",
     sub_category: "华语导演",
-    clues: ["🐚", "🎨", "💡"],
+    clues: ["🐙", "🎨", "🧠"],
     answer: "张艺谋",
     hint: "华语电影导演，作品很有视觉辨识度",
     difficulty: "medium"
@@ -1200,7 +1200,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep033",
     category: "猜名人",
     sub_category: "公众人物",
-    clues: ["🧊", "❄️"],
+    clues: ["🥶", "❄️"],
     answer: "韩寒",
     hint: "作家和导演，也和赛车有关",
     difficulty: "medium"
@@ -1209,7 +1209,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep034",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["🟡", "🌞", "💡"],
+    clues: ["🟡", "🌅", "💡"],
     answer: "黄晓明",
     hint: "华语演员，影视和综艺曝光度都很高",
     difficulty: "easy"
@@ -1227,7 +1227,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep036",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["6️⃣", "🏠", "🛫"],
+    clues: ["6️⃣", "🏥", "🛫"],
     answer: "刘亦菲",
     hint: "华语演员，古装角色辨识度很高",
     difficulty: "easy"
@@ -1254,7 +1254,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep039",
     category: "猜名人",
     sub_category: "华语歌手",
-    clues: ["🌊", "🚫", "🐚"],
+    clues: ["🌉", "🤫", "🐛"],
     answer: "梁静茹",
     hint: "华语女歌手，很多经典情歌",
     difficulty: "medium"
@@ -1272,7 +1272,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep041",
     category: "猜名人",
     sub_category: "华语艺人",
-    clues: ["🌿", "🐸", "🐳"],
+    clues: ["🥬", "🐢", "🐋"],
     answer: "蔡徐坤",
     hint: "华语艺人，舞台话题度很高",
     difficulty: "medium"
@@ -1281,7 +1281,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep042",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["⬜", "🙏", "🏠"],
+    clues: ["⚪", "🙏", "🏯"],
     answer: "白敬亭",
     hint: "华语演员，综艺和影视都很活跃",
     difficulty: "medium"
@@ -1308,7 +1308,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep045",
     category: "猜名人",
     sub_category: "华语歌手",
-    clues: ["🌸", "🌞", "🌌"],
+    clues: ["🌸", "🌅", "🌌"],
     answer: "华晨宇",
     hint: "华语男歌手，舞台风格很有辨识度",
     difficulty: "medium"
@@ -1326,7 +1326,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep047",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["🪑", "🛫"],
+    clues: ["🪑", "🚀"],
     answer: "邓超",
     hint: "华语演员，综艺感很强",
     difficulty: "easy"
@@ -1335,7 +1335,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep048",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["📘", "👶", "😊"],
+    clues: ["📖", "👶", "😊"],
     answer: "章子怡",
     hint: "华语电影演员，国际知名度很高",
     difficulty: "easy"
@@ -1362,7 +1362,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep051",
     category: "猜名人",
     sub_category: "华语歌手",
-    clues: ["🏹", "✨", "🐦"],
+    clues: ["🏹", "✨", "🦅"],
     answer: "张靓颖",
     hint: "华语女歌手，高音很有辨识度",
     difficulty: "medium"
@@ -1371,7 +1371,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep052",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["✅", "💡", "🥤"],
+    clues: ["✅", "💡", "🍔"],
     answer: "许光汉",
     hint: "华语演员，青春爱情题材辨识度高",
     difficulty: "medium"
@@ -1380,7 +1380,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep053",
     category: "猜名人",
     sub_category: "华语艺人",
-    clues: ["🍊", "💪", "✨"],
+    clues: ["🍊", "💪", "⚡"],
     answer: "陈伟霆",
     hint: "华语艺人，舞台和影视都有代表作",
     difficulty: "medium"
@@ -1389,7 +1389,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep054",
     category: "猜名人",
     sub_category: "华语演员",
-    clues: ["🪑", "☀️", "🎵"],
+    clues: ["🦴", "☀️", "🎵"],
     answer: "古天乐",
     hint: "华语演员，经典影视作品很多",
     difficulty: "easy"
@@ -1398,7 +1398,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep055",
     category: "猜名人",
     sub_category: "华语艺人",
-    clues: ["🙏", "✨", "🔪"],
+    clues: ["🙏", "⚡", "🔪"],
     answer: "谢霆锋",
     hint: "华语演员歌手，也和美食节目有关",
     difficulty: "medium"
@@ -1407,7 +1407,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ep056",
     category: "猜名人",
     sub_category: "华语艺人",
-    clues: ["🌲", "🏷️", "🔔"],
+    clues: ["🌲", "🚩", "🔔"],
     answer: "林志玲",
     hint: "华语艺人，声音和形象辨识度很高",
     difficulty: "easy"
@@ -1416,7 +1416,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es032",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🧶", "↔️", "❄️"],
+    clues: ["💇", "🟰", "❄️"],
     answer: "发如雪",
     hint: "中国风流行歌，画面感偏冷清",
     difficulty: "medium"
@@ -1425,7 +1425,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es033",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["❄️", "🌬️", "🔥"],
+    clues: ["☃️", "🌬️", "💥"],
     answer: "东风破",
     hint: "中国风代表作之一，歌名有古意",
     difficulty: "medium"
@@ -1434,7 +1434,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es034",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["1️⃣", "🛣️", "➡️", "➡️"],
+    clues: ["1️⃣", "🛣️", "➡️", "🧭"],
     answer: "一路向北",
     hint: "歌名带有方向和离开的感觉",
     difficulty: "medium"
@@ -1443,7 +1443,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es035",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["1️⃣", "📅"],
+    clues: ["🔟", "📅"],
     answer: "十年",
     hint: "经典华语歌，歌名和时间有关",
     difficulty: "easy"
@@ -1452,7 +1452,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es036",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["❤️", "❤️", "🔁", "🚚"],
+    clues: ["❤️", "💞", "🔁", "🚚"],
     answer: "爱情转移",
     hint: "经典华语情歌，歌名和感情变化有关",
     difficulty: "medium"
@@ -1461,7 +1461,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es037",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🔴", "🌸", "💀"],
+    clues: ["🔴", "🌹", "👻"],
     answer: "红玫瑰",
     hint: "经典情歌，歌名有花的意象",
     difficulty: "easy"
@@ -1479,7 +1479,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es039",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🔁", "🔙"],
+    clues: ["🔄", "📼"],
     answer: "倒带",
     hint: "歌名和回放记忆有关",
     difficulty: "easy"
@@ -1488,7 +1488,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es040",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🛡️", "🚫"],
+    clues: ["🛡️", "🤫"],
     answer: "安静",
     hint: "安静克制的华语情歌",
     difficulty: "easy"
@@ -1506,7 +1506,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es042",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🚫", "☀️"],
+    clues: ["🤫", "☀️"],
     answer: "宁夏",
     hint: "夏天感很强的华语歌曲",
     difficulty: "easy"
@@ -1524,7 +1524,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es044",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["💧", "😮"],
+    clues: ["🧯", "😞"],
     answer: "消愁",
     hint: "歌名带有情绪释放感",
     difficulty: "medium"
@@ -1542,7 +1542,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es046",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["👷", "🔥", "❤️", "❤️"],
+    clues: ["🛠️", "🔥", "❤️", "💞"],
     answer: "修炼爱情",
     hint: "华语流行歌，歌名像一场感情修行",
     difficulty: "medium"
@@ -1551,7 +1551,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es047",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["👩", "📣"],
+    clues: ["👩", "🗣️"],
     answer: "她说",
     hint: "经典华语歌曲，歌名像一句转述",
     difficulty: "easy"
@@ -1560,7 +1560,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es048",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🔓", "💬", "💬"],
+    clues: ["🔑", "⌨️", "💬"],
     answer: "关键词",
     hint: "华语流行歌，歌名和表达重点有关",
     difficulty: "medium"
@@ -1578,7 +1578,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es050",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["👷", "💪"],
+    clues: ["⛏️", "💪"],
     answer: "倔强",
     hint: "热血励志感很强的歌名",
     difficulty: "medium"
@@ -1587,7 +1587,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es051",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🌌", "🔘", "🔘"],
+    clues: ["🌌", "⚫", "⚫"],
     answer: "天黑黑",
     hint: "歌名带有夜晚和童年感",
     difficulty: "easy"
@@ -1596,7 +1596,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es052",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["📅", "🧒", "✅", "💪"],
+    clues: ["📅", "👦", "✅", "💪"],
     answer: "年少有为",
     hint: "歌名带有遗憾和成长感",
     difficulty: "medium"
@@ -1605,7 +1605,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es053",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["❤️", "🌙", "🥇", "🦹"],
+    clues: ["💔", "🌙", "🥇", "🦹"],
     answer: "岁月神偷",
     hint: "歌名带有时间流逝感",
     difficulty: "medium"
@@ -1614,7 +1614,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es054",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🔥", "🔥", "👍", "💭", "👉"],
+    clues: ["💥", "🔥", "👍", "💭", "👉"],
     answer: "突然好想你",
     hint: "传唱度很高的华语歌曲，歌名像一句情绪突然涌上来",
     difficulty: "medium"
@@ -1623,7 +1623,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es055",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🌊", "🫘"],
+    clues: ["🌊", "🧅"],
     answer: "洋葱",
     hint: "情绪很浓的华语情歌",
     difficulty: "easy"
@@ -1632,7 +1632,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es056",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🔴", "🎨", "⬆️", "🦶", "🦶"],
+    clues: ["🔴", "🎨", "⬆️", "👣", "👟"],
     answer: "红色高跟鞋",
     hint: "经典都市感华语歌曲",
     difficulty: "medium"
@@ -1641,7 +1641,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es057",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🧸", "👀", "🪨", "⏰"],
+    clues: ["😴", "👀", "🪨", "⏰"],
     answer: "梦醒时分",
     hint: "经典华语歌曲，歌名和清醒时刻有关",
     difficulty: "medium"
@@ -1659,7 +1659,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es059",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["⛰️", "🌊", "💃", "🏠"],
+    clues: ["🏜️", "🌊", "💃", "🏛️"],
     answer: "漠河舞厅",
     hint: "近年传唱度很高的民谣歌曲",
     difficulty: "medium"
@@ -1668,7 +1668,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "es060",
     category: "猜歌名",
     sub_category: "华语流行歌",
-    clues: ["🤏", "❤️", "🎤"],
+    clues: ["🤏", "💞", "🎤"],
     answer: "小情歌",
     hint: "传唱度很高的清新系华语歌曲",
     difficulty: "easy"
@@ -1686,7 +1686,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei041",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["👀", "😱", "👄", "😵"],
+    clues: ["👀", "😳", "👄", "😵"],
     answer: "目瞪口呆",
     hint: "形容因为惊讶而愣住",
     difficulty: "easy"
@@ -1695,7 +1695,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei042",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["😊", "📍", "🙈", "🔪"],
+    clues: ["😂", "📍", "🙈", "🔪"],
     answer: "笑里藏刀",
     hint: "表面友好，背后暗藏危险",
     difficulty: "medium"
@@ -1704,7 +1704,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei043",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["👹", "🧶", "🔥", "👑"],
+    clues: ["😡", "💇", "💥", "👑"],
     answer: "怒发冲冠",
     hint: "形容愤怒到了极点",
     difficulty: "medium"
@@ -1713,7 +1713,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei044",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["⬅️", "➡️", "😱", "😱"],
+    clues: ["⬅️", "➡️", "😣", "😣"],
     answer: "左右为难",
     hint: "形容两边都不好选择",
     difficulty: "easy"
@@ -1722,7 +1722,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei045",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["❄️", "🔘", "🏷️", "🔥"],
+    clues: ["❄️", "🎯", "🎁", "🔥"],
     answer: "雪中送炭",
     hint: "在别人困难时及时帮助",
     difficulty: "easy"
@@ -1731,7 +1731,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei046",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["📜", "⬆️", "📣", "⚔️"],
+    clues: ["📄", "⬆️", "🗣️", "⚔️"],
     answer: "纸上谈兵",
     hint: "只会空谈，缺少实际行动",
     difficulty: "easy"
@@ -1740,7 +1740,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei047",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🌱", "⬆️", "👏", "⬆️"],
+    clues: ["🌱", "⬆️", "🤲", "📈"],
     answer: "拔苗助长",
     hint: "比喻急于求成，反而坏事",
     difficulty: "medium"
@@ -1749,7 +1749,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei048",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["👴", "👏", "➡️", "⛰️"],
+    clues: ["👴", "🤲", "➡️", "⛰️"],
     answer: "愚公移山",
     hint: "形容坚持不懈地做困难的事",
     difficulty: "easy"
@@ -1758,7 +1758,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei049",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["👀", "🍎", "❌", "💧"],
+    clues: ["👀", "🍑", "🛑", "💧"],
     answer: "望梅止渴",
     hint: "用想象来安慰自己",
     difficulty: "medium"
@@ -1767,7 +1767,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei050",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🔥", "🔪", "⬇️", "⛵"],
+    clues: ["💥", "🪓", "⬇️", "⛵"],
     answer: "破釜沉舟",
     hint: "比喻下定决心，不留退路",
     difficulty: "medium"
@@ -1776,7 +1776,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei051",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🐦", "🐚", "↔️", "⚔️"],
+    clues: ["🐦", "🦪", "↔️", "⚔️"],
     answer: "鹬蚌相争",
     hint: "双方争斗，可能让第三方得利",
     difficulty: "hard"
@@ -1785,7 +1785,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei052",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🍡", "🐸", "🕳️", "🐸"],
+    clues: ["🍬", "🦗", "🕸️", "🦗"],
     answer: "螳螂捕蝉",
     hint: "只顾眼前，没注意身后危险",
     difficulty: "hard"
@@ -1794,7 +1794,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei053",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["📜", "🚪", "👷", "🚗"],
+    clues: ["🖊️", "🚪", "🛠️", "🚗"],
     answer: "闭门造车",
     hint: "脱离实际，只凭主观办事",
     difficulty: "medium"
@@ -1803,7 +1803,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei054",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["💯", "🏹", "💯", "🔘"],
+    clues: ["💯", "🏹", "💯", "🎯"],
     answer: "百发百中",
     hint: "形容命中率非常高",
     difficulty: "easy"
@@ -1812,7 +1812,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei055",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🌊", "⬇️", "👊", "🧶"],
+    clues: ["🌊", "⬇️", "🥄", "🪡"],
     answer: "海底捞针",
     hint: "形容寻找起来非常困难",
     difficulty: "medium"
@@ -1821,7 +1821,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei056",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["✋", "💃", "🦶", "💃"],
+    clues: ["✋", "💃", "🦶", "🕺"],
     answer: "手舞足蹈",
     hint: "形容高兴得手脚都动起来",
     difficulty: "easy"
@@ -1830,7 +1830,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei057",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🌬️", "⚖️", "🌊", "🚫"],
+    clues: ["🌬️", "⚖️", "🌊", "🤫"],
     answer: "风平浪静",
     hint: "形容没有风波，很平静",
     difficulty: "easy"
@@ -1839,7 +1839,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei058",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["😊", "🔴", "👂", "🔴"],
+    clues: ["🙂", "🔴", "👂", "🟥"],
     answer: "面红耳赤",
     hint: "形容激动、害羞或争辩时脸色发红",
     difficulty: "easy"
@@ -1848,7 +1848,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei059",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🔥", "🌲", "💎", "🌸"],
+    clues: ["🔥", "🌲", "🏦", "🌸"],
     answer: "火树银花",
     hint: "形容灯火烟花灿烂",
     difficulty: "medium"
@@ -1875,7 +1875,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei062",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🐯", "👤", "🐍", "😮"],
+    clues: ["🐯", "👤", "🐍", "🤢"],
     answer: "虎头蛇尾",
     hint: "开头声势大，结尾草草收场",
     difficulty: "easy"
@@ -1884,7 +1884,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei063",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["💧", "🌊", "🔥", "🔥"],
+    clues: ["💧", "🌊", "🔥", "🥵"],
     answer: "水深火热",
     hint: "形容处境非常艰难痛苦",
     difficulty: "easy"
@@ -1893,7 +1893,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei064",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["☀️", "☀️", "⬆️", "⬆️"],
+    clues: ["☀️", "☀️", "⬆️", "📈"],
     answer: "蒸蒸日上",
     hint: "形容事业不断向上发展",
     difficulty: "easy"
@@ -1902,7 +1902,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei065",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["⭐", "⭐", "📷", "🥤"],
+    clues: ["⭐", "⭐", "📷", "🧃"],
     answer: "惺惺相惜",
     hint: "彼此欣赏、互相珍惜",
     difficulty: "hard"
@@ -1911,7 +1911,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei066",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["❤️", "🔔", "✋", "🍡"],
+    clues: ["❤️", "🔔", "✋", "🍫"],
     answer: "心灵手巧",
     hint: "形容人心思灵活，手艺好",
     difficulty: "medium"
@@ -1920,7 +1920,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei067",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🚪", "👄", "✅", "📘"],
+    clues: ["🚪", "👄", "✅", "📖"],
     answer: "出口成章",
     hint: "形容文思敏捷，说话成文",
     difficulty: "medium"
@@ -1938,7 +1938,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei069",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🧊", "🌌", "❄️", "⛰️"],
+    clues: ["🧊", "🌌", "❄️", "🌍"],
     answer: "冰天雪地",
     hint: "形容冰雪覆盖，非常寒冷",
     difficulty: "easy"
@@ -1947,7 +1947,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "ei070",
     category: "猜成语",
     sub_category: "四字成语",
-    clues: ["🐺", "❤️", "🐶", "❤️"],
+    clues: ["🐺", "❤️", "🐶", "🫁"],
     answer: "狼心狗肺",
     hint: "形容人忘恩负义、心肠不好",
     difficulty: "easy"
@@ -1956,7 +1956,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb031",
     category: "猜品牌",
     sub_category: "运动品牌",
-    clues: ["🛡️", "🦶"],
+    clues: ["🛡️", "👣"],
     answer: "安踏",
     hint: "国产运动品牌",
     difficulty: "easy"
@@ -1965,7 +1965,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb032",
     category: "猜品牌",
     sub_category: "运动品牌",
-    clues: ["🍐", "🚫"],
+    clues: ["🍐", "🤫"],
     answer: "李宁",
     hint: "国产运动品牌，和奥运冠军有关",
     difficulty: "easy"
@@ -1983,7 +1983,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb034",
     category: "猜品牌",
     sub_category: "社交/内容平台",
-    clues: ["🤏", "🔴", "📘"],
+    clues: ["🤏", "🔴", "📖"],
     answer: "小红书",
     hint: "生活方式和种草平台",
     difficulty: "easy"
@@ -1992,7 +1992,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb035",
     category: "猜品牌",
     sub_category: "短视频/互联网",
-    clues: ["✨", "✋"],
+    clues: ["⚡", "✋"],
     answer: "快手",
     hint: "短视频平台",
     difficulty: "easy"
@@ -2001,7 +2001,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb036",
     category: "猜品牌",
     sub_category: "社交/内容平台",
-    clues: ["💡", "🦊"],
+    clues: ["🧠", "🦊"],
     answer: "知乎",
     hint: "问答社区平台",
     difficulty: "easy"
@@ -2019,7 +2019,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb038",
     category: "猜品牌",
     sub_category: "视频/互联网",
-    clues: ["❤️", "💬", "🎨"],
+    clues: ["❤️", "❓", "🎨"],
     answer: "爱奇艺",
     hint: "长视频平台",
     difficulty: "medium"
@@ -2028,7 +2028,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb039",
     category: "猜品牌",
     sub_category: "生鲜/零售",
-    clues: ["🧩", "🐴"],
+    clues: ["📦", "🐴"],
     answer: "盒马",
     hint: "生鲜零售品牌",
     difficulty: "easy"
@@ -2046,7 +2046,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb041",
     category: "猜品牌",
     sub_category: "茶饮/餐饮",
-    clues: ["😊", "☕"],
+    clues: ["😊", "🍵"],
     answer: "喜茶",
     hint: "新茶饮品牌",
     difficulty: "easy"
@@ -2073,7 +2073,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb044",
     category: "猜品牌",
     sub_category: "餐饮",
-    clues: ["🌊", "⬇️", "👊"],
+    clues: ["🌊", "⬇️", "🥄"],
     answer: "海底捞",
     hint: "火锅连锁品牌",
     difficulty: "easy"
@@ -2082,7 +2082,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb045",
     category: "猜品牌",
     sub_category: "食品品牌",
-    clues: ["👴", "⛰️", "👩"],
+    clues: ["👵", "🏜️", "👩"],
     answer: "老干妈",
     hint: "辣酱品牌",
     difficulty: "easy"
@@ -2091,7 +2091,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb046",
     category: "猜品牌",
     sub_category: "饮料品牌",
-    clues: ["👶", "😊", "😊"],
+    clues: ["👶", "😂", "😂"],
     answer: "娃哈哈",
     hint: "饮料品牌",
     difficulty: "easy"
@@ -2100,7 +2100,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb047",
     category: "猜品牌",
     sub_category: "饮料品牌",
-    clues: ["🌾", "👤", "⛰️", "💧"],
+    clues: ["🌾", "👨", "⛰️", "⛲"],
     answer: "农夫山泉",
     hint: "饮用水品牌",
     difficulty: "easy"
@@ -2109,7 +2109,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb048",
     category: "猜品牌",
     sub_category: "饮料品牌",
-    clues: ["🔘", "💨", "🌲", "🌳"],
+    clues: ["⭕", "💨", "🌲", "🌳"],
     answer: "元气森林",
     hint: "饮料品牌",
     difficulty: "medium"
@@ -2118,7 +2118,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb049",
     category: "猜品牌",
     sub_category: "茶饮/餐饮",
-    clues: ["🍯", "❄️", "🧊", "🏠"],
+    clues: ["🍯", "❄️", "🧊", "🏰"],
     answer: "蜜雪冰城",
     hint: "新茶饮品牌",
     difficulty: "easy"
@@ -2127,7 +2127,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb050",
     category: "猜品牌",
     sub_category: "茶饮/餐饮",
-    clues: ["☕", "💯", "🛣️"],
+    clues: ["🍵", "💯", "🛣️"],
     answer: "茶百道",
     hint: "新茶饮品牌",
     difficulty: "easy"
@@ -2136,7 +2136,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb051",
     category: "猜品牌",
     sub_category: "茶饮/餐饮",
-    clues: ["👑", "👑", "☕", "👑"],
+    clues: ["👑", "👑", "🍵", "👸"],
     answer: "霸王茶姬",
     hint: "新茶饮品牌",
     difficulty: "medium"
@@ -2154,7 +2154,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb053",
     category: "猜品牌",
     sub_category: "家电品牌",
-    clues: ["🏎️", "💪"],
+    clues: ["🏁", "💪"],
     answer: "格力",
     hint: "家电品牌",
     difficulty: "easy"
@@ -2163,7 +2163,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb054",
     category: "猜品牌",
     sub_category: "家电品牌",
-    clues: ["💃", "🔘"],
+    clues: ["💃", "🎯"],
     answer: "美的",
     hint: "家电品牌",
     difficulty: "easy"
@@ -2181,7 +2181,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb056",
     category: "猜品牌",
     sub_category: "出行/旅行",
-    clues: ["🛫", "🐶"],
+    clues: ["🪽", "🐷"],
     answer: "飞猪",
     hint: "旅行服务平台",
     difficulty: "easy"
@@ -2190,7 +2190,7 @@ window.PARTY_EMOJI_GUESS_QUESTIONS = [
     id: "eb057",
     category: "猜品牌",
     sub_category: "外卖/生活服务",
-    clues: ["😋", "✅", "💬"],
+    clues: ["😋", "✅", "❓"],
     answer: "饿了么",
     hint: "外卖平台",
     difficulty: "easy"
