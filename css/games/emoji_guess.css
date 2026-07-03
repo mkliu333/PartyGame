@@ -304,3 +304,78 @@
       visibility: hidden !important;
       opacity: 0 !important;
     }
+
+    .gameplay-grid.emoji-guess-play-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: clamp(16px, 2vw, 26px);
+      align-items: stretch;
+      min-height: calc(100vh - 110px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .media-wrap {
+      min-width: 0;
+      width: 100%;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .media-card.emoji-mode {
+      width: 100%;
+      min-height: clamp(520px, 68vh, 760px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-guess-panel {
+      min-height: clamp(440px, 58vh, 680px);
+      padding: clamp(32px, 6vw, 80px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-row {
+      gap: clamp(18px, 3vw, 36px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-token {
+      min-width: clamp(128px, 13vw, 170px);
+      min-height: clamp(128px, 13vw, 170px);
+      border-radius: 30px;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-img {
+      width: clamp(82px, 8vw, 112px);
+      height: clamp(82px, 8vw, 112px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .emoji-clue-fallback {
+      width: clamp(82px, 8vw, 122px);
+      height: clamp(82px, 8vw, 122px);
+      font-size: clamp(58px, 7vw, 104px);
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .gameplay-side-stack {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.8fr) minmax(360px, 1.2fr);
+      gap: clamp(14px, 2vw, 22px);
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .gameplay-grid.emoji-guess-play-layout .gameplay-side-stack .side-panel {
+      min-height: 0;
+    }
+
+    @media (max-width: 860px) {
+      .gameplay-grid.emoji-guess-play-layout {
+        min-height: auto;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .media-card.emoji-mode {
+        min-height: 460px;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .emoji-guess-panel {
+        min-height: 360px;
+      }
+
+      .gameplay-grid.emoji-guess-play-layout .gameplay-side-stack {
+        grid-template-columns: 1fr;
+      }
+    }

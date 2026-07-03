@@ -5,6 +5,7 @@ window.PartyGame.Core = window.PartyGame.Core || {};
       if (typeof stopActiveGameMedia === "function") stopActiveGameMedia();
       state.screen = screen;
       elements.screens.forEach((node) => node.classList.toggle("active", node.id === screen));
+      window.PartyGame.Games.syncGameplayLayoutClasses?.();
       clearValidationError(elements.setupError);
       clearRoundMessages();
 

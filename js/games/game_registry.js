@@ -79,6 +79,12 @@ function getActiveMusicGame() {
   return null;
 }
 
+function syncGameplayLayoutClasses() {
+  const gameplayGrid = $(".gameplay-grid");
+  if (!gameplayGrid) return;
+  gameplayGrid.classList.toggle("emoji-guess-play-layout", state.screen === "play" && isEmojiGuessActive());
+}
+
 function selectGame(gameId) {
   const game = getGameById(gameId);
   if (!game || game.status !== "available") return false;
@@ -105,6 +111,7 @@ function selectGame(gameId) {
   });
   resetQuestionFlowState();
   if (isWodiActive()) state.wodiRound = null;
+  syncGameplayLayoutClasses();
   window.PartyGame.Core.BackgroundAudio?.sync();
   return true;
 }
@@ -127,5 +134,5 @@ function renderHomepageGameCards() {
   }).join("");
 }
 
-Object.assign(window.PartyGame.Games, { getGameById, getActiveGame, isTripleMusicActive, isSingleMusicActive, isMusicGameActive, isEmojiGuessActive, isWodiActive, getActiveMusicGame, selectGame, renderHomepageGameCards });
+Object.assign(window.PartyGame.Games, { getGameById, getActiveGame, isTripleMusicActive, isSingleMusicActive, isMusicGameActive, isEmojiGuessActive, isWodiActive, getActiveMusicGame, syncGameplayLayoutClasses, selectGame, renderHomepageGameCards });
 
