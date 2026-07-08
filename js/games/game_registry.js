@@ -14,14 +14,14 @@ window.PartyGame.Games.registry = [
     title: "三歌混播猜歌",
     subtitle: "三首歌同时播放，抢答分别是哪三首歌。",
     status: "available",
-    dataSourceLabel: "triple_music/triple_music_questions_v5.js"
+    dataSourceLabel: "triple_music/triple_music_questions_v6.js"
   },
   {
     id: "single_music",
     title: "单曲猜歌",
     subtitle: "每题播放一段音频，抢答对应歌名。",
     status: "available",
-    dataSourceLabel: "triple_music/triple_music_questions_v5.js"
+    dataSourceLabel: "triple_music/triple_music_questions_v6.js"
   },
   {
     id: "emoji_guess",

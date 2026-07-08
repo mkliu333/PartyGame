@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.3";
+    const APP_VERSION = "v4.2.4";
 
-    const UPDATE_THEME = "强制对齐 Emoji 猜猜猜与猜台词的大屏布局间距";
+    const UPDATE_THEME = "更新三歌混播和单曲猜歌曲库 v6";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
