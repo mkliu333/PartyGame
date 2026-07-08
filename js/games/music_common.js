@@ -64,7 +64,7 @@ function getMusicAnswerCountByArtist(tracks) {
 function getStandaloneMusicArtists(tracks) {
   const counts = getMusicAnswerCountByArtist(tracks);
   return new Set([...counts.entries()]
-    .filter(([, count]) => count >= MUSIC_STANDALONE_ARTIST_THRESHOLD)
+    .filter(([artist, count]) => artist !== MUSIC_MISC_CATEGORY_ID && count >= MUSIC_STANDALONE_ARTIST_THRESHOLD)
     .map(([artist]) => artist));
 }
 
@@ -74,7 +74,9 @@ function isStandaloneMusicArtist(artist, tracks) {
 
 function hasMiscMusicCategory(tracks) {
   const counts = getMusicAnswerCountByArtist(tracks);
-  return [...counts.values()].some((count) => count < MUSIC_STANDALONE_ARTIST_THRESHOLD);
+  return [...counts.entries()].some(([artist, count]) => (
+    artist === MUSIC_MISC_CATEGORY_ID || count < MUSIC_STANDALONE_ARTIST_THRESHOLD
+  ));
 }
 
 function getMusicDisplayCategories(tracks) {
@@ -91,7 +93,7 @@ function trackBelongsToDisplayCategory(track, displayCategoryId, tracks) {
   const artist = track?.category;
   if (!artist) return false;
   const standaloneArtists = getStandaloneMusicArtists(tracks);
-  if (categoryId === MUSIC_MISC_CATEGORY_ID) return !standaloneArtists.has(artist);
+  if (categoryId === MUSIC_MISC_CATEGORY_ID) return artist === MUSIC_MISC_CATEGORY_ID || !standaloneArtists.has(artist);
   return artist === categoryId && standaloneArtists.has(artist);
 }
 
