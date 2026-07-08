@@ -270,12 +270,10 @@ function renderTripleMusicAnswerPanel() {
 }
 
 function renderTripleMusicQuestionFooter(question) {
-  const trackCount = question.tracks.length;
-  const trackWord = trackCount === 1 ? "播放" : "混播";
   const segmentLabel = getTripleMusicSegmentTypeLabel(question.segmentType);
   const artistLabel = window.PartyGame.Games.musicCommon.getInvolvedArtistLabel(question.tracks);
   elements.questionTitle.textContent = `第 ${state.currentQuestionIndex + 1} / ${state.currentRoundQuestions.length} 题`;
-  elements.questionMeta.textContent = `${artistLabel} · ${segmentLabel} · 本题 ${trackCount} 首歌${trackWord}`;
+  elements.questionMeta.textContent = `${artistLabel} · 三歌混播 · ${segmentLabel}`;
 }
 
 function renderTripleMusicStageControls() {

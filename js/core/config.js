@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.4-hotfix-1";
+    const APP_VERSION = "v4.2.4-hotfix-2";
 
-    const UPDATE_THEME = "修复 v6 曲库华语乐坛分类为空的问题";
+    const UPDATE_THEME = "修复音乐游戏播放页显示实际歌手名";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

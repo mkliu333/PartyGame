@@ -228,6 +228,7 @@ function renderSingleMusicGameplay() {
   }
   const track = question.tracks[0];
   const modeLabel = getSingleMusicPlaybackModeLabel();
+  const artistLabel = window.PartyGame.Games.musicCommon.getMusicTrackArtistLabel(track);
   const playLabel = getSingleMusicPrimaryPlaybackLabel();
   elements.mediaCard.classList.remove("empty", "image-mode", "emoji-mode");
   $(".emoji-clue-panel", elements.mediaCard)?.remove();
@@ -244,7 +245,7 @@ function renderSingleMusicGameplay() {
     </div>`;
   $("#singleAudioPanelButton")?.addEventListener("click", playSingleMusicAudio);
   elements.questionTitle.textContent = `第 ${state.currentQuestionIndex + 1} / ${state.currentRoundQuestions.length} 题`;
-  elements.questionMeta.textContent = `${track.category} · 单曲猜歌 · ${modeLabel}`;
+  elements.questionMeta.textContent = `${artistLabel} · 单曲猜歌 · ${modeLabel}`;
   elements.answerState.textContent = state.phase === "revealed" ? "答案已揭晓" : "答案未揭晓";
   if (state.phase === "revealed") {
     elements.answerText.classList.add("triple-music-answer-list");
