@@ -51,6 +51,24 @@
       text-align: center;
     }
 
+    .host-answers-qr-card .result-kicker {
+      color: var(--rose);
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    #hostAnswersQrCopy {
+      width: min(440px, 100%);
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-size: 19px;
+      line-height: 1.45;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+    }
+
     .host-answers-qr-box {
       display: grid;
       width: min(360px, 100%);
@@ -80,6 +98,13 @@
     @media (max-width: 720px) {
       .host-answers-qr-box {
         min-height: 300px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      #hostAnswersQrCopy {
+        font-size: 16px;
+        white-space: normal;
       }
     }
 

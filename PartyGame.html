@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <!--
 App Name: PartyGame
-Version: v4.2.6-hotfix-2
-Update Theme: 简化主持人二维码弹窗并压缩答案 payload
+Version: v4.2.6-hotfix-3
+Update Theme: 微调主持人二维码弹窗文案与标题样式
 Main Entry: PartyGame.html
 -->
 <html lang="zh-CN">
@@ -244,11 +244,10 @@ Main Entry: PartyGame.html
     </div>
   </div>
 
-  <div class="modal-overlay" id="hostAnswersQrOverlay" role="dialog" aria-modal="true" aria-labelledby="hostAnswersQrTitle">
+  <div class="modal-overlay" id="hostAnswersQrOverlay" role="dialog" aria-modal="true" aria-describedby="hostAnswersQrCopy">
     <div class="result-card host-answers-qr-card">
       <div class="result-kicker">主持人专用</div>
-      <h2 id="hostAnswersQrTitle">主持人答案二维码</h2>
-      <p id="hostAnswersQrCopy">请主持人扫码保存本轮答案顺序，玩家请勿查看。</p>
+      <p id="hostAnswersQrCopy">请主持人扫码查看答案，玩家请勿扫码</p>
       <div class="host-answers-qr-box" id="hostAnswersQrCode"></div>
       <div class="modal-actions">
         <button class="primary-btn" type="button" id="hostAnswersQrContinue">已扫码，开始游戏</button>

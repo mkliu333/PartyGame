@@ -178,7 +178,6 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
     return {
       overlay: document.getElementById("hostAnswersQrOverlay"),
       qr: document.getElementById("hostAnswersQrCode"),
-      title: document.getElementById("hostAnswersQrTitle"),
       copy: document.getElementById("hostAnswersQrCopy"),
       primary: document.getElementById("hostAnswersQrContinue")
     };
@@ -230,10 +229,7 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
     runtime.activeContinue = typeof options.onContinue === "function" ? options.onContinue : null;
     runtime.hasContinued = false;
 
-    els.title.textContent = "主持人答案二维码";
-    els.copy.textContent = state.activeGameId === "wodi"
-      ? "请主持人扫码保存本局词语和身份分配，玩家请勿查看。"
-      : "请主持人扫码保存本轮答案顺序，玩家请勿查看。";
+    els.copy.textContent = "请主持人扫码查看答案，玩家请勿扫码";
     els.primary.textContent = options.continueLabel || (state.activeGameId === "wodi" ? "已扫码，继续发身份" : "已扫码，开始游戏");
     renderQr(els.qr, link);
     els.overlay.classList.add("show");
