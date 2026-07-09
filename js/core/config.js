@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.6-hotfix-3";
+    const APP_VERSION = "v4.2.6-hotfix-4";
 
-    const UPDATE_THEME = "微调主持人二维码弹窗文案与标题样式";
+    const UPDATE_THEME = "扩大主界面在浏览器中的显示占比";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

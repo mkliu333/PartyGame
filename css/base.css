@@ -128,9 +128,15 @@
     .app {
       position: relative;
       z-index: 1;
-      width: min(1320px, calc(100% - 32px));
+      width: min(80vw, 1680px);
       margin: 0 auto;
       padding: 26px 0 42px;
+    }
+
+    @media (max-width: 1280px) {
+      .app {
+        width: calc(100% - 40px);
+      }
     }
 
 
