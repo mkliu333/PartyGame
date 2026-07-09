@@ -36,6 +36,7 @@
       color: var(--accent);
       font-size: clamp(28px, 8vw, 42px);
       line-height: 1.12;
+      text-align: center;
     }
     .subtitle,
     .warning {
@@ -43,6 +44,7 @@
       color: var(--muted);
       line-height: 1.6;
       font-weight: 700;
+      text-align: center;
     }
     .warning {
       padding: 12px 14px;
@@ -62,18 +64,26 @@
       border-radius: 18px;
       background: var(--paper);
     }
-    .answer-card h2 {
-      margin: 0 0 8px;
+    .answer-row {
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background: var(--paper);
+      color: var(--ink);
       font-size: 18px;
-    }
-    .row {
-      margin: 6px 0;
-      color: var(--muted);
-      line-height: 1.55;
+      font-weight: 850;
+      line-height: 1.5;
       word-break: break-word;
     }
-    .row strong {
-      color: var(--ink);
+    .wodi-words {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+    .wodi-role-title {
+      margin: 18px 0 8px;
+      color: var(--accent);
+      font-weight: 900;
     }
     .empty {
       margin-top: 20px;
@@ -87,9 +97,8 @@
 </head>
 <body>
   <main>
-    <h1>主持人答案卡</h1>
+    <h1>本轮答案</h1>
     <p class="subtitle" id="subtitle">正在读取本轮答案...</p>
-    <p class="warning">请主持人独自查看，不要给玩家看到。</p>
     <section class="answer-list" id="answerList"></section>
   </main>
 
@@ -121,7 +130,7 @@
       function getPayloadFromHash() {
         const hash = window.location.hash.replace(/^#/, "");
         const params = new URLSearchParams(hash);
-        const encoded = params.get("payload");
+        const encoded = params.get("p") || params.get("payload");
         if (!encoded) return null;
         return decodeBase64Url(encoded);
       }
@@ -141,22 +150,35 @@
         answerList.innerHTML = "";
       }
 
-      function renderAnswer(answer) {
-        const extra = Array.isArray(answer.extra) ? answer.extra.filter(Boolean) : [];
+      function normalizeLegacyAnswers(payload) {
+        if (Array.isArray(payload.answers)) return payload.answers.map((item) => item.answer || item.title || "暂无答案");
+        return [];
+      }
+
+      function renderAnswerList(items) {
+        return items.map((item, index) => (
+          `<div class="answer-row">第${index + 1}题：${escapeHTML(item || "暂无答案")}</div>`
+        )).join("");
+      }
+
+      function renderWodi(payload) {
+        const words = Array.isArray(payload.c) ? payload.c : [];
+        const players = Array.isArray(payload.p) ? payload.p : [];
+        const blank = words[2] || "";
         return `
-          <article class="answer-card">
-            <h2>第 ${escapeHTML(answer.index || "")} 题</h2>
-            <div class="row"><strong>答案：</strong>${escapeHTML(answer.answer || "暂无答案")}</div>
-            ${answer.title ? `<div class="row"><strong>作品/来源：</strong>${escapeHTML(answer.title)}</div>` : ""}
-            ${answer.meta ? `<div class="row"><strong>补充：</strong>${escapeHTML(answer.meta)}</div>` : ""}
-            ${extra.length ? `<div class="row"><strong>其他：</strong>${extra.map(escapeHTML).join(" / ")}</div>` : ""}
-          </article>
+          <div class="wodi-words">
+            <div class="answer-row">平民词：${escapeHTML(words[0] || "")}</div>
+            <div class="answer-row">卧底词：${escapeHTML(words[1] || "")}</div>
+            ${blank ? `<div class="answer-row">白板词：${escapeHTML(blank)}</div>` : ""}
+          </div>
+          <div class="wodi-role-title">玩家身份：</div>
+          ${players.map((item) => `<div class="answer-row">${escapeHTML(item[0] || "")}：${escapeHTML(item[1] || "")}</div>`).join("")}
         `;
       }
 
       try {
         const payload = getPayloadFromHash();
-        if (!payload || payload.type !== "host_answers" || !Array.isArray(payload.answers)) {
+        if (!payload || typeof payload !== "object") {
           showInvalid();
           return;
         }
@@ -164,9 +186,14 @@
           showExpired();
           return;
         }
-        subtitle.textContent = `${payload.gameTitle || "未知游戏"} / ${formatTime(payload.createdAt)} / ${payload.answers.length} 题`;
-        answerList.innerHTML = payload.answers.length
-          ? payload.answers.map(renderAnswer).join("")
+        subtitle.textContent = "仅主持人查看";
+        if (payload.t === "wodi") {
+          answerList.innerHTML = renderWodi(payload);
+          return;
+        }
+        const answers = Array.isArray(payload.r) ? payload.r : normalizeLegacyAnswers(payload);
+        answerList.innerHTML = answers.length
+          ? renderAnswerList(answers)
           : `<div class="empty">本轮暂无可显示答案。</div>`;
       } catch (error) {
         console.warn("[host_answers] invalid payload", error);

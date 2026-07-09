@@ -69,7 +69,7 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
 
   function buildHostAnswersUrl(payload) {
     const baseUrl = buildMobilePageUrl(HOST_ANSWERS_PAGE);
-    return `${baseUrl}#payload=${encodeBase64Url(payload)}`;
+    return `${baseUrl}#p=${encodeBase64Url(payload)}`;
   }
 
   function getWodiIdentityBaseUrlFromMobileHost() {
@@ -106,110 +106,71 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
       : question.segmentType;
   }
 
-  function buildLineGuessAnswer(question, index) {
-    const categoryLabel = getCategoryLabelSafe(question.category);
-    return {
-      index,
-      title: question.source || "猜台词",
-      answer: question.answer || "暂无文字答案",
-      meta: [categoryLabel, question.source].filter(Boolean).join(" / "),
-      extra: [question.type === "image_line" ? "图片题" : "视频题"]
-    };
+  function getGamePayloadType(gameId) {
+    if (gameId === "single_music") return "single";
+    if (gameId === "triple_music") return "triple";
+    if (gameId === "emoji_guess") return "emoji";
+    if (gameId === "wodi") return "wodi";
+    return "script";
   }
 
-  function buildSingleMusicAnswer(question, index) {
-    const track = question.tracks?.[0] || {};
-    const modeLabel = window.PartyGame.Games?.singleMusic?.getPlaybackModeLabel?.() || "";
-    return {
-      index,
-      title: getMusicArtistLabel(track) || "单曲猜歌",
-      answer: track.answer || "暂无歌名",
-      meta: ["单曲猜歌", getMusicArtistLabel(track)].filter(Boolean).join(" / "),
-      extra: [modeLabel ? `播放方式：${modeLabel}` : ""].filter(Boolean)
-    };
+  function buildLineGuessAnswer(question) {
+    return question?.answer || "暂无答案";
   }
 
-  function buildTripleMusicAnswer(question, index) {
-    const tracks = Array.isArray(question.tracks) ? question.tracks : [];
-    const lines = tracks.map((track, trackIndex) => (
-      `${trackIndex + 1}. ${track.answer || "未知歌名"} - ${getMusicArtistLabel(track) || "未知歌手"}`
-    ));
-    return {
-      index,
-      title: "三歌混播",
-      answer: lines.join("\n"),
-      meta: ["三歌混播", getCategoryLabelSafe(question.category), getMusicSegmentLabel(question)].filter(Boolean).join(" / "),
-      extra: []
-    };
+  function compactTrackAnswer(track) {
+    const answer = track?.answer || "暂无歌名";
+    const artist = getMusicArtistLabel(track);
+    return artist ? `${answer} - ${artist}` : answer;
   }
 
-  function getEmojiClueTextSafe(clue) {
-    if (typeof clue === "string") return clue;
-    if (!clue || typeof clue !== "object") return "";
-    return clue.text || clue.label || "";
+  function buildSingleMusicAnswer(question) {
+    return compactTrackAnswer(question?.tracks?.[0] || question?.track || {});
   }
 
-  function buildEmojiGuessAnswer(question, index) {
-    const clues = Array.isArray(question.clues) ? question.clues.map(getEmojiClueTextSafe).filter(Boolean).join(" ") : "";
-    return {
-      index,
-      title: clues || "Emoji 线索",
-      answer: question.answer || "暂无答案",
-      meta: [question.category, question.sub_category].filter(Boolean).join(" / "),
-      extra: [question.hint ? `提示：${question.hint}` : ""].filter(Boolean)
-    };
+  function buildTripleMusicAnswer(question) {
+    const tracks = Array.isArray(question?.tracks) ? question.tracks : [];
+    return tracks.map(compactTrackAnswer).join(" / ") || "暂无答案";
   }
 
-  function buildWodiAnswers(round) {
+  function buildEmojiGuessAnswer(question) {
+    return question?.answer || "暂无答案";
+  }
+
+  function buildCompactWodiPayload(round) {
     const roleLabels = window.PartyGame.Games?.WodiInternal?.WODI_ROLE_LABELS || {
       civilian: "平民",
       undercover: "卧底",
       blank: "白板"
     };
-    const answers = [
-      {
-        index: 1,
-        title: "本局词语",
-        answer: `平民词：${round.goodWord || ""}\n卧底词：${round.undercoverWord || ""}`,
-        meta: `白板：${round.assignments?.some((item) => item.role === "blank") ? "有" : "无"}`,
-        extra: []
-      }
-    ];
-    (round.assignments || []).forEach((assignment, index) => {
-      answers.push({
-        index: index + 2,
-        title: assignment.name || `玩家 ${index + 1}`,
-        answer: `${assignment.name || `玩家 ${index + 1}`} - ${roleLabels[assignment.role] || assignment.role || "未知"}`,
-        meta: assignment.role === "blank" ? "词语：白板" : `词语：${assignment.word || ""}`,
-        extra: []
-      });
-    });
-    return answers;
+    const assignments = Array.isArray(round.assignments) ? round.assignments : [];
+    const hasBlank = assignments.some((item) => item.role === "blank");
+    return {
+      t: "wodi",
+      c: [round.goodWord || "", round.undercoverWord || "", hasBlank ? "白板" : ""],
+      p: assignments.map((assignment) => [
+        assignment.name || "",
+        roleLabels[assignment.role] || assignment.role || "未知"
+      ])
+    };
   }
 
-  function buildAnswersForCurrentRound() {
-    if (state.activeGameId === "wodi") return buildWodiAnswers(state.wodiRound || {});
+  function buildRoundAnswerList(gameId) {
     const questions = Array.isArray(state.currentRoundQuestions) ? state.currentRoundQuestions : [];
-    return questions.map((question, index) => {
-      if (state.activeGameId === "single_music") return buildSingleMusicAnswer(question, index + 1);
-      if (state.activeGameId === "triple_music") return buildTripleMusicAnswer(question, index + 1);
-      if (state.activeGameId === "emoji_guess") return buildEmojiGuessAnswer(question, index + 1);
-      return buildLineGuessAnswer(question, index + 1);
+    return questions.map((question) => {
+      if (gameId === "single_music") return buildSingleMusicAnswer(question);
+      if (gameId === "triple_music") return buildTripleMusicAnswer(question);
+      if (gameId === "emoji_guess") return buildEmojiGuessAnswer(question);
+      return buildLineGuessAnswer(question);
     });
   }
 
   function buildPayloadForCurrentRound() {
-    const createdAt = Date.now();
     const gameId = state.activeGameId || "line_guess";
+    if (gameId === "wodi") return buildCompactWodiPayload(state.wodiRound || {});
     return {
-      type: "host_answers",
-      appVersion: window.PartyGame.Config?.APP_VERSION || (typeof APP_VERSION === "undefined" ? "" : APP_VERSION),
-      gameId,
-      gameTitle: getGameTitle(gameId),
-      roundId: `${createdAt}-${Math.random().toString(36).slice(2, 8)}`,
-      createdAt,
-      expiresAt: createdAt + HOST_ANSWERS_TTL_MS,
-      answers: buildAnswersForCurrentRound()
+      t: getGamePayloadType(gameId),
+      r: buildRoundAnswerList(gameId)
     };
   }
 
@@ -217,12 +178,9 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
     return {
       overlay: document.getElementById("hostAnswersQrOverlay"),
       qr: document.getElementById("hostAnswersQrCode"),
-      url: document.getElementById("hostAnswersQrUrl"),
-      base: document.getElementById("hostAnswersQrBaseUrl"),
       title: document.getElementById("hostAnswersQrTitle"),
       copy: document.getElementById("hostAnswersQrCopy"),
-      primary: document.getElementById("hostAnswersQrContinue"),
-      close: document.getElementById("hostAnswersQrClose")
+      primary: document.getElementById("hostAnswersQrContinue")
     };
   }
 
@@ -235,9 +193,9 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
     try {
       new QRCode(container, {
         text: link,
-        width: 260,
-        height: 260,
-        colorDark: "#111111",
+        width: 320,
+        height: 320,
+        colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel?.L ?? 1
       });
@@ -261,7 +219,7 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
 
   function showHostAnswersQr(payload, options = {}) {
     const els = getOverlayElements();
-    if (!els.overlay || !els.qr || !els.url || !els.base || !els.primary || !els.close) {
+    if (!els.overlay || !els.qr || !els.primary) {
       console.warn("[HostAnswers] QR modal elements are missing.");
       return false;
     }
@@ -277,8 +235,6 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
       ? "请主持人扫码保存本局词语和身份分配，玩家请勿查看。"
       : "请主持人扫码保存本轮答案顺序，玩家请勿查看。";
     els.primary.textContent = options.continueLabel || (state.activeGameId === "wodi" ? "已扫码，继续发身份" : "已扫码，开始游戏");
-    els.base.textContent = buildMobilePageUrl(HOST_ANSWERS_PAGE);
-    els.url.value = link;
     renderQr(els.qr, link);
     els.overlay.classList.add("show");
     return true;
@@ -288,12 +244,12 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
     try {
       const payload = buildPayloadForCurrentRound();
       console.info("[HostAnswers] showForCurrentRound", {
-        gameId: payload.gameId,
-        answersCount: payload.answers.length,
+        type: payload.t,
+        answersCount: Array.isArray(payload.r) ? payload.r.length : Array.isArray(payload.p) ? payload.p.length : 0,
         modalFound: Boolean(document.getElementById("hostAnswersQrOverlay"))
       });
-      if (!payload.answers.length) {
-        payload.answers = [{ index: 1, title: "本轮答案", answer: "暂无答案", meta: "", extra: [] }];
+      if (payload.t !== "wodi" && (!Array.isArray(payload.r) || !payload.r.length)) {
+        payload.r = ["暂无答案"];
       }
       return showHostAnswersQr(payload, options);
     } catch (error) {
@@ -323,9 +279,8 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
   }
 
   function bindModal() {
-    const { primary, close } = getOverlayElements();
+    const { primary } = getOverlayElements();
     primary?.addEventListener("click", continueFromModal);
-    close?.addEventListener("click", continueFromModal);
   }
 
   function init() {
