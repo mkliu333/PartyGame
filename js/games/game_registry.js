@@ -7,7 +7,7 @@ window.PartyGame.Games.registry = [
     title: "猜台词",
     subtitle: "看影视片段或者图片，抢答下一句台词。",
     status: "available",
-    dataSourceLabel: "script_guess/questions_v3.js"
+    dataSourceLabel: "script_guess/questions_v4.js"
   },
   {
     id: "triple_music",

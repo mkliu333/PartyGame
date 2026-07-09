@@ -122,11 +122,11 @@ window.PartyGame.Games = window.PartyGame.Games || {};
 
     async function loadQuestionBank() {
       const externalQuestions = getExternalQuestionBank();
-      let source = "script_guess/questions_v3.js";
+      let source = "script_guess/questions_v4.js";
       let rawQuestions = externalQuestions;
 
       if (externalQuestions.length) {
-        console.info("Question bank loaded from script_guess/questions_v3.js:", externalQuestions.length);
+        console.info("Question bank loaded from script_guess/questions_v4.js:", externalQuestions.length);
       } else {
         source = "内置备用";
         rawQuestions = [...BUILT_IN_QUESTIONS];
