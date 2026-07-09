@@ -51,6 +51,9 @@ function startWodiRound() {
   if (note) showToast(note);
   switchScreen("play");
   window.PartyGame.Core.BackgroundAudio?.sync();
+  window.PartyGame.Core.HostAnswers?.showForCurrentRound?.({
+    continueLabel: "已扫码，继续发身份"
+  });
   return true;
 }
 

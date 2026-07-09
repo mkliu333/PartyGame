@@ -290,8 +290,16 @@ function bindEvents() {
     clearRoundMessages();
     beginActiveRoundSnapshot();
     if (generateRoundQuestions()) {
-      switchScreen("play");
-      window.PartyGame.Core.BackgroundAudio?.sync();
+      const handled = window.PartyGame.Core.HostAnswers?.showForCurrentRound?.({
+        onContinue: () => {
+          switchScreen("play");
+          window.PartyGame.Core.BackgroundAudio?.sync();
+        }
+      });
+      if (!handled) {
+        switchScreen("play");
+        window.PartyGame.Core.BackgroundAudio?.sync();
+      }
     } else {
       discardActiveRoundSnapshot();
     }
@@ -343,6 +351,7 @@ async function init() {
   renderParticipants();
   renderTotalScores();
   bindEvents();
+  window.PartyGame.Core.HostAnswers?.init?.();
   window.PartyGame.Core.BackgroundAudio?.init();
   await loadQuestionBank();
   if (window.PartyGame.Games.tripleMusic) {

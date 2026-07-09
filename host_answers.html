@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>主持人答案卡</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #2d2530;
+      --muted: #715f6c;
+      --border: #f2b5c8;
+      --soft: #fff3f7;
+      --paper: #fffdf8;
+      --accent: #d94f7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 18px;
+      color: var(--ink);
+      background: linear-gradient(180deg, #fff7df, #ffeaf2);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.86);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, 0.94);
+      box-shadow: 0 18px 42px rgba(45, 37, 48, 0.14);
+    }
+    h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(28px, 8vw, 42px);
+      line-height: 1.12;
+    }
+    .subtitle,
+    .warning {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-weight: 700;
+    }
+    .warning {
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background: var(--soft);
+      color: #8f3357;
+    }
+    .answer-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .answer-card {
+      padding: 14px;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      background: var(--paper);
+    }
+    .answer-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .row {
+      margin: 6px 0;
+      color: var(--muted);
+      line-height: 1.55;
+      word-break: break-word;
+    }
+    .row strong {
+      color: var(--ink);
+    }
+    .empty {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--soft);
+      color: var(--muted);
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>主持人答案卡</h1>
+    <p class="subtitle" id="subtitle">正在读取本轮答案...</p>
+    <p class="warning">请主持人独自查看，不要给玩家看到。</p>
+    <section class="answer-list" id="answerList"></section>
+  </main>
+
+  <script>
+    (function () {
+      const subtitle = document.getElementById("subtitle");
+      const answerList = document.getElementById("answerList");
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;",
+          "'": "&#039;"
+        }[char]));
+      }
+
+      function decodeBase64Url(value) {
+        const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+        const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+        const binary = atob(padded);
+        const escaped = Array.from(binary, (char) => (
+          "%" + char.charCodeAt(0).toString(16).padStart(2, "0")
+        )).join("");
+        return JSON.parse(decodeURIComponent(escaped));
+      }
+
+      function getPayloadFromHash() {
+        const hash = window.location.hash.replace(/^#/, "");
+        const params = new URLSearchParams(hash);
+        const encoded = params.get("payload");
+        if (!encoded) return null;
+        return decodeBase64Url(encoded);
+      }
+
+      function formatTime(timestamp) {
+        if (!timestamp) return "未知时间";
+        return new Date(timestamp).toLocaleString("zh-CN", { hour12: false });
+      }
+
+      function showInvalid() {
+        subtitle.textContent = "答案信息无效，请回到主持人页面重新生成二维码。";
+        answerList.innerHTML = "";
+      }
+
+      function showExpired() {
+        subtitle.textContent = "本轮答案二维码已过期，请回到主持人页面重新生成。";
+        answerList.innerHTML = "";
+      }
+
+      function renderAnswer(answer) {
+        const extra = Array.isArray(answer.extra) ? answer.extra.filter(Boolean) : [];
+        return `
+          <article class="answer-card">
+            <h2>第 ${escapeHTML(answer.index || "")} 题</h2>
+            <div class="row"><strong>答案：</strong>${escapeHTML(answer.answer || "暂无答案")}</div>
+            ${answer.title ? `<div class="row"><strong>作品/来源：</strong>${escapeHTML(answer.title)}</div>` : ""}
+            ${answer.meta ? `<div class="row"><strong>补充：</strong>${escapeHTML(answer.meta)}</div>` : ""}
+            ${extra.length ? `<div class="row"><strong>其他：</strong>${extra.map(escapeHTML).join(" / ")}</div>` : ""}
+          </article>
+        `;
+      }
+
+      try {
+        const payload = getPayloadFromHash();
+        if (!payload || payload.type !== "host_answers" || !Array.isArray(payload.answers)) {
+          showInvalid();
+          return;
+        }
+        if (payload.expiresAt && Date.now() > payload.expiresAt) {
+          showExpired();
+          return;
+        }
+        subtitle.textContent = `${payload.gameTitle || "未知游戏"} / ${formatTime(payload.createdAt)} / ${payload.answers.length} 题`;
+        answerList.innerHTML = payload.answers.length
+          ? payload.answers.map(renderAnswer).join("")
+          : `<div class="empty">本轮暂无可显示答案。</div>`;
+      } catch (error) {
+        console.warn("[host_answers] invalid payload", error);
+        showInvalid();
+      }
+    }());
+  </script>
+</body>
+</html>

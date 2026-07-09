@@ -44,6 +44,94 @@
       gap: 10px;
     }
 
+    .host-answers-qr-card {
+      width: min(760px, 100%);
+    }
+
+    .host-answers-qr-layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+    .host-answers-qr-box {
+      display: grid;
+      min-height: 280px;
+      place-items: center;
+      padding: 10px;
+      border: 2px solid var(--accent-border);
+      border-radius: 20px;
+      background: #fff;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .host-answers-qr-box img,
+    .host-answers-qr-box canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .host-answers-qr-info {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .host-answers-base-label,
+    .host-answers-link-field span {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .host-answers-base-value {
+      padding: 10px 12px;
+      overflow-wrap: anywhere;
+      border: 2px solid var(--accent-border);
+      border-radius: 14px;
+      background: rgba(255, 253, 248, 0.78);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .host-answers-link-field {
+      display: grid;
+      gap: 7px;
+    }
+
+    .host-answers-link-field textarea {
+      width: 100%;
+      min-height: 138px;
+      padding: 10px 12px;
+      resize: vertical;
+      border: 2px solid var(--accent-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      background: var(--panel-bg-strong);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .host-answers-qr-card .modal-actions {
+      gap: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .host-answers-qr-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .host-answers-qr-box {
+        min-height: 240px;
+      }
+    }
+
     .certificate-card {
       padding-bottom: clamp(72px, 8vh, 104px);
       border-color: #ffd980;

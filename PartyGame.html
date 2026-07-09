@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <!--
 App Name: PartyGame
-Version: v4.2.5
-Update Theme: 更新猜台词题库 v4
+Version: v4.2.6
+Update Theme: 新增主持人答案二维码和全局手机访问地址
 Main Entry: PartyGame.html
 -->
 <html lang="zh-CN">
@@ -56,6 +56,13 @@ Main Entry: PartyGame.html
         <div class="decor candy" style="left: 6%; bottom: 10%; --rot: 12deg;"></div>
         <h1>聚会Party小游戏合集</h1>
         <p>欢迎大家来到Melody的生日聚会，希望大家玩的开心 <button class="birthday-song-toggle" type="button" id="birthdaySongToggle" aria-label="播放或停止生日歌" title="播放/停止生日歌" aria-pressed="false">🎂</button></p>
+        <div class="mobile-base-url-card">
+          <label for="mobileBaseUrlInput">
+            <span>手机扫码基础地址</span>
+            <input id="mobileBaseUrlInput" placeholder="例如：http://192.168.1.23:8000">
+          </label>
+          <p>手机和电脑需连接同一 Wi-Fi。可填写电脑 IPv4，系统会自动补全答案页面地址。</p>
+        </div>
       </div>
 
       <div class="games-grid" id="gamesGrid">
@@ -238,9 +245,33 @@ Main Entry: PartyGame.html
     </div>
   </div>
 
+  <div class="modal-overlay" id="hostAnswersQrOverlay" role="dialog" aria-modal="true" aria-labelledby="hostAnswersQrTitle">
+    <div class="result-card host-answers-qr-card">
+      <div class="result-kicker">主持人专用</div>
+      <h2 id="hostAnswersQrTitle">主持人答案二维码</h2>
+      <p id="hostAnswersQrCopy">请主持人扫码保存本轮答案顺序，玩家请勿查看。</p>
+      <div class="host-answers-qr-layout">
+        <div class="host-answers-qr-box" id="hostAnswersQrCode"></div>
+        <div class="host-answers-qr-info">
+          <div class="host-answers-base-label">当前基础地址</div>
+          <div class="host-answers-base-value" id="hostAnswersQrBaseUrl"></div>
+          <label class="host-answers-link-field">
+            <span>完整链接</span>
+            <textarea id="hostAnswersQrUrl" readonly></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="ghost-btn" type="button" id="hostAnswersQrClose">关闭</button>
+        <button class="primary-btn" type="button" id="hostAnswersQrContinue">已扫码，开始游戏</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="assets/emoji/emoji_index.js"></script>
   <script src="vendor/qrcode.min.js"></script>
+  <script src="js/core/host_answers.js"></script>
   <script src="data/script_guess/questions_v4.js"></script>
   <script src="data/triple_music/triple_music_questions_v6.js"></script>
   <script src="data/emoji_guess/emoji_guess_questions_v3.js"></script>
