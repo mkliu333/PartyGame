@@ -8,40 +8,55 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
   const HOST_ANSWERS_TTL_MS = 2 * 60 * 60 * 1000;
 
   const runtime = {
-    mobileBaseUrl: "",
+    mobileHost: "",
     activeContinue: null,
     hasContinued: false,
     lastUrl: "",
     lastPayload: null
   };
 
-  function getDefaultHostAnswersBaseUrl(targetPage = HOST_ANSWERS_PAGE) {
-    return `${location.protocol}//${location.host}/${targetPage}`;
-  }
-
   function normalizeTargetPage(targetPage) {
     return String(targetPage || HOST_ANSWERS_PAGE).replace(/^\/+/, "") || HOST_ANSWERS_PAGE;
   }
 
-  function normalizeMobileBaseUrl(value, targetPage = HOST_ANSWERS_PAGE) {
-    const page = normalizeTargetPage(targetPage);
+  function normalizeHostInput(value) {
     const raw = String(value || "").trim();
-    if (!raw) return getDefaultHostAnswersBaseUrl(page);
-
-    const defaultPort = location.port || "8000";
+    if (!raw) return "";
     const withProtocol = /^[a-zA-Z][a-zA-Z\d+\-.]*:\/\//.test(raw) ? raw : `http://${raw}`;
 
     try {
       const parsed = new URL(withProtocol);
-      parsed.hash = "";
-      parsed.search = "";
-      if (!["http:", "https:"].includes(parsed.protocol)) parsed.protocol = "http:";
-      if (!parsed.port && parsed.hostname) parsed.port = defaultPort;
-      parsed.pathname = `/${page}`;
-      return parsed.toString();
+      if (!parsed.hostname) return raw.replace(/[/?#].*$/, "");
+      return parsed.port ? `${parsed.hostname}:${parsed.port}` : parsed.hostname;
     } catch (error) {
-      return getDefaultHostAnswersBaseUrl(page);
+      return raw.replace(/[/?#].*$/, "");
     }
+  }
+
+  function getCurrentMobileHost() {
+    return runtime.mobileHost || location.host || "localhost:8000";
+  }
+
+  function buildMobilePageUrl(targetPage = HOST_ANSWERS_PAGE) {
+    const page = normalizeTargetPage(targetPage);
+    const hostInput = normalizeHostInput(getCurrentMobileHost()) || "localhost";
+    const hasPort = /:\d+$/.test(hostInput);
+    const hostWithPort = hasPort ? hostInput : `${hostInput}:${location.port || "8000"}`;
+    const protocol = location.protocol === "http:" || location.protocol === "https:" ? location.protocol : "http:";
+    return `${protocol}//${hostWithPort}/${page}`;
+  }
+
+  function getDefaultHostAnswersBaseUrl(targetPage = HOST_ANSWERS_PAGE) {
+    return buildMobilePageUrl(targetPage);
+  }
+
+  function normalizeMobileBaseUrl(value, targetPage = HOST_ANSWERS_PAGE) {
+    const previousHost = runtime.mobileHost;
+    const normalizedHost = normalizeHostInput(value);
+    if (normalizedHost) runtime.mobileHost = normalizedHost;
+    const url = buildMobilePageUrl(targetPage);
+    runtime.mobileHost = previousHost;
+    return url;
   }
 
   function encodeBase64Url(value) {
@@ -53,8 +68,19 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
   }
 
   function buildHostAnswersUrl(payload) {
-    const baseUrl = normalizeMobileBaseUrl(runtime.mobileBaseUrl || "", HOST_ANSWERS_PAGE);
+    const baseUrl = buildMobilePageUrl(HOST_ANSWERS_PAGE);
     return `${baseUrl}#payload=${encodeBase64Url(payload)}`;
+  }
+
+  function getWodiIdentityBaseUrlFromMobileHost() {
+    return buildMobilePageUrl("wodi_identity.html");
+  }
+
+  function syncWodiIdentityBaseUrlFromHostAnswers() {
+    const url = getWodiIdentityBaseUrlFromMobileHost();
+    const wodi = window.PartyGame.Games?.wodi;
+    if (wodi?.getIdentityBaseUrl?.() === url) return;
+    if (typeof wodi?.setIdentityBaseUrl === "function") wodi.setIdentityBaseUrl(url);
   }
 
   function getGameTitle(gameId) {
@@ -251,7 +277,7 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
       ? "请主持人扫码保存本局词语和身份分配，玩家请勿查看。"
       : "请主持人扫码保存本轮答案顺序，玩家请勿查看。";
     els.primary.textContent = options.continueLabel || (state.activeGameId === "wodi" ? "已扫码，继续发身份" : "已扫码，开始游戏");
-    els.base.textContent = normalizeMobileBaseUrl(runtime.mobileBaseUrl || "", HOST_ANSWERS_PAGE);
+    els.base.textContent = buildMobilePageUrl(HOST_ANSWERS_PAGE);
     els.url.value = link;
     renderQr(els.qr, link);
     els.overlay.classList.add("show");
@@ -261,7 +287,14 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
   function showForCurrentRound(options = {}) {
     try {
       const payload = buildPayloadForCurrentRound();
-      if (!payload.answers.length) return false;
+      console.info("[HostAnswers] showForCurrentRound", {
+        gameId: payload.gameId,
+        answersCount: payload.answers.length,
+        modalFound: Boolean(document.getElementById("hostAnswersQrOverlay"))
+      });
+      if (!payload.answers.length) {
+        payload.answers = [{ index: 1, title: "本轮答案", answer: "暂无答案", meta: "", extra: [] }];
+      }
       return showHostAnswersQr(payload, options);
     } catch (error) {
       console.warn("[HostAnswers] Cannot build host answers QR:", error);
@@ -272,14 +305,20 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
   function bindHomeInput() {
     const input = document.getElementById("mobileBaseUrlInput");
     if (!input) return;
-    runtime.mobileBaseUrl = getDefaultHostAnswersBaseUrl();
-    input.value = runtime.mobileBaseUrl;
+    const initialHost = location.hostname === "localhost" || location.hostname === "127.0.0.1"
+      ? ""
+      : location.hostname;
+    runtime.mobileHost = normalizeHostInput(runtime.mobileHost || initialHost);
+    input.value = runtime.mobileHost;
+    syncWodiIdentityBaseUrlFromHostAnswers();
     input.addEventListener("input", () => {
-      runtime.mobileBaseUrl = input.value.trim();
+      runtime.mobileHost = normalizeHostInput(input.value);
+      syncWodiIdentityBaseUrlFromHostAnswers();
     });
     input.addEventListener("blur", () => {
-      runtime.mobileBaseUrl = normalizeMobileBaseUrl(input.value, HOST_ANSWERS_PAGE);
-      input.value = runtime.mobileBaseUrl;
+      runtime.mobileHost = normalizeHostInput(input.value);
+      input.value = runtime.mobileHost;
+      syncWodiIdentityBaseUrlFromHostAnswers();
     });
   }
 
@@ -296,6 +335,11 @@ window.PartyGame.Core.HostAnswers = window.PartyGame.Core.HostAnswers || {};
 
   Object.assign(HostAnswers, {
     runtime,
+    normalizeHostInput,
+    getCurrentMobileHost,
+    buildMobilePageUrl,
+    getWodiIdentityBaseUrlFromMobileHost,
+    syncWodiIdentityBaseUrlFromHostAnswers,
     getDefaultHostAnswersBaseUrl,
     normalizeMobileBaseUrl,
     encodeBase64Url,

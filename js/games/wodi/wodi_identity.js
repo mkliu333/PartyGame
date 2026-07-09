@@ -31,8 +31,6 @@ function updateWodiIdentityBaseUrl(value) {
   const assignment = round?.assignments?.[round.revealIndex];
   const container = $("#wodiQrCard");
   if (assignment && container) renderWodiQRCode(container, assignment);
-  const warning = $("#wodiMobileUrlWarning");
-  if (warning) warning.hidden = !isWodiIdentityBaseUrlLocalhost();
 }
 
 function isWodiIdentityBaseUrlLocalhost() {
@@ -132,12 +130,6 @@ function renderWodiAssigning() {
       <p>\u6b63\u5728\u53d1\u653e\uff1a\u7b2c ${round.revealIndex + 1} / ${round.assignments.length} \u4f4d</p>
       <div class="wodi-current-player"><span class="mini-avatar" style="background: ${avatar.color}">${avatar.emoji}</span><strong>${escapeHTML(assignment.name)}</strong></div>
       <div class="wodi-qr-card" id="wodiQrCard"></div>
-      <label class="wodi-mobile-url-field">
-        <span>\u624b\u673a\u8bbf\u95ee\u5730\u5740</span>
-        <input value="${escapeHTML(getWodiIdentityBaseUrl())}" data-wodi-mobile-base-url>
-      </label>
-      <p class="wodi-mobile-url-note">\u624b\u673a\u626b\u7801\u9700\u8981\u548c\u7535\u8111\u5728\u540c\u4e00\u4e2a Wi-Fi \u4e0b\u3002\u8bf7\u786e\u8ba4\u4e0a\u9762\u5730\u5740\u662f\u624b\u673a\u53ef\u4ee5\u8bbf\u95ee\u7684\u7535\u8111\u5730\u5740\u3002</p>
-      <p class="wodi-warning" id="wodiMobileUrlWarning" ${isWodiIdentityBaseUrlLocalhost() ? "" : "hidden"}>\u5f53\u524d\u4f7f\u7528\u7684\u662f localhost\uff0c\u624b\u673a\u901a\u5e38\u65e0\u6cd5\u8bbf\u95ee\u3002\u8bf7\u628a localhost \u6539\u6210\u7535\u8111\u5c40\u57df\u7f51 IP\uff0c\u4f8b\u5982 http://192.168.x.x:8000/wodi_identity.html</p>
       <p>\u8bf7\u5f53\u524d\u73a9\u5bb6\u626b\u7801\u67e5\u770b\u81ea\u5df1\u7684\u8eab\u4efd\u8bcd\uff0c\u4e0d\u8981\u8ba9\u5176\u4ed6\u4eba\u770b\u5230\u624b\u673a\u3002</p>
       <div class="action-row">
         <button class="ghost-btn" type="button" data-wodi-prev-identity ${round.revealIndex === 0 ? "disabled" : ""}>\u4e0a\u4e00\u4f4d\u73a9\u5bb6</button>
@@ -165,6 +157,7 @@ Object.assign(window.PartyGame.Games.WodiInternal, {
   encodeBase64Url,
   getDefaultWodiIdentityBaseUrl,
   getWodiIdentityBaseUrl,
+  getIdentityBaseUrl: getWodiIdentityBaseUrl,
   setIdentityBaseUrl: setWodiIdentityBaseUrl,
   setWodiIdentityBaseUrl,
   updateIdentityBaseUrl: updateWodiIdentityBaseUrl,

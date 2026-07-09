@@ -27,6 +27,7 @@ window.PartyGame.Games.wodi = {
   buildIdentityHtml: WodiInternal.buildIdentityUrl,
   buildIdentityUrl: WodiInternal.buildIdentityUrl,
   renderQRCode: WodiInternal.renderQRCode,
+  getIdentityBaseUrl: WodiInternal.getIdentityBaseUrl,
   setIdentityBaseUrl: WodiInternal.setIdentityBaseUrl,
   updateIdentityBaseUrl: WodiInternal.updateIdentityBaseUrl,
   showPreviousIdentity: WodiInternal.showPreviousIdentity,

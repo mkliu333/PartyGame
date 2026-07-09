@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.6";
+    const APP_VERSION = "v4.2.6-hotfix-1";
 
-    const UPDATE_THEME = "新增主持人答案二维码和全局手机访问地址";
+    const UPDATE_THEME = "修复主持人答案二维码和全局 IPv4 地址同步";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

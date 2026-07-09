@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <!--
 App Name: PartyGame
-Version: v4.2.6
-Update Theme: 新增主持人答案二维码和全局手机访问地址
+Version: v4.2.6-hotfix-1
+Update Theme: 修复主持人答案二维码和全局 IPv4 地址同步
 Main Entry: PartyGame.html
 -->
 <html lang="zh-CN">
@@ -56,12 +56,11 @@ Main Entry: PartyGame.html
         <div class="decor candy" style="left: 6%; bottom: 10%; --rot: 12deg;"></div>
         <h1>聚会Party小游戏合集</h1>
         <p>欢迎大家来到Melody的生日聚会，希望大家玩的开心 <button class="birthday-song-toggle" type="button" id="birthdaySongToggle" aria-label="播放或停止生日歌" title="播放/停止生日歌" aria-pressed="false">🎂</button></p>
-        <div class="mobile-base-url-card">
+        <div class="mobile-base-url-card compact-ipv4-field">
           <label for="mobileBaseUrlInput">
-            <span>手机扫码基础地址</span>
-            <input id="mobileBaseUrlInput" placeholder="例如：http://192.168.1.23:8000">
+            <span>IPv4：</span>
+            <input id="mobileBaseUrlInput" placeholder="例如 192.168.1.162">
           </label>
-          <p>手机和电脑需连接同一 Wi-Fi。可填写电脑 IPv4，系统会自动补全答案页面地址。</p>
         </div>
       </div>
 
