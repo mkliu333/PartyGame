@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.6-hotfix-4";
+    const APP_VERSION = "v4.2.7";
 
-    const UPDATE_THEME = "扩大主界面在浏览器中的显示占比";
+    const UPDATE_THEME = "优化三歌混播同歌手抽题策略";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },

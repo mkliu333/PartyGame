@@ -79,10 +79,20 @@ function drawUniqueAnswerTracks(pool, count, usedIds = new Set(), usedAnswers = 
   return selected;
 }
 
+function getTripleMusicRealArtist(track) {
+  return window.PartyGame.Games.musicCommon.getMusicTrackArtistLabel(track) || "未知歌手";
+}
+
+function getTripleMusicUnknownArtistLabel() {
+  return window.PartyGame.Games.musicCommon.getMusicTrackArtistLabel({});
+}
+
 function groupTracksByArtist(tracks) {
   const groups = new Map();
+  const unknownArtist = getTripleMusicUnknownArtistLabel();
   tracks.forEach((track) => {
-    const artist = track.category || "";
+    const artist = getTripleMusicRealArtist(track);
+    if (!artist || artist === unknownArtist) return;
     if (!groups.has(artist)) groups.set(artist, []);
     groups.get(artist).push(track);
   });
@@ -122,6 +132,68 @@ function drawGroupedTripleMusicQuestion(displayCategory, localUsedIds) {
   return drawBestEffortSameSegmentTracks(displayCategory, localUsedIds);
 }
 
+function drawMixedArtistTripleMusicQuestion(displayCategory, localUsedIds, options = {}) {
+  const allowFallback = options.allowFallback !== false;
+  const segmentTypes = shuffleArray(["vocal", "instrumental"]);
+
+  for (const segmentType of segmentTypes) {
+    const pool = getAvailableTripleMusicTracks(displayCategory, localUsedIds, segmentType);
+    const artistGroups = shuffleArray([...groupTracksByArtist(pool).entries()])
+      .filter(([, artistTracks]) => uniqueAnswerEligibleTracks(artistTracks).length >= 1);
+    const selected = [];
+    const trialUsedIds = new Set(localUsedIds);
+    const usedAnswers = new Set();
+    const usedArtists = new Set();
+
+    artistGroups.forEach(([artist, artistTracks]) => {
+      if (selected.length >= 3) return;
+      if (usedArtists.has(artist)) return;
+      const candidate = shuffleArray(artistTracks).find((track) => (
+        !trialUsedIds.has(track.id)
+        && !usedAnswers.has(track.answer)
+      ));
+      if (!candidate) return;
+      selected.push(candidate);
+      usedArtists.add(artist);
+      usedAnswers.add(candidate.answer);
+      trialUsedIds.add(candidate.id);
+    });
+
+    if (selected.length >= 3) {
+      selected.forEach((track) => localUsedIds.add(track.id));
+      return selected;
+    }
+  }
+
+  return allowFallback ? drawBestEffortSameSegmentTracks(displayCategory, localUsedIds) : [];
+}
+
+function getMixedArtistQuestionQuota(requestedCount) {
+  return Math.floor(requestedCount / 5);
+}
+
+function buildMixedArtistQuestionIndexes(requestedCount) {
+  const quota = getMixedArtistQuestionQuota(requestedCount);
+  const indexes = new Set();
+  if (quota <= 0) return indexes;
+
+  for (let index = 5; index <= requestedCount && indexes.size < quota; index += 5) {
+    indexes.add(index - 1);
+  }
+
+  return indexes;
+}
+
+function getTripleMusicArtistMixInfo(tracks) {
+  const artists = [...new Set((Array.isArray(tracks) ? tracks : [])
+    .map(getTripleMusicRealArtist)
+    .filter(Boolean))];
+  return {
+    artistMixType: artists.length <= 1 ? "same_artist" : "mixed_artist",
+    artistLabel: artists.join(" / ")
+  };
+}
+
 function buildTripleMusicQuestion(index, tracks) {
   const segmentType = getTripleMusicSegmentType(tracks[0]?.id);
   return {
@@ -130,25 +202,38 @@ function buildTripleMusicQuestion(index, tracks) {
     category: state.selectedCategory,
     segmentType,
     source: "三歌混播",
-    tracks
+    tracks,
+    ...getTripleMusicArtistMixInfo(tracks)
   };
 }
 
-function drawTripleMusicQuestion(selectedCategory, localUsedIds) {
+function drawTripleMusicQuestion(selectedCategory, localUsedIds, options = {}) {
   const common = window.PartyGame.Games.musicCommon;
-  if (selectedCategory !== common.MUSIC_ALL_CATEGORY_ID && selectedCategory !== common.MUSIC_MISC_CATEGORY_ID) {
+  const isBroadCategory = selectedCategory === common.MUSIC_ALL_CATEGORY_ID
+    || selectedCategory === common.MUSIC_MISC_CATEGORY_ID;
+
+  if (!isBroadCategory) {
     return drawStandaloneTripleMusicQuestion(selectedCategory, localUsedIds);
   }
+
+  if (options.forceMixedArtist) {
+    const mixedTracks = drawMixedArtistTripleMusicQuestion(selectedCategory, localUsedIds, { allowFallback: false });
+    if (mixedTracks.length) return mixedTracks;
+  }
+
   return drawGroupedTripleMusicQuestion(selectedCategory, localUsedIds);
 }
 
 function generateTripleMusicRoundQuestions() {
   const requestedCount = Number(state.roundSize) || 5;
+  const mixedArtistIndexes = buildMixedArtistQuestionIndexes(requestedCount);
   const localUsedIds = new Set();
   const questions = [];
 
   for (let index = 0; index < requestedCount; index += 1) {
-    const tracks = drawTripleMusicQuestion(state.selectedCategory, localUsedIds);
+    const tracks = drawTripleMusicQuestion(state.selectedCategory, localUsedIds, {
+      forceMixedArtist: mixedArtistIndexes.has(index)
+    });
     if (!tracks.length) break;
     questions.push(buildTripleMusicQuestion(index + 1, tracks));
   }
@@ -312,6 +397,18 @@ function revealTripleMusicAnswer() {
 // This game does not use text-answer toggling, but keeps the method to satisfy the shared game interface.
 function toggleTripleMusicAnswerText() {}
 
+function debugCurrentRoundArtistMix() {
+  return (state.currentRoundQuestions || []).map((question, index) => ({
+    index: index + 1,
+    segmentType: question.segmentType,
+    artistMixType: question.artistMixType,
+    artistLabel: question.artistLabel,
+    answers: question.tracks.map((track) => track.answer),
+    artists: question.tracks.map(getTripleMusicRealArtist),
+    ids: question.tracks.map((track) => track.id)
+  }));
+}
+
 function resetTripleMusicQuestionPool() {
   window.PartyGame.Games.musicBank.resetSharedPool();
   updateTripleMusicCategoryStatsDisplay();
@@ -337,5 +434,6 @@ window.PartyGame.Games.tripleMusic = {
   getAvailableTracks: getAvailableTripleMusicTracks,
   getSharedRuntime: () => tripleMusicRuntime,
   stopAudio: window.PartyGame.Games.musicCommon.safeStopAudio,
-  handleAudioError: handleTripleMusicAudioError
+  handleAudioError: handleTripleMusicAudioError,
+  debugCurrentRoundArtistMix
 };
