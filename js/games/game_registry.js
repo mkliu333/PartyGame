@@ -7,21 +7,21 @@ window.PartyGame.Games.registry = [
     title: "猜台词",
     subtitle: "看影视片段或者图片，抢答下一句台词。",
     status: "available",
-    dataSourceLabel: "script_guess/questions_v4.js"
+    dataSourceLabel: "script_guess/questions_v5.js"
   },
   {
     id: "triple_music",
     title: "三歌混播猜歌",
     subtitle: "三首歌同时播放，抢答分别是哪三首歌。",
     status: "available",
-    dataSourceLabel: "triple_music/triple_music_questions_v6.js"
+    dataSourceLabel: "triple_music/triple_music_questions_v7.js"
   },
   {
     id: "single_music",
     title: "单曲猜歌",
     subtitle: "每题播放一段音频，抢答对应歌名。",
     status: "available",
-    dataSourceLabel: "triple_music/triple_music_questions_v6.js"
+    dataSourceLabel: "triple_music/triple_music_questions_v7.js"
   },
   {
     id: "emoji_guess",

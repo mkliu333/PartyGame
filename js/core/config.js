@@ -1,9 +1,9 @@
 ﻿window.PartyGame = window.PartyGame || {};
 window.PartyGame.Config = window.PartyGame.Config || {};
 
-    const APP_VERSION = "v4.2.7";
+    const APP_VERSION = "v4.2.8";
 
-    const UPDATE_THEME = "优化三歌混播同歌手抽题策略";
+    const UPDATE_THEME = "更新猜台词题库 v5 和音乐题库 v7";
 
     const CATEGORY_CONFIG = [
       { id: "movie", label: "电影" },
