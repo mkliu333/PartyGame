@@ -5961,204 +5961,238 @@ window.PARTY_TRIPLE_MUSIC_TRACKS = [
   {
     id: "tt994",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "爱的初体验",
     music: "assets/triple_music/tt994_zhang-zhen-yue_ai-de-chu-ti-yan.mp3"
   },
   {
     id: "t995",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "爱的初体验",
     music: "assets/triple_music/t995_zhang-zhen-yue_ai-de-chu-ti-yan.mp3"
   },
   {
     id: "tt996",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "爱我别走",
     music: "assets/triple_music/tt996_zhang-zhen-yue_ai-wo-bie-zou.mp3"
   },
   {
     id: "t997",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "爱我别走",
     music: "assets/triple_music/t997_zhang-zhen-yue_ai-wo-bie-zou.mp3"
   },
   {
     id: "tt998",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "小宇",
     music: "assets/triple_music/tt998_zhang-zhen-yue_xiao-yu.mp3"
   },
   {
     id: "t999",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "小宇",
     music: "assets/triple_music/t999_zhang-zhen-yue_xiao-yu.mp3"
   },
   {
     id: "t1000",
     category: "华语乐坛",
+    artist: "张震岳",
     answer: "再见",
     music: "assets/triple_music/t1000_zhang-zhen-yue_zai-jian.mp3"
   },
   {
     id: "t1001",
     category: "华语乐坛",
+    artist: "刘惜君",
     answer: "我很快乐",
     music: "assets/triple_music/t1001_liu-xi-jun_wo-hen-kuai-le.mp3"
   },
   {
     id: "t1002",
     category: "华语乐坛",
+    artist: "刘惜君",
     answer: "我很快乐",
     music: "assets/triple_music/t1002_liu-xi-jun_wo-hen-kuai-le.mp3"
   },
   {
     id: "tt1003",
     category: "华语乐坛",
+    artist: "梁博",
     answer: "男孩",
     music: "assets/triple_music/tt1003_liang-bo_nan-hai.mp3"
   },
   {
     id: "t1004",
     category: "华语乐坛",
+    artist: "梁博",
     answer: "男孩",
     music: "assets/triple_music/t1004_liang-bo_nan-hai.mp3"
   },
   {
     id: "tt1005",
     category: "华语乐坛",
+    artist: "梁博",
     answer: "日落大道",
     music: "assets/triple_music/tt1005_liang-bo_ri-luo-da-dao.mp3"
   },
   {
     id: "t1006",
     category: "华语乐坛",
+    artist: "梁博",
     answer: "日落大道",
     music: "assets/triple_music/t1006_liang-bo_ri-luo-da-dao.mp3"
   },
   {
     id: "tt1007",
     category: "周杰伦",
+    artist: "周杰伦",
     answer: "彩虹",
     music: "assets/triple_music/tt1007_zhou-jie-lun_cai-hong.mp3"
   },
   {
     id: "t1008",
     category: "周杰伦",
+    artist: "周杰伦",
     answer: "彩虹",
     music: "assets/triple_music/t1008_zhou-jie-lun_cai-hong.mp3"
   },
   {
     id: "t1009",
     category: "周杰伦",
+    artist: "周杰伦",
     answer: "彩虹",
     music: "assets/triple_music/t1009_zhou-jie-lun_cai-hong.mp3"
   },
   {
     id: "t1010",
     category: "华语乐坛",
+    artist: "胡彦斌",
     answer: "你要的全拿走",
     music: "assets/triple_music/t1010_hu-yan-bin_ni-yao-de-quan-na-zou.mp3"
   },
   {
     id: "t1011",
     category: "华语乐坛",
+    artist: "胡彦斌",
     answer: "红颜",
     music: "assets/triple_music/t1011_hu-yan-bin_hong-yan.mp3"
   },
   {
     id: "t1012",
     category: "华语乐坛",
+    artist: "胡彦斌",
     answer: "红颜",
     music: "assets/triple_music/t1012_hu-yan-bin_hong-yan.mp3"
   },
   {
     id: "tt1013",
     category: "华语乐坛",
+    artist: "李健",
     answer: "贝加尔湖畔",
     music: "assets/triple_music/tt1013_li-jian_bei-jia-er-hu-pan.mp3"
   },
   {
     id: "t1014",
     category: "华语乐坛",
+    artist: "李健",
     answer: "贝加尔湖畔",
     music: "assets/triple_music/t1014_li-jian_bei-jia-er-hu-pan.mp3"
   },
   {
     id: "t1015",
     category: "华语乐坛",
+    artist: "李健",
     answer: "风吹麦浪",
     music: "assets/triple_music/t1015_li-jian_feng-chui-mai-lang.mp3"
   },
   {
     id: "tt1016",
     category: "华语乐坛",
+    artist: "李健",
     answer: "假如爱有天意",
     music: "assets/triple_music/tt1016_li-jian_jia-ru-ai-you-tian-yi.mp3"
   },
   {
     id: "t1017",
     category: "华语乐坛",
+    artist: "李健",
     answer: "假如爱有天意",
     music: "assets/triple_music/t1017_li-jian_jia-ru-ai-you-tian-yi.mp3"
   },
   {
     id: "t1018",
     category: "华语乐坛",
+    artist: "李健",
     answer: "父亲写的散文诗",
     music: "assets/triple_music/t1018_li-jian_fu-qin-xie-de-san-wen-shi.mp3"
   },
   {
     id: "tt1019",
     category: "华语乐坛",
+    artist: "李健",
     answer: "异乡人",
     music: "assets/triple_music/tt1019_li-jian_yi-xiang-ren.mp3"
   },
   {
     id: "t1020",
     category: "华语乐坛",
+    artist: "李健",
     answer: "异乡人",
     music: "assets/triple_music/t1020_li-jian_yi-xiang-ren.mp3"
   },
   {
     id: "tt1021",
     category: "华语乐坛",
+    artist: "张敬轩",
     answer: "断点",
     music: "assets/triple_music/tt1021_zhang-jing-xuan_duan-dian.mp3"
   },
   {
     id: "t1022",
     category: "华语乐坛",
+    artist: "张敬轩",
     answer: "断点",
     music: "assets/triple_music/t1022_zhang-jing-xuan_duan-dian.mp3"
   },
   {
     id: "t1023",
     category: "华语乐坛",
+    artist: "杨丞琳",
     answer: "雨爱",
     music: "assets/triple_music/t1023_yang-cheng-lin_yu-ai.mp3"
   },
   {
     id: "t1024",
     category: "华语乐坛",
+    artist: "杨丞琳",
     answer: "匿名的好友",
     music: "assets/triple_music/t1024_yang-cheng-lin_ni-ming-de-hao-you.mp3"
   },
   {
     id: "t1025",
     category: "华语乐坛",
+    artist: "杨丞琳",
     answer: "带我走",
     music: "assets/triple_music/t1025_yang-cheng-lin_dai-wo-zou.mp3"
   },
   {
     id: "t1026",
     category: "华语乐坛",
+    artist: "杨丞琳",
     answer: "年轮说",
     music: "assets/triple_music/t1026_yang-cheng-lin_nian-lun-shuo.mp3"
   },
   {
     id: "t1027",
     category: "华语乐坛",
+    artist: "杨丞琳",
     answer: "暧昧",
     music: "assets/triple_music/t1027_yang-cheng-lin_ai-mei.mp3"
   }

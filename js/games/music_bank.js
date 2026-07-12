@@ -10,6 +10,10 @@ function normalizeMusicBankTrack(rawTrack) {
   return {
     id: normalizeCodeField(safe.id),
     category: normalizeField(safe.category),
+    artist: normalizeField(safe.artist),
+    singer: normalizeField(safe.singer),
+    artist_name: normalizeField(safe.artist_name),
+    singer_name: normalizeField(safe.singer_name),
     answer: normalizeField(safe.answer),
     music: normalizeField(safe.music)
   };
@@ -137,6 +141,20 @@ function getMusicBankDebugInfo() {
   };
 }
 
+function debugUnknownArtistTracks() {
+  const musicCommon = window.PartyGame.Games.musicCommon;
+  const unknownArtist = musicCommon.getMusicTrackArtistLabel({});
+  return getMusicBankTracks()
+    .filter((track) => musicCommon.getMusicTrackArtistLabel(track) === unknownArtist)
+    .map((track) => ({
+      id: track.id,
+      category: track.category,
+      artist: track.artist,
+      answer: track.answer,
+      music: track.music
+    }));
+}
+
 Object.assign(window.PartyGame.Games.musicBank, {
   id: "music_bank",
   normalizeTrack: normalizeMusicBankTrack,
@@ -150,5 +168,6 @@ Object.assign(window.PartyGame.Games.musicBank, {
   getPreflight: getMusicBankPreflight,
   handleAudioError: handleMusicBankAudioError,
   resetSharedPool: resetMusicBankSharedPool,
-  getDebugInfo: getMusicBankDebugInfo
+  getDebugInfo: getMusicBankDebugInfo,
+  debugUnknownArtistTracks
 });
